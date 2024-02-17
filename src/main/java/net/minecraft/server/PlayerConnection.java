@@ -1100,11 +1100,14 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
 
         final Vec3D vec3d = packetplayinuseentity.b();
-        final PreInteractEntityEvent event = new PreInteractEntityEvent(packetplayinuseentity.getID(), vec3d.a, vec3d.b, vec3d.c, worldserver.getWorld());
-        EventsExecutor.execute(event);
 
-        if (event.isCancelled()) {
-            return;
+        if (vec3d != null) {
+            final PreInteractEntityEvent event = new PreInteractEntityEvent(packetplayinuseentity.getID(), vec3d.a, vec3d.b, vec3d.c, worldserver.getWorld());
+            EventsExecutor.execute(event);
+    
+            if (event.isCancelled()) {
+                return;
+            }
         }
 
         Entity entity = packetplayinuseentity.a((World) worldserver);
@@ -1142,17 +1145,17 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     }
                     this.server.getPluginManager().callEvent(interactEvent);
 
-                    if (triggerLeashUpdate && (event.isCancelled() || this.player.inventory.getItemInHand() == null || this.player.inventory.getItemInHand().getItem() != Items.LEAD)) {
+                    if (triggerLeashUpdate && (interactEvent.isCancelled() || this.player.inventory.getItemInHand() == null || this.player.inventory.getItemInHand().getItem() != Items.LEAD)) {
                         // Refresh the current leash state
                         this.sendPacket(new PacketPlayOutAttachEntity(1, entity, ((EntityInsentient) entity).getLeashHolder()));
                     }
 
-                    if (event.isCancelled() || this.player.inventory.getItemInHand() == null || this.player.inventory.getItemInHand().getItem() != origItem) {
+                    if (interactEvent.isCancelled() || this.player.inventory.getItemInHand() == null || this.player.inventory.getItemInHand().getItem() != origItem) {
                         // Refresh the current entity metadata
                         this.sendPacket(new PacketPlayOutEntityMetadata(entity.getId(), entity.datawatcher, true));
                     }
 
-                    if (event.isCancelled()) {
+                    if (interactEvent.isCancelled()) {
                         return;
                     }
                     // CraftBukkit end
