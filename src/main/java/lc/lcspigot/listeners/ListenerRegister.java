@@ -5,9 +5,11 @@ import java.lang.reflect.Method;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.tinylog.Logger;
+
+import lc.lcspigot.listeners.internal.EventsExecutor;
 
 
 public final class ListenerRegister {
@@ -19,17 +21,17 @@ public final class ListenerRegister {
         this.plugin = plugin;
     }
 
-    public void register(final Listener listener) {
-        final Method[] methods = listener.getClass().getMethods();
-        for (final Method method : methods) {
-            final ListenerData data = method.getAnnotation(ListenerData.class);
-            if (data == null) {
-                continue;
-            }
-            plugin.getServer().getPluginManager().registerEvent(data.event(), listener, data.priority(), EXECUTOR, plugin);
+    public void register(final EventListener listener, final boolean useOldRegister) {
+        final ListenerData data = getData(listener);
+        if (data == null) {
+            Logger.warn("Can't register the listener of the class " + listener.getClass().getName() + " because don't contains ListenerData annontation");
             return;
         }
-        plugin.getLogger().warning("Can't register the listener of the class " + listener.getClass().getName() + " because don't contains ListenerData annontation");
+        if (useOldRegister) {
+            plugin.getServer().getPluginManager().registerEvent(data.event(), listener, data.priority(), EXECUTOR, plugin);
+        } else {
+            new EventsExecutor().addListener(data.event(), listener, data);
+        }
     }
 
     public void cancelEvent(final Class<? extends Event> event) {
@@ -41,7 +43,7 @@ public final class ListenerRegister {
         });
     }
 
-    public void fastListener(final Class<? extends Event> event, final Listener listener) {
+    public void fastListener(final Class<? extends Event> event, final EventListener listener) {
         plugin.getServer().getPluginManager().registerEvent(
             event,
             listener,
@@ -49,5 +51,17 @@ public final class ListenerRegister {
             EXECUTOR,
             plugin
         );
+    }
+
+    private ListenerData getData(final EventListener listener) {
+        final Method[] methods = listener.getClass().getMethods();
+        for (final Method method : methods) {
+            final ListenerData data = method.getAnnotation(ListenerData.class);
+            if (data == null) {
+                continue;
+            }
+            return data;
+        }
+        return null;
     }
 }

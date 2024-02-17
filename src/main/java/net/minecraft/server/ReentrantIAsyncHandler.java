@@ -19,7 +19,7 @@ public abstract class ReentrantIAsyncHandler<R extends Runnable> extends IAsyncH
 
     @Override
     protected void doRunnable(R task) {
-    ++this.count;
+        ++this.count;
         try {
             super.doRunnable(task);
         } finally {
