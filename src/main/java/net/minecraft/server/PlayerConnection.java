@@ -1,14 +1,16 @@
 package net.minecraft.server;
 
 import com.google.common.collect.Lists;
-import com.google.common.util.concurrent.Futures;
 import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import lc.lcspigot.events.PreInteractEntityEvent;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +20,6 @@ import org.tinylog.Logger;
 
 // CraftBukkit start
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.HashSet;
 
 import org.bukkit.craftbukkit.entity.CraftPlayer;
@@ -28,7 +29,7 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.util.CraftChatMessage;
 import org.bukkit.craftbukkit.util.LazyPlayerSet;
 import org.bukkit.craftbukkit.util.Waitable;
-
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -70,9 +71,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     private int i;
     private long j;
     private long k;
-    // CraftBukkit start - multithreaded fields
-    private volatile int chatThrottle;
-    // CraftBukkit end
     private int m;
     private IntHashMap<Short> n = new IntHashMap();
     private double o;
@@ -93,7 +91,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     }
 
     private final org.bukkit.craftbukkit.CraftServer server;
-    private int lastTick = MinecraftServer.currentTick;
     private int lastDropTick = MinecraftServer.currentTick;
     private int dropCount = 0;
     private static final int SURVIVAL_PLACE_DISTANCE_SQUARED = 6 * 6;
@@ -222,8 +219,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             // CraftBukkit start - fire PlayerMoveEvent
             Player player = this.getPlayer();
             // Spigot Start
-            if ( !hasMoved )
-            {
+            if (!hasMoved){
                 Location curPos = player.getLocation();
                 lastPosX = curPos.getX();
                 lastPosY = curPos.getY();
@@ -233,60 +229,19 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 hasMoved = true;
             }
             // Spigot End
-            Location from = new Location(player.getWorld(), lastPosX, lastPosY, lastPosZ, lastYaw, lastPitch); // Get the Players previous Event location.
-            Location to = player.getLocation().clone(); // Start off the To location as the Players current location.
+            final Location playerLoc = player.getLocation();
 
             // If the packet contains movement information then we update the To location with the correct XYZ.
             if (packetplayinflying.hasPos && !(packetplayinflying.hasPos && packetplayinflying.y == -999.0D)) {
-                to.setX(packetplayinflying.x);
-                to.setY(packetplayinflying.y);
-                to.setZ(packetplayinflying.z);
+                playerLoc.setX(packetplayinflying.x);
+                playerLoc.setY(packetplayinflying.y);
+                playerLoc.setZ(packetplayinflying.z);
             }
 
             // If the packet contains look information then we update the To location with the correct Yaw & Pitch.
             if (packetplayinflying.hasLook) {
-                to.setYaw(packetplayinflying.yaw);
-                to.setPitch(packetplayinflying.pitch);
-            }
-
-            // Prevent 40 event-calls for less than a single pixel of movement >.>
-            double delta = Math.pow(this.lastPosX - to.getX(), 2) + Math.pow(this.lastPosY - to.getY(), 2) + Math.pow(this.lastPosZ - to.getZ(), 2);
-            float deltaAngle = Math.abs(this.lastYaw - to.getYaw()) + Math.abs(this.lastPitch - to.getPitch());
-
-            if ((delta > 1f / 256 || deltaAngle > 10f) && (this.checkMovement && !this.player.dead)) {
-                this.lastPosX = to.getX();
-                this.lastPosY = to.getY();
-                this.lastPosZ = to.getZ();
-                this.lastYaw = to.getYaw();
-                this.lastPitch = to.getPitch();
-
-                // Skip the first time we do this
-                if (true) { // Spigot - don't skip any move events
-                    Location oldTo = to.clone();
-                    PlayerMoveEvent event = new PlayerMoveEvent(player, from, to);
-                    this.server.getPluginManager().callEvent(event);
-
-                    // If the event is cancelled we move the player back to their old location.
-                    if (event.isCancelled()) {
-                        this.player.playerConnection.sendPacket(new PacketPlayOutPosition(from.getX(), from.getY(), from.getZ(), from.getYaw(), from.getPitch(), Collections.<PacketPlayOutPosition.EnumPlayerTeleportFlags>emptySet()));
-                        return;
-                    }
-
-                    /* If a Plugin has changed the To destination then we teleport the Player
-                    there to avoid any 'Moved wrongly' or 'Moved too quickly' errors.
-                    We only do this if the Event was not cancelled. */
-                    if (!oldTo.equals(event.getTo()) && !event.isCancelled()) {
-                        this.player.getBukkitEntity().teleport(event.getTo(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
-                        return;
-                    }
-
-                    /* Check to see if the Players Location has some how changed during the call of the event.
-                    This can happen due to a plugin teleporting the player instead of using .setTo() */
-                    if (!from.equals(this.getPlayer().getLocation()) && this.justTeleported) {
-                        this.justTeleported = false;
-                        return;
-                    }
-                }
+                playerLoc.setYaw(packetplayinflying.yaw);
+                playerLoc.setPitch(packetplayinflying.pitch);
             }
 
             if (this.checkMovement && !this.player.dead) {
@@ -1005,70 +960,37 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             return;
         }
 
-        if (!async && s.startsWith("/")) {
+        if (!async && s.charAt(0) == '/'){
             this.handleCommand(s);
-        } else if (this.player.getChatFlags() == EntityHuman.EnumChatVisibility.SYSTEM) {
-            // Do nothing, this is coming from a plugin
-        } else {
-            Player player = this.getPlayer();
-            AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(async, player, s, new LazyPlayerSet());
-            this.server.getPluginManager().callEvent(event);
+            return;
+        }
+        
+        if (this.player.getChatFlags() == EntityHuman.EnumChatVisibility.SYSTEM) {
+            return;
+        }
+        final Player player = this.getPlayer();
+        final AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(async, player, s, new LazyPlayerSet());
+        this.server.getPluginManager().callEvent(event);
 
-            if (PlayerChatEvent.getHandlerList().getRegisteredListeners().length != 0) {
-                // Evil plugins still listening to deprecated event
-                final PlayerChatEvent queueEvent = new PlayerChatEvent(player, event.getMessage(), event.getFormat(), event.getRecipients());
-                queueEvent.setCancelled(event.isCancelled());
-                Waitable waitable = new Waitable() {
-                    @Override
-                    protected Object evaluate() {
-                        org.bukkit.Bukkit.getPluginManager().callEvent(queueEvent);
+        if (event.isCancelled()) {
+            return;
+        }
 
-                        if (queueEvent.isCancelled()) {
-                            return null;
-                        }
+        s = String.format(event.getFormat(), event.getPlayer().getDisplayName(), event.getMessage());
+        minecraftServer.console.sendMessage(s);
+        final BaseComponent[] message = TextComponent.fromLegacyText(s);
 
-                        String message = String.format(queueEvent.getFormat(), queueEvent.getPlayer().getDisplayName(), queueEvent.getMessage());
-                        PlayerConnection.this.minecraftServer.console.sendMessage(message);
-                        if (((LazyPlayerSet) queueEvent.getRecipients()).isLazy()) {
-                            for (Object player : PlayerConnection.this.minecraftServer.getPlayerList().players) {
-                                ((EntityPlayer) player).sendMessage(CraftChatMessage.fromString(message));
-                            }
-                        } else {
-                            for (Player player : queueEvent.getRecipients()) {
-                                player.sendMessage(message);
-                            }
-                        }
-                        return null;
-                    }};
-                if (async) {
-                    minecraftServer.processQueue.add(waitable);
-                } else {
-                    waitable.run();
-                }
-                try {
-                    waitable.get();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt(); // This is proper habit for java. If we aren't handling it, pass it on!
-                } catch (ExecutionException e) {
-                    throw new RuntimeException("Exception processing chat event", e.getCause());
-                }
-            } else {
-                if (event.isCancelled()) {
-                    return;
-                }
-
-                s = String.format(event.getFormat(), event.getPlayer().getDisplayName(), event.getMessage());
-                minecraftServer.console.sendMessage(s);
-                if (((LazyPlayerSet) event.getRecipients()).isLazy()) {
-                    for (Object recipient : minecraftServer.getPlayerList().players) {
-                        ((EntityPlayer) recipient).sendMessage(CraftChatMessage.fromString(s));
-                    }
-                } else {
-                    for (Player recipient : event.getRecipients()) {
-                        recipient.sendMessage(s);
-                    }
-                }
+        if (((LazyPlayerSet) event.getRecipients()).isLazy()) {
+            final PacketPlayOutChat chatPacket = new PacketPlayOutChat(null);
+            chatPacket.components = message;
+            for (EntityPlayer recipient : minecraftServer.getPlayerList().players) {
+                recipient.playerConnection.sendPacket(chatPacket);
             }
+            return;
+        }    
+
+        for (Player recipient : event.getRecipients()) {
+            recipient.spigot().sendMessage(message);
         }
     }
     // CraftBukkit end
@@ -1207,9 +1129,21 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     }
 
     public void a(PacketPlayInUseEntity packetplayinuseentity) {
-        if (this.player.dead) return; // CraftBukkit
+        if (this.player.dead) {
+            return;
+        } // CraftBukkit
+
         PlayerConnectionUtils.ensureMainThread(packetplayinuseentity, this, this.player.u());
         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
+
+        final Vec3D vec3d = packetplayinuseentity.b();
+        final PreInteractEntityEvent event = new PreInteractEntityEvent(packetplayinuseentity.getID(), vec3d.a, vec3d.b, vec3d.c, worldserver.getWorld());
+        this.server.getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) {
+            return;
+        }
+
         Entity entity = packetplayinuseentity.a((World) worldserver);
         // Spigot Start
         if ( entity == player && !player.isSpectator() )
@@ -1236,14 +1170,14 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     // CraftBukkit start
                     boolean triggerLeashUpdate = itemInHand != null && itemInHand.getItem() == Items.LEAD && entity instanceof EntityInsentient;
                     Item origItem = this.player.inventory.getItemInHand() == null ? null : this.player.inventory.getItemInHand().getItem();
-                    PlayerInteractEntityEvent event;
+                    PlayerInteractEntityEvent interactEvent;
                     if (packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT) {
-                        event = new PlayerInteractEntityEvent((Player) this.getPlayer(), entity.getBukkitEntity());
+                        interactEvent = new PlayerInteractEntityEvent((Player) this.getPlayer(), entity.getBukkitEntity());
                     } else {
                         Vec3D target = packetplayinuseentity.b();
-                        event = new PlayerInteractAtEntityEvent((Player) this.getPlayer(), entity.getBukkitEntity(), new org.bukkit.util.Vector(target.a, target.b, target.c));
+                        interactEvent = new PlayerInteractAtEntityEvent((Player) this.getPlayer(), entity.getBukkitEntity(), new org.bukkit.util.Vector(target.a, target.b, target.c));
                     }
-                    this.server.getPluginManager().callEvent(event);
+                    this.server.getPluginManager().callEvent(interactEvent);
 
                     if (triggerLeashUpdate && (event.isCancelled() || this.player.inventory.getItemInHand() == null || this.player.inventory.getItemInHand().getItem() != Items.LEAD)) {
                         // Refresh the current leash state

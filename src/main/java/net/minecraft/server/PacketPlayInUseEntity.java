@@ -46,6 +46,10 @@ public class PacketPlayInUseEntity implements Packet<PacketListenerPlayIn> {
         return this.c;
     }
 
+    public int getID() {
+        return a;
+    }
+
     public static enum EnumEntityUseAction {
 
         INTERACT, ATTACK, INTERACT_AT;

@@ -106,9 +106,7 @@ public class ActivationRange
         maxRange = Math.max( maxRange, miscActivationRange );
         maxRange = Math.min( ( world.spigotConfig.viewDistance << 4 ) - 8, maxRange );
 
-        for ( Entity player : (List<Entity>) (List) world.players )
-        {
-
+        for (Entity player : world.players){
             player.activatedTick = MinecraftServer.currentTick;
             maxBB = player.getBoundingBox().grow( maxRange, 256, maxRange );
             miscBB = player.getBoundingBox().grow( miscActivationRange, 256, miscActivationRange );
@@ -124,9 +122,9 @@ public class ActivationRange
             {
                 for ( int j1 = k; j1 <= l; ++j1 )
                 {
-                    if ( world.getWorld().isChunkLoaded( i1, j1 ) )
-                    {
-                        activateChunkEntities( world.getChunkAt( i1, j1 ) );
+                    final Chunk chunk = world.getChunkIfLoaded( i1, j1 );
+                    if (chunk != null) {
+                        activateChunkEntities(chunk);
                     }
                 }
             }
@@ -141,37 +139,30 @@ public class ActivationRange
      */
     private static void activateChunkEntities(Chunk chunk)
     {
-        for ( List<Entity> slice : chunk.entitySlices )
-        {
-            for ( Entity entity : slice )
-            {
-                if ( MinecraftServer.currentTick > entity.activatedTick )
-                {
-                    if ( entity.defaultActivationState )
-                    {
+        for ( List<Entity> slice : chunk.entitySlices ) {
+            for ( Entity entity : slice ) {
+                if ( MinecraftServer.currentTick > entity.activatedTick ) {
+                    if ( entity.defaultActivationState ) {
                         entity.activatedTick = MinecraftServer.currentTick;
                         continue;
                     }
-                    switch ( entity.activationType )
-                    {
+                    switch ( entity.activationType ) {
                         case 1:
-                            if ( monsterBB.b( entity.getBoundingBox() ) )
-                            {
+                            if (monsterBB.b(entity.getBoundingBox())){
                                 entity.activatedTick = MinecraftServer.currentTick;
                             }
                             break;
                         case 2:
-                            if ( animalBB.b( entity.getBoundingBox() ) )
-                            {
+                            if (animalBB.b(entity.getBoundingBox())){
                                 entity.activatedTick = MinecraftServer.currentTick;
                             }
                             break;
                         case 3:
                         default:
-                            if ( miscBB.b( entity.getBoundingBox() ) )
-                            {
+                            if (miscBB.b(entity.getBoundingBox())){
                                 entity.activatedTick = MinecraftServer.currentTick;
                             }
+                            break;
                     }
                 }
             }
