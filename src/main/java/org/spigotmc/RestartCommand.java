@@ -2,8 +2,8 @@ package org.spigotmc;
 
 import java.io.File;
 import java.util.List;
-import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 

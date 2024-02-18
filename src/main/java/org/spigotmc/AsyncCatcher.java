@@ -1,6 +1,6 @@
 package org.spigotmc;
 
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 
 public class AsyncCatcher
 {

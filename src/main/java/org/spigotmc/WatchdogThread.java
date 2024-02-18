@@ -3,7 +3,7 @@ package org.spigotmc;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MonitorInfo;
 import java.lang.management.ThreadInfo;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.tinylog.Logger;
 
@@ -58,11 +58,11 @@ public class WatchdogThread extends Thread
                 Logger.error("Be sure to include ALL relevant console errors and Minecraft crash reports" );
                 Logger.error("Spigot version: " + Bukkit.getServer().getVersion() );
                 //
-                if(net.minecraft.server.World.haveWeSilencedAPhysicsCrash)
+                if(net.minecraft.server.v1_8_R3.World.haveWeSilencedAPhysicsCrash)
                 {
                     Logger.error("------------------------------" );
                     Logger.error("During the run of the server, a physics stackoverflow was supressed" );
-                    Logger.error("near " + net.minecraft.server.World.blockLocation);
+                    Logger.error("near " + net.minecraft.server.v1_8_R3.World.blockLocation);
                 }
                 //
                 Logger.error("------------------------------" );

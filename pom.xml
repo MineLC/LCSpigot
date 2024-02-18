@@ -144,7 +144,7 @@
                             <Multi-Release>true</Multi-Release>
                         </manifestEntries>
                         <manifest>
-                            <mainClass>org.bukkit.craftbukkit.Main</mainClass>
+                            <mainClass>org.bukkit.craftbukkit.v1_8_R3.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

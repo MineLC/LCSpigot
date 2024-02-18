@@ -1,12 +1,12 @@
 package org.spigotmc;
 
-import net.minecraft.server.Entity;
-import net.minecraft.server.EntityExperienceOrb;
-import net.minecraft.server.EntityGhast;
-import net.minecraft.server.EntityItem;
-import net.minecraft.server.EntityItemFrame;
-import net.minecraft.server.EntityPainting;
-import net.minecraft.server.EntityPlayer;
+import net.minecraft.server.v1_8_R3.Entity;
+import net.minecraft.server.v1_8_R3.EntityExperienceOrb;
+import net.minecraft.server.v1_8_R3.EntityGhast;
+import net.minecraft.server.v1_8_R3.EntityItem;
+import net.minecraft.server.v1_8_R3.EntityItemFrame;
+import net.minecraft.server.v1_8_R3.EntityPainting;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
 
 public class TrackingRange
 {

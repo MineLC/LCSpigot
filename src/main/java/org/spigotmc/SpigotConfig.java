@@ -14,9 +14,9 @@ import java.util.Map;
 import java.util.Set;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
-import net.minecraft.server.AttributeRanged;
-import net.minecraft.server.GenericAttributes;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.v1_8_R3.AttributeRanged;
+import net.minecraft.server.v1_8_R3.GenericAttributes;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -64,12 +64,9 @@ public class SpigotConfig
         config.options().copyDefaults( true );
 
         commands = new HashMap<String, Command>();
-        Logger.info("CONFIG SPIGOT EN PROCESO");
         version = getInt( "config-version", 8 );
         set( "config-version", 8 );
-        Logger.info("SET CONFIG VERSION IN 8");
         readConfig(SpigotConfig.class, this);
-        Logger.info("CONFIG READED");
     }
 
     public void registerCommands()

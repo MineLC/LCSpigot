@@ -1,6 +1,7 @@
 package lc.lcspigot.events;
 
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -9,16 +10,22 @@ public final class PreInteractEntityEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
 
     private boolean cancel = false;
+    private final Player player;
     private final int entityID;
     private final double width, heigth, depth;
     private final World world;
 
-    public PreInteractEntityEvent(int entityId, double width, double height, double depth, World world) {
+    public PreInteractEntityEvent(Player player, int entityId, double width, double height, double depth, World world) {
+        this.player = player;
         this.entityID = entityId;
         this.width = width;
         this.heigth = height;
         this.depth = depth;
         this.world = world;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public int getEntityID() {

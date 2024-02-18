@@ -1,0 +1,27 @@
+package org.bukkit.craftbukkit.v1_8_R3.entity;
+
+import net.minecraft.server.v1_8_R3.EntitySmallFireball;
+
+import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.SmallFireball;
+
+public class CraftSmallFireball extends CraftFireball implements SmallFireball {
+    public CraftSmallFireball(CraftServer server, EntitySmallFireball entity) {
+        super(server, entity);
+    }
+
+    @Override
+    public EntitySmallFireball getHandle() {
+        return (EntitySmallFireball) entity;
+    }
+
+    @Override
+    public String toString() {
+        return "CraftSmallFireball";
+    }
+
+    public EntityType getType() {
+        return EntityType.SMALL_FIREBALL;
+    }
+}

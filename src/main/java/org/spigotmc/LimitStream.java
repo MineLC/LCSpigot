@@ -3,7 +3,7 @@ package org.spigotmc;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import net.minecraft.server.NBTReadLimiter;
+import net.minecraft.server.v1_8_R3.NBTReadLimiter;
 
 public class LimitStream extends FilterInputStream
 {

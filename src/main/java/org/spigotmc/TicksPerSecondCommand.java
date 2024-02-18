@@ -1,7 +1,7 @@
 package org.spigotmc;
 
 import com.google.common.base.Joiner;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import com.google.common.collect.Iterables;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
