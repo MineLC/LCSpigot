@@ -15,17 +15,10 @@ public class TicksPerSecondCommand extends Command
         super( name );
         this.description = "Gets the current ticks per second for the server";
         this.usageMessage = "/tps";
-        this.setPermission( "bukkit.command.tps" );
     }
 
     @Override
-    public boolean execute(CommandSender sender, String currentAlias, String[] args)
-    {
-        if ( !testPermission( sender ) )
-        {
-            return true;
-        }
-
+    public boolean execute(CommandSender sender, String currentAlias, String[] args) {
         StringBuilder sb = new StringBuilder( ChatColor.GOLD + "TPS from last 1m, 5m, 15m: " );
         for ( double tps : MinecraftServer.getServer().recentTps )
         {

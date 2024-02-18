@@ -3,7 +3,7 @@ package org.bukkit.craftbukkit.v1_8_R3.inventory;
 import net.minecraft.server.v1_8_R3.PacketPlayOutHeldItemSlot;
 import net.minecraft.server.v1_8_R3.PlayerInventory;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.EntityEquipment;

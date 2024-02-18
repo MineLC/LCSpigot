@@ -1,6 +1,9 @@
 package net.minecraft.server.v1_8_R3;
 
 import com.google.common.collect.Lists;
+
+import lc.lcspigot.configuration.StartLCConfiguration;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -113,6 +116,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         }
         // Spigot start
         this.a(new DedicatedPlayerList(this));
+        new StartLCConfiguration().load();
         new SpigotConfig().init();
         new SpigotConfig().registerCommands();
         // Spigot end

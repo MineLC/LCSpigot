@@ -75,7 +75,6 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.bukkit.help.HelpMap;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
@@ -105,9 +104,8 @@ import org.tinylog.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.error.MarkedYAMLException;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
-import com.avaje.ebean.config.ServerConfig;
 import com.google.common.base.Charsets;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
@@ -120,6 +118,7 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.base64.Base64;
 import jline.console.ConsoleReader;
+import lc.lcspigot.configuration.StartLCConfiguration;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public final class CraftServer implements Server {
@@ -327,7 +326,6 @@ public final class CraftServer implements Server {
         if (type == PluginLoadOrder.POSTWORLD) {
             // Spigot start - Allow vanilla commands to be forced to be the main command
             setVanillaCommands(true);
-            commandMap.setFallbackCommands();
             setVanillaCommands(false);
             // Spigot end
             commandMap.registerServerAliases();
@@ -687,6 +685,7 @@ public final class CraftServer implements Server {
         chunkGCLoadThresh = configuration.getInt("chunk-gc.load-threshold");
         loadIcon();
 
+        new StartLCConfiguration().load();
         new SpigotConfig().init(); // Spigot
         for (WorldServer world : console.worlds) {
             world.worldData.setDifficulty(difficulty);
@@ -1264,7 +1263,7 @@ public final class CraftServer implements Server {
     @Deprecated
     public OfflinePlayer getOfflinePlayer(String name) {
         Validate.notNull(name, "Name cannot be null");
-        com.google.common.base.Preconditions.checkArgument( !org.apache.commons.lang.StringUtils.isBlank( name ), "Name cannot be blank" ); // Spigot
+        com.google.common.base.Preconditions.checkArgument( !org.apache.commons.lang3.StringUtils.isBlank( name ), "Name cannot be blank" ); // Spigot
 
         OfflinePlayer result = getPlayerExact(name);
         if (result == null) {
@@ -1682,15 +1681,6 @@ public final class CraftServer implements Server {
         return spigot;
     }
 
-    @Override
-    public void configureDbConfig(ServerConfig config) {
-        throw new UnsupportedOperationException("Unimplemented method 'configureDbConfig'");
-    }
-
-    @Override
-    public ChunkData createChunkData(World world) {
-        throw new UnsupportedOperationException("Unimplemented method 'createChunkData'");
-    }
 
     @Override
     public java.util.logging.Logger getLogger() {

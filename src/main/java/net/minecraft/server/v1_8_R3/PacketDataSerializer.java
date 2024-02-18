@@ -1,6 +1,8 @@
 package net.minecraft.server.v1_8_R3;
 
 import com.google.common.base.Charsets;
+import com.hpfxd.pandaspigot.network.VarIntUtil;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufInputStream;
@@ -39,7 +41,7 @@ public class PacketDataSerializer extends ByteBuf {
                 return j;
             }
         }
-
+        
         return 5;
     }
 
@@ -80,20 +82,7 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public int e() {
-        int i = 0;
-        int j = 0;
-
-        byte b0;
-
-        do {
-            b0 = this.readByte();
-            i |= (b0 & 127) << j++ * 7;
-            if (j > 5) {
-                throw new RuntimeException("VarInt too big");
-            }
-        } while ((b0 & 128) == 128);
-
-        return i;
+        return VarIntUtil.readVarInt(this.a);
     }
 
     public long f() {
@@ -123,12 +112,7 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public void b(int i) {
-        while ((i & -128) != 0) {
-            this.writeByte(i & 127 | 128);
-            i >>>= 7;
-        }
-
-        this.writeByte(i);
+        VarIntUtil.writeVarInt(this.a, i); // PandaSpigot - Optimize VarInt writing
     }
 
     public void b(long i) {
@@ -229,13 +213,13 @@ public class PacketDataSerializer extends ByteBuf {
     }
 
     public PacketDataSerializer a(String s) {
-        byte[] abyte = s.getBytes(Charsets.UTF_8);
-
-        if (abyte.length > 32767) {
+        // PandaSpigot start - Optimize string writing
+        int utf8Bytes = io.netty.buffer.ByteBufUtil.utf8Bytes(s);
+        if (utf8Bytes > 32767) {
             throw new EncoderException("String too big (was " + s.length() + " bytes encoded, max " + 32767 + ")");
         } else {
-            this.b(abyte.length);
-            this.writeBytes(abyte);
+            this.b(utf8Bytes);
+            this.writeCharSequence(s, Charsets.UTF_8);
             return this;
         }
     }

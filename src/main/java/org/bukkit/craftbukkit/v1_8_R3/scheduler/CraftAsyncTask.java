@@ -4,9 +4,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-import org.apache.commons.lang.UnhandledException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitWorker;
+import org.tinylog.Logger;
 
 
 class CraftAsyncTask extends CraftTask {
@@ -53,12 +53,11 @@ class CraftAsyncTask extends CraftTask {
             super.run();
         } catch (final Throwable t) {
             thrown = t;
-            throw new UnhandledException(
-                    String.format(
-                        "Plugin %s generated an exception while executing task %s",
-                        getOwner().getDescription().getFullName(),
-                        getTaskId()),
-                    thrown);
+            Logger.error(t);
+            Logger.error( String.format(
+                "Plugin %s generated an exception while executing task %s",
+                getOwner().getDescription().getFullName(),
+                getTaskId()));
         } finally {
             // Cleanup is important for any async task, otherwise ghost tasks are everywhere
             synchronized(workers) {

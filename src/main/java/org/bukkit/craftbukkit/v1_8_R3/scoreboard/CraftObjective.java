@@ -3,7 +3,7 @@ package org.bukkit.craftbukkit.v1_8_R3.scoreboard;
 import net.minecraft.server.v1_8_R3.Scoreboard;
 import net.minecraft.server.v1_8_R3.ScoreboardObjective;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;

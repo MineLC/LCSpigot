@@ -1,0 +1,1 @@
+tick-time: 100 # How many ticks wait to send PacketPlayOutUpdateTime to player. Vanilla: 20

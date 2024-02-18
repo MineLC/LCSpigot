@@ -2,7 +2,7 @@ package org.bukkit.craftbukkit.v1_8_R3.entity;
 
 import net.minecraft.server.v1_8_R3.EntityArrow;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;

@@ -5,7 +5,7 @@ import net.minecraft.server.v1_8_R3.Scoreboard;
 import net.minecraft.server.v1_8_R3.ScoreboardObjective;
 import net.minecraft.server.v1_8_R3.ScoreboardTeam;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -159,10 +159,5 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
     // CraftBukkit method
     public Scoreboard getHandle() {
         return board;
-    }
-
-    @Override
-    public Team getEntryTeam(String entry) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("Unimplemented method 'getEntryTeam'");
     }
 }

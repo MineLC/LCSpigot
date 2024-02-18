@@ -16,7 +16,7 @@ import net.minecraft.server.v1_8_R3.TileEntityDispenser;
 import net.minecraft.server.v1_8_R3.TileEntityDropper;
 import net.minecraft.server.v1_8_R3.TileEntityFurnace;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;

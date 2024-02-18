@@ -1,5 +1,6 @@
 package org.bukkit.craftbukkit.v1_8_R3.entity;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
@@ -21,8 +22,8 @@ import net.md_5.bungee.api.chat.BaseComponent;
 
 import net.minecraft.server.v1_8_R3.*;
 
-import org.apache.commons.lang.Validate;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.NotImplementedException;
 import org.bukkit.*;
 import org.bukkit.Achievement;
 import org.bukkit.Statistic;
@@ -1444,25 +1445,30 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     {
         return spigot;
     }
-    // Spigot end
 
-    @Override
-    public Entity getSpectatorTarget() {
-        throw new UnsupportedOperationException("Unimplemented method 'getSpectatorTarget'");
+    public void setTitleTimes(int fadeInTicks, int stayTicks, int fadeOutTicks) {
+        (getHandle()).playerConnection.sendPacket(new PacketPlayOutTitle(fadeInTicks, stayTicks, fadeOutTicks));
+    }
+
+    public void setSubtitle(BaseComponent[] components) {
+        final PacketPlayOutTitle title = new PacketPlayOutTitle(0,0,0);
+        title.a = PacketPlayOutTitle.EnumTitleAction.SUBTITLE;
+        title.components = components;
+        (getHandle()).playerConnection.sendPacket(title);
+    }
+
+    public void showTitle(BaseComponent[] components) {
+        final PacketPlayOutTitle title = new PacketPlayOutTitle(0,0,0);
+        title.a = PacketPlayOutTitle.EnumTitleAction.TITLE;
+        title.components = components;
+        (getHandle()).playerConnection.sendPacket(title);
     }
 
     @Override
-    public void setSpectatorTarget(Entity entity) {
-        throw new UnsupportedOperationException("Unimplemented method 'setSpectatorTarget'");
-    }
-
-    @Override
-    public void sendTitle(String title, String subtitle) {
-        throw new UnsupportedOperationException("Unimplemented method 'sendTitle'");
-    }
-
-    @Override
-    public void resetTitle() {
-        throw new UnsupportedOperationException("Unimplemented method 'resetTitle'");
+    public void sendTitle(Title title, String subtitle) {
+        Preconditions.checkNotNull(title, "Title is null");
+        setTitleTimes(title.getFadeIn(), title.getStay(), title.getFadeOut());
+        setSubtitle((title.getSubtitle() == null) ? new BaseComponent[0] : title.getSubtitle());
+        showTitle(title.getTitle());
     }
 }

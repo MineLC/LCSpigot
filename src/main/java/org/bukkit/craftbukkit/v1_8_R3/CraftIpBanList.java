@@ -8,8 +8,8 @@ import java.util.Set;
 import net.minecraft.server.v1_8_R3.IpBanEntry;
 import net.minecraft.server.v1_8_R3.IpBanList;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 
 import com.google.common.collect.ImmutableSet;
 

@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraft.server.v1_8_R3.ChatComponentText;
 
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHumanEntity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;

@@ -2,7 +2,7 @@ package org.bukkit.craftbukkit.v1_8_R3.projectiles;
 
 import java.util.Random;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;

@@ -101,7 +101,7 @@ public class BlockStateList {
     }
 
     public String toString() {
-        return Objects.toStringHelper(this).add("block", Block.REGISTRY.c(this.c)).add("properties", Iterables.transform(this.d, BlockStateList.b)).toString();
+        return "block" + Block.REGISTRY.c(this.c) + "properties" + Iterables.transform(this.d, BlockStateList.b).toString();
     }
 
     static class BlockData extends BlockDataAbstract {

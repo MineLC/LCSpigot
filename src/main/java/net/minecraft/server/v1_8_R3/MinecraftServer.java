@@ -41,6 +41,7 @@ import org.tinylog.Logger;
 
 import jline.console.ConsoleReader;
 import joptsimple.OptionSet;
+import lc.lcspigot.configuration.LCConfig;
 
 public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTick> implements Runnable, ICommandListener, IAsyncTaskHandler, IMojangStatistics {
 
@@ -93,7 +94,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     private long X = 0L;
     private final GameProfileRepository Y;
     private final UserCache Z;
-    protected final Queue<FutureTask<?>> j = new java.util.concurrent.ConcurrentLinkedQueue<FutureTask<?>>(); // Spigot, PAIL: Rename
+    protected final Queue<FutureTask<?>> j = new CachedSizeConcurrentLinkedQueue<FutureTask<?>>(); // Spigot, PAIL: Rename
     private Thread serverThread;
     private long ab = az();
 
@@ -726,10 +727,18 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
 
         SpigotTimings.timeUpdateTimer.startTiming(); // Spigot
         // Send time updates to everyone, it will get the right time from the world the player is in.
-        if (this.ticks % 20 == 0) {
-            for (int i = 0; i < this.getPlayerList().players.size(); ++i) {
-                EntityPlayer entityplayer = (EntityPlayer) this.getPlayerList().players.get(i);
-                entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateTime(entityplayer.world.getTime(), entityplayer.getPlayerTime(), entityplayer.world.getGameRules().getBoolean("doDaylightCycle"))); // Add support for per player time
+        if (this.ticks % LCConfig.getConfig().getTickTime() == 0) {
+            for (final WorldServer world : this.worlds) {
+                if (!world.getGameRules().getBoolean("doDaylightCycle")) {
+                    break;
+                }
+                final PacketPlayOutUpdateTime packet = new PacketPlayOutUpdateTime(world.getTime(), world.getDayTime(), true);
+                for (final EntityHuman human : world.players) {
+                    if (!(human instanceof EntityPlayer)) {
+                        continue;
+                    }
+                    ((EntityPlayer)human).playerConnection.sendPacket(packet);
+                }
             }
         }
         SpigotTimings.timeUpdateTimer.stopTiming(); // Spigot

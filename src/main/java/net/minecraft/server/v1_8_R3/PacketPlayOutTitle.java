@@ -2,14 +2,17 @@ package net.minecraft.server.v1_8_R3;
 
 import java.io.IOException;
 
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
+
 public class PacketPlayOutTitle implements Packet<PacketListenerPlayOut> {
 
-    private PacketPlayOutTitle.EnumTitleAction a;
-    private IChatBaseComponent b;
+    public PacketPlayOutTitle.EnumTitleAction a;
+    public IChatBaseComponent b;
     private int c;
     private int d;
     private int e;
-
+    public BaseComponent[] components;
     public PacketPlayOutTitle() {}
 
     public PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction packetplayouttitle_enumtitleaction, IChatBaseComponent ichatbasecomponent) {
@@ -45,7 +48,11 @@ public class PacketPlayOutTitle implements Packet<PacketListenerPlayOut> {
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
         packetdataserializer.a((Enum) this.a);
         if (this.a == PacketPlayOutTitle.EnumTitleAction.TITLE || this.a == PacketPlayOutTitle.EnumTitleAction.SUBTITLE) {
-            packetdataserializer.a(this.b);
+            if (this.components != null) {
+                packetdataserializer.a(ComponentSerializer.toString(this.components));
+            } else {
+                packetdataserializer.a(this.b);
+            }
         }
 
         if (this.a == PacketPlayOutTitle.EnumTitleAction.TIMES) {

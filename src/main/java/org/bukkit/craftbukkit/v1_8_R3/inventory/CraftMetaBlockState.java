@@ -19,7 +19,7 @@ import net.minecraft.server.v1_8_R3.TileEntityMobSpawner;
 import net.minecraft.server.v1_8_R3.TileEntityNote;
 import net.minecraft.server.v1_8_R3.TileEntitySign;
 import net.minecraft.server.v1_8_R3.TileEntitySkull;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.configuration.serialization.DelegateDeserialization;

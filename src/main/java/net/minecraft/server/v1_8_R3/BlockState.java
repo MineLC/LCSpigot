@@ -21,7 +21,7 @@ public abstract class BlockState<T extends Comparable<T>> implements IBlockState
     }
 
     public String toString() {
-        return Objects.toStringHelper(this).add("name", this.b).add("clazz", this.a).add("values", this.c()).toString();
+        return "name" + this.b + "clazz" + this.a + "values" + this.c();
     }
 
     public boolean equals(Object object) {

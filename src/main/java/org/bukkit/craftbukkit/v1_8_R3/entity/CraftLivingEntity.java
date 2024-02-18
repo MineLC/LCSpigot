@@ -30,7 +30,7 @@ import net.minecraft.server.v1_8_R3.GenericAttributes;
 import net.minecraft.server.v1_8_R3.MobEffect;
 import net.minecraft.server.v1_8_R3.MobEffectList;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

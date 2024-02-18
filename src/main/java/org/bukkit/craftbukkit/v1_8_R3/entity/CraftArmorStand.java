@@ -205,14 +205,4 @@ public class CraftArmorStand extends CraftLivingEntity implements ArmorStand {
             (float) Math.toDegrees(old.getZ())
         );
     }
-
-    @Override
-    public boolean isMarker() {
-        throw new UnsupportedOperationException("Unimplemented method 'isMarker'");
-    }
-
-    @Override
-    public void setMarker(boolean marker) {
-        throw new UnsupportedOperationException("Unimplemented method 'setMarker'");
-    }
 }

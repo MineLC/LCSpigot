@@ -769,6 +769,11 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     }
 
     public void sendPacket(final Packet packet) {
+        // CraftBukkit start
+        if (packet == null) {
+            return;
+        }
+
         if (packet instanceof PacketPlayOutChat) {
             PacketPlayOutChat packetplayoutchat = (PacketPlayOutChat) packet;
             EntityHuman.EnumChatVisibility entityhuman_enumchatvisibility = this.player.getChatFlags();
@@ -780,34 +785,14 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             if (entityhuman_enumchatvisibility == EntityHuman.EnumChatVisibility.SYSTEM && !packetplayoutchat.b()) {
                 return;
             }
-        }
-
-        // CraftBukkit start
-        if (packet == null) {
-            return;
         } else if (packet instanceof PacketPlayOutSpawnPosition) {
             PacketPlayOutSpawnPosition packet6 = (PacketPlayOutSpawnPosition) packet;
             this.player.compassTarget = new Location(this.getPlayer().getWorld(), packet6.position.getX(), packet6.position.getY(), packet6.position.getZ());
         }
+
         // CraftBukkit end
 
-        try {
-            this.networkManager.handle(packet);
-        } catch (Throwable throwable) {
-            CrashReport crashreport = CrashReport.a(throwable, "Sending packet");
-            CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Packet being sent");
-
-            crashreportsystemdetails.a("Packet class", new Callable() {
-                public String a() throws Exception {
-                    return packet.getClass().getCanonicalName();
-                }
-
-                public Object call() throws Exception {
-                    return this.a();
-                }
-            });
-            throw new ReportedException(crashreport);
-        }
+        this.networkManager.handle(packet);
     }
 
     public void a(PacketPlayInHeldItemSlot packetplayinhelditemslot) {

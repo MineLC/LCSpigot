@@ -7,41 +7,51 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.CorruptedFrameException;
 import java.util.List;
 
+import com.hpfxd.pandaspigot.network.VarIntByteDecoder;
+
 public class PacketSplitter extends ByteToMessageDecoder {
 
     public PacketSplitter() {}
 
     protected void decode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, List<Object> list) throws Exception {
-        bytebuf.markReaderIndex();
-        byte[] abyte = new byte[3];
-
-        for (int i = 0; i < abyte.length; ++i) {
-            if (!bytebuf.isReadable()) {
-                bytebuf.resetReaderIndex();
-                return;
-            }
-
-            abyte[i] = bytebuf.readByte();
-            if (abyte[i] >= 0) {
-                PacketDataSerializer packetdataserializer = new PacketDataSerializer(Unpooled.wrappedBuffer(abyte));
-
-                try {
-                    int j = packetdataserializer.e();
-
-                    if (bytebuf.readableBytes() >= j) {
-                        list.add(bytebuf.readBytes(j));
-                        return;
-                    }
-
-                    bytebuf.resetReaderIndex();
-                } finally {
-                    packetdataserializer.release();
-                }
-
-                return;
-            }
+        if (!channelhandlercontext.channel().isActive()) {
+            bytebuf.clear();
+            return;
+        } 
+        VarIntByteDecoder reader = new VarIntByteDecoder();
+        int varIntEnd = bytebuf.forEachByte(reader);
+        if (varIntEnd == -1) {
+            if (reader.getResult() == VarIntByteDecoder.DecodeResult.RUN_OF_ZEROES)
+                bytebuf.clear(); 
+            return;
         }
-
-        throw new CorruptedFrameException("length wider than 21-bit");
+    
+        switch (reader.getResult()) {
+            case RUN_OF_ZEROES:
+                bytebuf.readerIndex(varIntEnd);
+                break;
+            case SUCCESS:
+                int readVarint = reader.getReadVarint();
+                int bytesRead = reader.getBytesRead();
+                if (readVarint < 0) {
+                    bytebuf.clear();
+                    throw new CorruptedFrameException("Bad packet length");
+                } 
+                if (readVarint == 0) {
+                    bytebuf.readerIndex(varIntEnd + 1);
+                } else {
+                    int minimumRead = bytesRead + readVarint;
+                    if (bytebuf.isReadable(minimumRead)) {
+                        list.add(bytebuf.retainedSlice(varIntEnd + 1, readVarint));
+                        bytebuf.skipBytes(minimumRead);
+                    }
+                }
+                break;
+            case TOO_BIG:
+                bytebuf.clear();
+                throw new CorruptedFrameException("VarInt too big");
+            default:
+                break;
+        }
     }
 }
