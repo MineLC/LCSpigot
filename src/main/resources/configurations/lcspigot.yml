@@ -1,1 +1,9 @@
 tick-time: 100 # How many ticks wait to send PacketPlayOutUpdateTime to player. Vanilla: 20
+
+unknown-command: "&cEl comando %command% no existe"
+
+container-update-delay: 4 # How many ticks wait to update the player inventory. Vanilla: 1
+
+# How many ticks wait to disable the redstone or block physics. Reduce this value can HEAVY increase performance.
+# Vanilla: 10000
+tick-next-tick-cap: 100

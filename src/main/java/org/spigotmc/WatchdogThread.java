@@ -78,10 +78,6 @@ public class WatchdogThread extends Thread
                 }
                 Logger.error("------------------------------" );
 
-                if ( restart )
-                {
-                    RestartCommand.restart();
-                }
                 break;
             }
 

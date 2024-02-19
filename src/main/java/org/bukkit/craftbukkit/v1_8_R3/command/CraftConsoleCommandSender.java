@@ -6,6 +6,7 @@ import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.conversations.ManuallyAbandonedConversationCanceller;
 import org.bukkit.craftbukkit.v1_8_R3.conversations.ConversationTracker;
+import org.tinylog.Logger;
 
 /**
  * Represents CLI input from a console
@@ -23,7 +24,7 @@ public class CraftConsoleCommandSender extends ServerCommandSender implements Co
     }
 
     public void sendRawMessage(String message) {
-        System.out.println(ChatColor.stripColor(message));
+        Logger.info(ChatColor.stripColor(message));
     }
 
     public void sendMessage(String[] messages) {

@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
+import lc.lcspigot.configuration.LCConfig;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -58,6 +60,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public boolean keepLevel = false;
     public double maxHealthCache;
     public boolean joining = true;
+    private int containerUpdateDelay = LCConfig.getConfig().getContainerUpdateDelay();
     // CraftBukkit end
     // Spigot start
     public boolean collidesWithEntities = true;
@@ -193,7 +196,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             --this.noDamageTicks;
         }
 
-        this.activeContainer.b();
+        if (--containerUpdateDelay <= 0) {
+            this.activeContainer.b();
+            containerUpdateDelay = LCConfig.getConfig().getContainerUpdateDelay();
+        }
+
         if (!this.world.isClientSide && !this.activeContainer.a((EntityHuman) this)) {
             this.closeInventory();
             this.activeContainer = this.defaultContainer;

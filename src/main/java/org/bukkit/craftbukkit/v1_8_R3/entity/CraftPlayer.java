@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
+import lc.lcspigot.commands.CommandStorage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -244,7 +245,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public boolean performCommand(String command) {
-        return server.dispatchCommand(this, command);
+        CommandStorage.execute(this, command);
+        return true;
     }
 
     @Override

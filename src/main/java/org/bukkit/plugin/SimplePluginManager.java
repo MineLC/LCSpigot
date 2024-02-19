@@ -20,9 +20,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Server;
-import org.bukkit.command.Command;
-import org.bukkit.command.PluginCommandYamlParser;
-import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
@@ -43,16 +40,14 @@ public final class SimplePluginManager implements PluginManager {
     private final List<Plugin> plugins = new ArrayList<Plugin>();
     private final Map<String, Plugin> lookupNames = new HashMap<String, Plugin>();
     private static File updateDirectory = null;
-    private final SimpleCommandMap commandMap;
     private final Map<String, Permission> permissions = new HashMap<String, Permission>();
     private final Map<Boolean, Set<Permission>> defaultPerms = new LinkedHashMap<Boolean, Set<Permission>>();
     private final Map<String, Map<Permissible, Boolean>> permSubs = new HashMap<String, Map<Permissible, Boolean>>();
     private final Map<Boolean, Map<Permissible, Boolean>> defSubs = new HashMap<Boolean, Map<Permissible, Boolean>>();
     private boolean useTimings = false;
 
-    public SimplePluginManager(Server instance, SimpleCommandMap commandMap) {
+    public SimplePluginManager(Server instance) {
         server = instance;
-        this.commandMap = commandMap;
 
         defaultPerms.put(true, new HashSet<Permission>());
         defaultPerms.put(false, new HashSet<Permission>());
@@ -295,7 +290,6 @@ public final class SimplePluginManager implements PluginManager {
             }
         }
 
-        org.bukkit.command.defaults.TimingsCommand.timingStart = System.nanoTime(); // Spigot
         return result.toArray(new Plugin[result.size()]);
     }
 
@@ -395,11 +389,6 @@ public final class SimplePluginManager implements PluginManager {
 
     public void enablePlugin(final Plugin plugin) {
         if (!plugin.isEnabled()) {
-            List<Command> pluginCommands = PluginCommandYamlParser.parse(plugin);
-
-            if (!pluginCommands.isEmpty()) {
-                commandMap.registerAll(plugin.getDescription().getName(), pluginCommands);
-            }
 
             try {
                 plugin.getPluginLoader().enablePlugin(plugin);

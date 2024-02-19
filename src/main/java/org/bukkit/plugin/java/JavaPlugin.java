@@ -18,9 +18,6 @@ import java.util.logging.Logger;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Server;
 import org.bukkit.Warning.WarningState;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -357,12 +354,6 @@ public abstract class JavaPlugin extends PluginBase {
         return new ArrayList<Class<?>>();
     }
 
-    private String replaceDatabaseString(String input) {
-        input = input.replaceAll("\\{DIR\\}", dataFolder.getPath().replaceAll("\\\\", "/") + "/");
-        input = input.replaceAll("\\{NAME\\}", description.getName().replaceAll("[^\\w_-]", ""));
-        return input;
-    }
-
     /**
      * Gets the initialization status of this plugin
      *
@@ -373,45 +364,6 @@ public abstract class JavaPlugin extends PluginBase {
     @Deprecated
     public final boolean isInitialized() {
         return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return null;
-    }
-
-    /**
-     * Gets the command with the given name, specific to this plugin. Commands
-     * need to be registered in the {@link PluginDescriptionFile#getCommands()
-     * PluginDescriptionFile} to exist at runtime.
-     *
-     * @param name name or alias of the command
-     * @return the plugin command if found, otherwise null
-     */
-    public PluginCommand getCommand(String name) {
-        String alias = name.toLowerCase();
-        PluginCommand command = getServer().getPluginCommand(alias);
-
-        if (command == null || command.getPlugin() != this) {
-            command = getServer().getPluginCommand(description.getName().toLowerCase() + ":" + alias);
-        }
-
-        if (command != null && command.getPlugin() == this) {
-            return command;
-        } else {
-            return null;
-        }
     }
 
     @Override

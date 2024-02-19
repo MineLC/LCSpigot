@@ -8,23 +8,19 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 
 public class CraftCommandBlock extends CraftBlockState implements CommandBlock {
     private final TileEntityCommand commandBlock;
-    private String command;
-    private String name;
+    private String command = "";
+    private String name = "";
 
     public CraftCommandBlock(Block block) {
         super(block);
 
         CraftWorld world = (CraftWorld) block.getWorld();
         commandBlock = (TileEntityCommand) world.getTileEntityAt(getX(), getY(), getZ());
-        command = commandBlock.getCommandBlock().getCommand();
-        name = commandBlock.getCommandBlock().getName();
-    }
+      }
 
     public CraftCommandBlock(final Material material, final TileEntityCommand te) {
         super(material);
         commandBlock = te;
-        command = commandBlock.getCommandBlock().getCommand();
-        name = commandBlock.getCommandBlock().getName();
     }
 
     public String getCommand() {
@@ -45,11 +41,6 @@ public class CraftCommandBlock extends CraftBlockState implements CommandBlock {
 
     public boolean update(boolean force, boolean applyPhysics) {
         boolean result = super.update(force, applyPhysics);
-
-        if (result) {
-            commandBlock.getCommandBlock().setCommand(command);
-            commandBlock.getCommandBlock().setName(name);
-        }
 
         return result;
     }

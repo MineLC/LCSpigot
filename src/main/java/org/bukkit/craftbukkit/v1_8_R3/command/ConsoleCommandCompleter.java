@@ -1,46 +1,33 @@
 package org.bukkit.craftbukkit.v1_8_R3.command;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-
-import org.bukkit.craftbukkit.v1_8_R3.util.Waitable;
-import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
+import org.bukkit.Bukkit;
 import org.tinylog.Logger;
 
 import jline.console.completer.Completer;
+import lc.lcspigot.commands.Command;
+import lc.lcspigot.commands.CommandStorage;
 
 public class ConsoleCommandCompleter implements Completer {
-    private final CraftServer server;
 
-    public ConsoleCommandCompleter(CraftServer server) {
-        this.server = server;
-    }
-
+    @Override
     public int complete(final String buffer, final int cursor, final List<CharSequence> candidates) {
-        Waitable<List<String>> waitable = new Waitable<List<String>>() {
-            @Override
-            protected List<String> evaluate() {
-                return server.getCommandMap().tabComplete(server.getConsoleSender(), buffer);
-            }
-        };
-        this.server.getServer().processQueue.add(waitable);
-        try {
-            List<String> offers = waitable.get();
-            if (offers == null) {
-                return cursor;
-            }
-            candidates.addAll(offers);
+        if (buffer.isEmpty()) {
+            candidates.addAll(CommandStorage.getCommands());
+            return cursor;
+        }
 
-            final int lastSpace = buffer.lastIndexOf(' ');
-            if (lastSpace == -1) {
-                return cursor - buffer.length();
-            } else {
-                return cursor - (buffer.length() - lastSpace - 1);
+        final Command command = CommandStorage.getCommand(buffer);
+        if (command == null) {
+            return cursor;
+        }
+
+        final String[] tab = command.tab(Bukkit.getConsoleSender(), buffer.split(" "));
+
+        if (tab != null) {
+            for (final String tabOption : tab) {
+                candidates.add(tabOption);
             }
-        } catch (ExecutionException e) {
-            Logger.warn("Unhandled exception when tab completing", e);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
         }
         return cursor;
     }

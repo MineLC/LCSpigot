@@ -35,19 +35,13 @@ import org.bukkit.Warning.WarningState;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.conversations.Conversable;
-import org.bukkit.craftbukkit.v1_8_R3.command.VanillaCommandWrapper;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftFurnaceRecipe;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryCustom;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemFactory;
@@ -75,7 +69,6 @@ import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.help.HelpMap;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Inventory;
@@ -118,6 +111,7 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.base64.Base64;
 import jline.console.ConsoleReader;
+import lc.lcspigot.commands.CommandStorage;
 import lc.lcspigot.configuration.StartLCConfiguration;
 import net.md_5.bungee.api.chat.BaseComponent;
 
@@ -128,7 +122,6 @@ public final class CraftServer implements Server {
     private final String bukkitVersion;
     private final ServicesManager servicesManager;
     private final CraftScheduler scheduler;
-    private final SimpleCommandMap commandMap;
     private final StandardMessenger messenger;
     private final PluginManager pluginManager;
     protected final MinecraftServer console;
@@ -185,8 +178,7 @@ public final class CraftServer implements Server {
         bukkitVersion = Versioning.getBukkitVersion();
         servicesManager = new SimpleServicesManager();
         scheduler = new CraftScheduler();
-        commandMap = new SimpleCommandMap(this);
-        pluginManager = new SimplePluginManager(this, commandMap);
+        pluginManager = new SimplePluginManager(this);
         messenger = new StandardMessenger();
         offlinePlayers = new MapMaker().softValues().makeMap();
         entityMetadata = new EntityMetadataStore();
@@ -194,7 +186,7 @@ public final class CraftServer implements Server {
         worldMetadata = new WorldMetadataStore();
 
         console.console = org.bukkit.craftbukkit.v1_8_R3.command.ColouredConsoleSender.getInstance();
-        console.reader.addCompleter(new org.bukkit.craftbukkit.v1_8_R3.command.ConsoleCommandCompleter(console.server));
+        console.reader.addCompleter(new org.bukkit.craftbukkit.v1_8_R3.command.ConsoleCommandCompleter());
 
         // Register all the Enchantments and PotionTypes now so we can stop new registration immediately after
         Enchantment.DAMAGE_ALL.getClass();
@@ -325,10 +317,7 @@ public final class CraftServer implements Server {
 
         if (type == PluginLoadOrder.POSTWORLD) {
             // Spigot start - Allow vanilla commands to be forced to be the main command
-            setVanillaCommands(true);
-            setVanillaCommands(false);
             // Spigot end
-            commandMap.registerServerAliases();
             loadCustomPermissions();
             DefaultPermissions.registerCorePermissions();
             CraftDefaultPermissions.registerCorePermissions();
@@ -337,22 +326,6 @@ public final class CraftServer implements Server {
 
     public void disablePlugins() {
         pluginManager.disablePlugins();
-    }
-
-    private void setVanillaCommands(boolean first) { // Spigot
-        Map<String, ICommand> commands = new CommandDispatcher().getCommands();
-        for (ICommand cmd : commands.values()) {
-            // Spigot start
-            VanillaCommandWrapper wrapper = new VanillaCommandWrapper((CommandAbstract) cmd, LocaleI18n.get(cmd.getUsage(null)));
-            if (org.spigotmc.SpigotConfig.replaceCommands.contains( wrapper.getName() ) ) {
-                if (first) {
-                    commandMap.register("minecraft", wrapper);
-                }
-            } else if (!first) {
-                commandMap.register("minecraft", wrapper);
-            }
-            // Spigot end
-        }
     }
 
     private void loadPlugin(Plugin plugin) {
@@ -621,41 +594,6 @@ public final class CraftServer implements Server {
         return playerList;
     }
 
-    // NOTE: Should only be called from DedicatedServer.ah()
-    public boolean dispatchServerCommand(CommandSender sender, ServerCommand serverCommand) {
-        if (sender instanceof Conversable) {
-            Conversable conversable = (Conversable)sender;
-
-            if (conversable.isConversing()) {
-                conversable.acceptConversationInput(serverCommand.command);
-                return true;
-            }
-        }
-        try {
-            this.playerCommandState = true;
-            return dispatchCommand(sender, serverCommand.command);
-        } catch (Exception ex) {
-            Logger.warn("Unexpected exception while parsing console command \"" + serverCommand.command + '"', ex);
-            return false;
-        } finally {
-            this.playerCommandState = false;
-        }
-    }
-
-    @Override
-    public boolean dispatchCommand(CommandSender sender, String commandLine) {
-        Validate.notNull(sender, "Sender cannot be null");
-        Validate.notNull(commandLine, "CommandLine cannot be null");
-
-        if (commandMap.dispatch(sender, commandLine)) {
-            return true;
-        }
-
-        sender.sendMessage(org.spigotmc.SpigotConfig.unknownCommandMessage);
-
-        return false;
-    }
-
     @Override
     public void reload() {
         reloadCount++;
@@ -705,9 +643,7 @@ public final class CraftServer implements Server {
         }
 
         pluginManager.clearPlugins();
-        commandMap.clearCommands();
         resetRecipes();
-        new SpigotConfig().registerCommands(); // Spigot
 
         overrideAllCommandBlockCommands = commandsConfiguration.getStringList("command-block-overrides").contains("*");
 
@@ -1036,17 +972,6 @@ public final class CraftServer implements Server {
 
     public ConsoleReader getReader() {
         return console.reader;
-    }
-
-    @Override
-    public PluginCommand getPluginCommand(String name) {
-        Command command = commandMap.getCommand(name);
-
-        if (command instanceof PluginCommand) {
-            return (PluginCommand) command;
-        } else {
-            return null;
-        }
     }
 
     @Override
@@ -1484,14 +1409,6 @@ public final class CraftServer implements Server {
         return new CraftInventoryCustom(owner, size, title);
     }
 
-    @Override
-    public HelpMap getHelpMap() {
-        return null;
-    }
-
-    public SimpleCommandMap getCommandMap() {
-        return commandMap;
-    }
 
     @Override
     public int getMonsterSpawnLimit() {
@@ -1526,61 +1443,6 @@ public final class CraftServer implements Server {
     @Override
     public WarningState getWarningState() {
         return warningState;
-    }
-
-    public List<String> tabComplete(net.minecraft.server.v1_8_R3.ICommandListener sender, String message) {
-        if (!(sender instanceof EntityPlayer)) {
-            return ImmutableList.of();
-        }
-
-        Player player = ((EntityPlayer) sender).getBukkitEntity();
-        if (message.startsWith("/")) {
-            return tabCompleteCommand(player, message);
-        } else {
-            return tabCompleteChat(player, message);
-        }
-    }
-
-    public List<String> tabCompleteCommand(Player player, String message) {
-        // Spigot Start
-		if ( (org.spigotmc.SpigotConfig.tabComplete < 0 || message.length() <= org.spigotmc.SpigotConfig.tabComplete) && !message.contains( " " ) )
-        {
-            return ImmutableList.of();
-        }
-        // Spigot End
-
-        List<String> completions = null;
-        try {
-            completions = getCommandMap().tabComplete(player, message.substring(1));
-        } catch (CommandException ex) {
-            player.sendMessage(ChatColor.RED + "An internal error occurred while attempting to tab-complete this command");
-            Logger.error("Exception when " + player.getName() + " attempted to tab complete " + message, ex);
-        }
-
-        return completions == null ? ImmutableList.<String>of() : completions;
-    }
-
-    public List<String> tabCompleteChat(Player player, String message) {
-        List<String> completions = new ArrayList<String>();
-        PlayerChatTabCompleteEvent event = new PlayerChatTabCompleteEvent(player, message, completions);
-        String token = event.getLastToken();
-        for (Player p : getOnlinePlayers()) {
-            if (player.canSee(p) && StringUtil.startsWithIgnoreCase(p.getName(), token)) {
-                completions.add(p.getName());
-            }
-        }
-        pluginManager.callEvent(event);
-
-        Iterator<?> it = completions.iterator();
-        while (it.hasNext()) {
-            Object current = it.next();
-            if (!(current instanceof String)) {
-                // Sanity
-                it.remove();
-            }
-        }
-        Collections.sort(completions, String.CASE_INSENSITIVE_ORDER);
-        return completions;
     }
 
     @Override

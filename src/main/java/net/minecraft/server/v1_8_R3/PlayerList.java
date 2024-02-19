@@ -497,7 +497,6 @@ public abstract class PlayerList {
         entityplayer1.playerConnection = entityplayer.playerConnection;
         entityplayer1.copyTo(entityplayer, flag);
         entityplayer1.d(entityplayer.getId());
-        entityplayer1.o(entityplayer);
         // WorldServer worldserver = this.server.getWorldServer(entityplayer.dimension);  // CraftBukkit - handled later
 
         // this.a(entityplayer1, entityplayer, worldserver); // CraftBukkit - removed

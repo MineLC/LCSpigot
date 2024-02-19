@@ -887,8 +887,6 @@ public abstract class EntityHuman extends EntityLiving {
 
     public void openSign(TileEntitySign tileentitysign) {}
 
-    public void a(CommandBlockListenerAbstract commandblocklistenerabstract) {}
-
     public void openTrade(IMerchant imerchant) {}
 
     public void openContainer(IInventory iinventory) {}

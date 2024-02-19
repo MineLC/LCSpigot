@@ -2,6 +2,9 @@ package net.minecraft.server.v1_8_R3;
 
 import com.google.common.collect.Lists;
 
+import lc.lcspigot.commands.CommandStorage;
+import lc.lcspigot.commands.custom.CustomCommandLoader;
+import lc.lcspigot.commands.vanilla.VanillaCommandLoader;
 import lc.lcspigot.configuration.StartLCConfiguration;
 
 import java.io.File;
@@ -14,19 +17,12 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import org.bukkit.event.server.ServerCommandEvent;
 import org.spigotmc.SpigotConfig;
 import org.tinylog.Logger;
-import org.bukkit.craftbukkit.v1_8_R3.util.Waitable;
-import org.bukkit.craftbukkit.v1_8_R3.SpigotTimings;
-import org.bukkit.event.server.RemoteServerCommandEvent;
 // CraftBukkit end
 
 public class DedicatedServer extends MinecraftServer implements IMinecraftServer {
 
-    private final List<ServerCommand> l = Collections.synchronizedList(Lists.<ServerCommand>newArrayList()); // CraftBukkit - fix decompile error
-    private RemoteStatusListener m;
-    private RemoteControlListener n;
     public PropertyManager propertyManager; // CraftBukkit - public
     private boolean generateStructures;
     private WorldSettings.EnumGamemode r;
@@ -57,7 +53,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
                             s = bufferedreader.readLine();
                         }
                         if (s != null && s.trim().length() > 0) { // Trim to filter lines which are just spaces
-                            issueCommand(s, DedicatedServer.this);
+                            CommandStorage.execute(console, s);
                         }
                         // CraftBukkit end
                     }
@@ -114,11 +110,14 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         if (this.R() < 0) {
             this.setPort(this.propertyManager.getInt("server-port", 25565));
         }
+
+        new StartLCConfiguration().load();
+        new VanillaCommandLoader().load();
+        new CustomCommandLoader().load();
+
         // Spigot start
         this.a(new DedicatedPlayerList(this));
-        new StartLCConfiguration().load();
         new SpigotConfig().init();
-        new SpigotConfig().registerCommands();
         // Spigot end
 
         Logger.info("Generating keypair");
@@ -201,18 +200,6 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
             String s3 = String.format("%.3fs", new Object[] { Double.valueOf((double) i1 / 1.0E9D)});
 
             Logger.info("Done (" + s3 + ")! For help, type \"help\" or \"?\"");
-            if (this.propertyManager.getBoolean("enable-query", false)) {
-                Logger.info("Starting GS4 status listener");
-                this.m = new RemoteStatusListener(this);
-                this.m.a();
-            }
-
-            if (this.propertyManager.getBoolean("enable-rcon", false)) {
-                Logger.info("Starting remote control listener");
-                this.n = new RemoteControlListener(this);
-                this.n.a();
-                this.remoteConsole = new org.bukkit.craftbukkit.v1_8_R3.command.CraftRemoteConsoleCommandSender(); // CraftBukkit
-            }
 
             // CraftBukkit start
             if (this.server.getBukkitSpawnRadius() > -1) {
@@ -298,7 +285,6 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     public void B() { // CraftBukkit - fix decompile error
         super.B();
-        this.aO();
     }
 
     public boolean getAllowNether() {
@@ -317,28 +303,6 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
 
     public boolean getSnooperEnabled() {
         return this.propertyManager.getBoolean("snooper-enabled", true);
-    }
-
-    public void issueCommand(String s, ICommandListener icommandlistener) {
-        this.l.add(new ServerCommand(s, icommandlistener));
-    }
-
-    public void aO() {
-        SpigotTimings.serverCommandTimer.startTiming(); // Spigot
-        while (!this.l.isEmpty()) {
-            ServerCommand servercommand = (ServerCommand) this.l.remove(0);
-
-            // CraftBukkit start - ServerCommand for preprocessing
-            ServerCommandEvent event = new ServerCommandEvent(console, servercommand.command);
-            server.getPluginManager().callEvent(event);
-            servercommand = new ServerCommand(event.getCommand(), servercommand.source);
-
-            // this.getCommandHandler().a(servercommand.source, servercommand.command); // Called in dispatchServerCommand
-            server.dispatchServerCommand(console, servercommand);
-            // CraftBukkit end
-        }
-
-        SpigotTimings.serverCommandTimer.stopTiming(); // Spigot
     }
 
     public boolean ae() {
@@ -554,33 +518,6 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         }
 
         return result.toString();
-        // CraftBukkit end
-    }
-
-    // CraftBukkit start - fire RemoteServerCommandEvent
-    public String executeRemoteCommand(final String s) {
-        Waitable<String> waitable = new Waitable<String>() {
-            @Override
-            protected String evaluate() {
-                RemoteControlCommandListener.getInstance().i();
-                // Event changes start
-                RemoteServerCommandEvent event = new RemoteServerCommandEvent(remoteConsole, s);
-                server.getPluginManager().callEvent(event);
-                // Event change end
-                ServerCommand serverCommand = new ServerCommand(event.getCommand(), RemoteControlCommandListener.getInstance());
-                server.dispatchServerCommand(remoteConsole, serverCommand);
-                return RemoteControlCommandListener.getInstance().j();
-            }
-        };
-        processQueue.add(waitable);
-        try {
-            return waitable.get();
-        } catch (java.util.concurrent.ExecutionException e) {
-            throw new RuntimeException("Exception processing rcon command " + s, e.getCause());
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // Maintain interrupted state
-            throw new RuntimeException("Interrupted processing rcon command " + s, e);
-        }
         // CraftBukkit end
     }
 

@@ -2,6 +2,7 @@ package org.bukkit.craftbukkit.v1_8_R3.util;
 
 import com.google.common.collect.Lists;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -99,12 +100,12 @@ public final class CraftMagicNumbers implements UnsafeValues {
     }
 
     @Override
-    public List<String> tabCompleteInternalMaterialName(String token, List<String> completions) {
+    public String[] tabCompleteInternalMaterialName(String token, List<String> completions) {
         ArrayList<String> results = Lists.newArrayList();
         for (MinecraftKey key : (Set<MinecraftKey>)Item.REGISTRY.keySet()) {
             results.add(key.toString());
         }
-        return StringUtil.copyPartialMatches(token, results, completions);
+        return (String[])StringUtil.copyPartialMatches(token, results, completions).toArray();
     }
 
     @Override
@@ -133,7 +134,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
     }
 
     @Override
-    public List<String> tabCompleteInternalStatisticOrAchievementName(String token, List<String> completions) {
+    public String[] tabCompleteInternalStatisticOrAchievementName(String token, List<String> completions) {
         List<String> matches = new ArrayList<String>();
         Iterator iterator = StatisticList.stats.iterator();
         while (iterator.hasNext()) {
@@ -142,6 +143,6 @@ public final class CraftMagicNumbers implements UnsafeValues {
                 matches.add(statistic);
             }
         }
-        return matches;
+        return (String[])matches.toArray();
     }
 }

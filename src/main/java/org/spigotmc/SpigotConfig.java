@@ -7,19 +7,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.server.v1_8_R3.AttributeRanged;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -43,7 +38,6 @@ public class SpigotConfig
     /*========================================================================*/
     public static YamlConfiguration config;
     static int version;
-    static Map<String, Command> commands;
     /*========================================================================*/
 
     public void init()
@@ -63,18 +57,9 @@ public class SpigotConfig
         config.options().header( HEADER );
         config.options().copyDefaults( true );
 
-        commands = new HashMap<String, Command>();
         version = getInt( "config-version", 8 );
         set( "config-version", 8 );
         readConfig(SpigotConfig.class, this);
-    }
-
-    public void registerCommands()
-    {
-        for ( Map.Entry<String, Command> entry : commands.entrySet() )
-        {
-            MinecraftServer.getServer().server.getCommandMap().register( entry.getKey(), "Spigot", entry.getValue() );
-        }
     }
 
     public void readConfig(Class<?> clazz, Object instance)
@@ -201,7 +186,6 @@ public class SpigotConfig
         restartOnCrash = getBoolean( "settings.restart-on-crash", restartOnCrash );
         restartScript = getString( "settings.restart-script", restartScript );
         restartMessage = transform( getString( "messages.restart", "Server is restarting" ) );
-        commands.put( "restart", new RestartCommand( "restart" ) );
         WatchdogThread.doStart( timeoutTime, restartOnCrash );
     }
 
@@ -252,11 +236,6 @@ public class SpigotConfig
                     " isn't set to 1. Disabling stat saving without forcing the achievement may cause it to get stuck on the player's " +
                     "screen." );
         }
-    }
-
-    private void tpsCommand()
-    {
-        commands.put( "tps", new TicksPerSecondCommand( "tps" ) );
     }
 
     public static int playerSample;

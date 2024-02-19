@@ -21,7 +21,7 @@ public interface UnsafeValues {
 
     Material getMaterialFromInternalName(String name);
 
-    List<String> tabCompleteInternalMaterialName(String token, List<String> completions);
+    String[] tabCompleteInternalMaterialName(String token, List<String> completions);
 
     ItemStack modifyItemStack(ItemStack stack, String arguments);
 
@@ -29,5 +29,5 @@ public interface UnsafeValues {
 
     Achievement getAchievementFromInternalName(String name);
 
-    List<String> tabCompleteInternalStatisticOrAchievementName(String token, List<String> completions);
+    String[] tabCompleteInternalStatisticOrAchievementName(String token, List<String> completions);
 }

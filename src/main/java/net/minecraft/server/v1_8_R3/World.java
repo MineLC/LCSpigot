@@ -1167,12 +1167,11 @@ public abstract class World implements IBlockAccess {
             int cx = chunkx << 4;
             for ( int chunkz = ( i1 >> 4 ); chunkz <= ( ( j1 - 1 ) >> 4 ); chunkz++ )
             {
-                if ( !this.isChunkLoaded( chunkx, chunkz, true ) )
-                {
+                Chunk chunk = this.getChunkIfLoaded( chunkx, chunkz );
+                if (chunk == null) {
                     continue;
                 }
                 int cz = chunkz << 4;
-                Chunk chunk = this.getChunkAt( chunkx, chunkz );
                 // Compute ranges within chunk
                 int xstart = ( i < cx ) ? cx : i;
                 int xend = ( j < ( cx + 16 ) ) ? j : ( cx + 16 );
@@ -1210,6 +1209,8 @@ public abstract class World implements IBlockAccess {
             }
         }
         // Spigot end
+
+        if (entity instanceof EntityItem) return arraylist; // PaperSpigot - Optimize item movement
 
         double d0 = 0.25D;
         List list = this.getEntities(entity, axisalignedbb.grow(d0, d0, d0));
@@ -1362,11 +1363,7 @@ public abstract class World implements IBlockAccess {
             } catch (Throwable throwable) {
                 crashreport = CrashReport.a(throwable, "Ticking entity");
                 crashreportsystemdetails = crashreport.a("Entity being ticked");
-                if (entity == null) {
-                    crashreportsystemdetails.a("Entity", (Object) "~~NULL~~");
-                } else {
-                    entity.appendEntityCrashDetails(crashreportsystemdetails);
-                }
+                entity.appendEntityCrashDetails(crashreportsystemdetails);
 
                 throw new ReportedException(crashreport);
             }

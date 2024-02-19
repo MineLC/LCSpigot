@@ -30,8 +30,6 @@ public interface IMinecraftServer {
 
     String getPlugins();
 
-    String executeRemoteCommand(String s);
-
     boolean isDebugging();
 
     void info(String s);
@@ -40,5 +38,4 @@ public interface IMinecraftServer {
 
     void g(String s);
 
-    void h(String s);
 }

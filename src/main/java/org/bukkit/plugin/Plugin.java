@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.logging.Logger;
 
 import org.bukkit.Server;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.generator.ChunkGenerator;
 
@@ -15,7 +14,7 @@ import org.bukkit.generator.ChunkGenerator;
  * <p>
  * The use of {@link PluginBase} is recommended for actual Implementation
  */
-public interface Plugin extends TabExecutor {
+public interface Plugin {
     /**
      * Returns the folder that the plugin data's files are located in. The
      * folder may not yet exist.

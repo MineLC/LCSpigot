@@ -113,12 +113,6 @@ public class BlockMinecartDetector extends BlockMinecartTrackAbstract {
 
     public int l(World world, BlockPosition blockposition) {
         if (((Boolean) world.getType(blockposition).get(BlockMinecartDetector.POWERED)).booleanValue()) {
-            List list = this.a(world, blockposition, EntityMinecartCommandBlock.class, new Predicate[0]);
-
-            if (!list.isEmpty()) {
-                return ((EntityMinecartCommandBlock) list.get(0)).getCommandBlock().j();
-            }
-
             List list1 = this.a(world, blockposition, EntityMinecartAbstract.class, new Predicate[] { IEntitySelector.c});
 
             if (!list1.isEmpty()) {

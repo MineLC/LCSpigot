@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import lc.lcspigot.commands.CommandStorage;
 import lc.lcspigot.events.PreInteractEntityEvent;
 import lc.lcspigot.listeners.internal.EventsExecutor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -12,15 +13,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
-import org.apache.commons.lang3.StringUtils;
 import org.tinylog.Logger;
 
 // CraftBukkit start
-import java.util.concurrent.ExecutionException;
 import java.util.HashSet;
 
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -29,8 +26,6 @@ import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryView;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_8_R3.util.CraftChatMessage;
 import org.bukkit.craftbukkit.v1_8_R3.util.LazyPlayerSet;
-import org.bukkit.craftbukkit.v1_8_R3.util.Waitable;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -44,7 +39,6 @@ import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
@@ -817,105 +811,37 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     }
 
     public void a(PacketPlayInChat packetplayinchat) {
-        // CraftBukkit start - async chat
-        boolean isSync = packetplayinchat.a().startsWith("/");
-        if (packetplayinchat.a().startsWith("/")) {
-            PlayerConnectionUtils.ensureMainThread(packetplayinchat, this, this.player.u());
+        final String message = packetplayinchat.a();
+        if (message.isEmpty()) {
+            return;
         }
+
+        if (message.charAt(0) == '/'){
+            CommandStorage.execute(getPlayer(), message.substring(1));
+            return;
+        }
+
         // CraftBukkit end
         if (this.player.dead || this.player.getChatFlags() == EntityHuman.EnumChatVisibility.HIDDEN) { // CraftBukkit - dead men tell no tales
             ChatMessage chatmessage = new ChatMessage("chat.cannotSend", new Object[0]);
 
             chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
             this.sendPacket(new PacketPlayOutChat(chatmessage));
-        } else {
-            this.player.resetIdleTimer();
-            String s = packetplayinchat.a();
-
-            s = StringUtils.normalizeSpace(s);
-
-            for (int i = 0; i < s.length(); ++i) {
-                if (!SharedConstants.isAllowedChatCharacter(s.charAt(i))) {
-                    // CraftBukkit start - threadsafety
-                    if (!isSync) {
-                        Waitable waitable = new Waitable() {
-                            @Override
-                            protected Object evaluate() {
-                                PlayerConnection.this.disconnect("Illegal characters in chat");
-                                return null;
-                            }
-                        };
-
-                        this.minecraftServer.processQueue.add(waitable);
-
-                        try {
-                            waitable.get();
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                        } catch (ExecutionException e) {
-                            throw new RuntimeException(e);
-                        }
-                    } else {
-                        this.disconnect("Illegal characters in chat");
-                    }
-                    // CraftBukkit end
-                    return;
-                }
-            }
-
-            // CraftBukkit start
-            if (isSync) {
-                try {
-                    this.minecraftServer.server.playerCommandState = true;
-                    this.handleCommand(s);
-                } finally {
-                    this.minecraftServer.server.playerCommandState = false;
-                }
-            } else if (s.isEmpty()) {
-                Logger.warn(this.player.getName() + " tried to send an empty message");
-            } else if (getPlayer().isConversing()) {
-                // Spigot start
-                final String message = s;
-                this.minecraftServer.processQueue.add( new Waitable()
-                {
-                    @Override
-                    protected Object evaluate()
-                    {
-                        getPlayer().acceptConversationInput( message );
-                        return null;
-                    }
-                } );
-                // Spigot end
-            } else if (this.player.getChatFlags() == EntityHuman.EnumChatVisibility.SYSTEM) { // Re-add "Command Only" flag check
-                ChatMessage chatmessage = new ChatMessage("chat.cannotSend", new Object[0]);
-
-                chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
-                this.sendPacket(new PacketPlayOutChat(chatmessage));
-            } else if (true) {
-                this.chat(s, true);
-                // CraftBukkit end - the below is for reference. :)
-            } else {
-                ChatMessage chatmessage1 = new ChatMessage("chat.type.text", new Object[] { this.player.getScoreboardDisplayName(), s});
-
-                this.minecraftServer.getPlayerList().sendMessage(chatmessage1, false);
-            }
+            return;
         }
+
+        if (this.player.getChatFlags() == EntityHuman.EnumChatVisibility.SYSTEM) { // Re-add "Command Only" flag check
+            ChatMessage chatmessage = new ChatMessage("chat.cannotSend", new Object[0]);
+
+            chatmessage.getChatModifier().setColor(EnumChatFormat.RED);
+            this.sendPacket(new PacketPlayOutChat(chatmessage));
+            return;
+        }
+
+        this.chat(message, true);
     }
 
-    // CraftBukkit start - add method
     public void chat(String s, boolean async) {
-        if (s.isEmpty() || this.player.getChatFlags() == EntityHuman.EnumChatVisibility.HIDDEN) {
-            return;
-        }
-
-        if (!async && s.charAt(0) == '/'){
-            this.handleCommand(s);
-            return;
-        }
-        
-        if (this.player.getChatFlags() == EntityHuman.EnumChatVisibility.SYSTEM) {
-            return;
-        }
         final Player player = this.getPlayer();
         final AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(async, player, s, new LazyPlayerSet());
         this.server.getPluginManager().callEvent(event);
@@ -941,40 +867,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             recipient.spigot().sendMessage(message);
         }
     }
-    // CraftBukkit end
-
-   private void handleCommand(String s) {
-        org.bukkit.craftbukkit.v1_8_R3.SpigotTimings.playerCommandTimer.startTiming(); // Spigot
-       // CraftBukkit start - whole method
-        if ( org.spigotmc.SpigotConfig.logCommands ) // Spigot
-        Logger.info(this.player.getName() + " issued server command: " + s);
-
-        CraftPlayer player = this.getPlayer();
-
-        PlayerCommandPreprocessEvent event = new PlayerCommandPreprocessEvent(player, s, new LazyPlayerSet());
-        this.server.getPluginManager().callEvent(event);
-
-        if (event.isCancelled()) {
-            org.bukkit.craftbukkit.v1_8_R3.SpigotTimings.playerCommandTimer.stopTiming(); // Spigot
-            return;
-        }
-
-        try {
-            if (this.server.dispatchCommand(event.getPlayer(), event.getMessage().substring(1))) {
-                org.bukkit.craftbukkit.v1_8_R3.SpigotTimings.playerCommandTimer.stopTiming(); // Spigot
-                return;
-            }
-        } catch (org.bukkit.command.CommandException ex) {
-            player.sendMessage(org.bukkit.ChatColor.RED + "An internal error occurred while attempting to perform this command");
-            Logger.info(null, ex);
-            org.bukkit.craftbukkit.v1_8_R3.SpigotTimings.playerCommandTimer.stopTiming(); // Spigot
-            return;
-        }
-        org.bukkit.craftbukkit.v1_8_R3.SpigotTimings.playerCommandTimer.stopTiming(); // Spigot
-        // this.minecraftServer.getCommandHandler().a(this.player, s);
-        // CraftBukkit end
-    }
-
+ 
     public void a(PacketPlayInArmAnimation packetplayinarmanimation) {
         if (this.player.dead) return; // CraftBukkit
         PlayerConnectionUtils.ensureMainThread(packetplayinarmanimation, this, this.player.u());
@@ -1717,16 +1610,10 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     public void a(PacketPlayInTabComplete packetplayintabcomplete) {
         PlayerConnectionUtils.ensureMainThread(packetplayintabcomplete, this, this.player.u());
 
-        ArrayList arraylist = Lists.newArrayList();
-        Iterator iterator = this.minecraftServer.tabCompleteCommand(this.player, packetplayintabcomplete.a(), packetplayintabcomplete.b()).iterator();
-
-        while (iterator.hasNext()) {
-            String s = (String) iterator.next();
-
-            arraylist.add(s);
+        final String[] tab = CommandStorage.tab(getPlayer(), packetplayintabcomplete.a());
+        if (tab != null) {
+            this.player.playerConnection.sendPacket(new PacketPlayOutTabComplete(tab));
         }
-
-        this.player.playerConnection.sendPacket(new PacketPlayOutTabComplete((String[]) arraylist.toArray(new String[arraylist.size()])));
     }
 
     public void a(PacketPlayInSettings packetplayinsettings) {
@@ -1822,51 +1709,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 this.disconnect("Invalid trade data!"); // CraftBukkit
             }
         } else if ("MC|AdvCdm".equals(packetplayincustompayload.a())) {
-            if (!this.minecraftServer.getEnableCommandBlock()) {
-                this.player.sendMessage(new ChatMessage("advMode.notEnabled", new Object[0]));
-            } else if (this.player.getBukkitEntity().isOp() && this.player.abilities.canInstantlyBuild) { // CraftBukkit - Change to Bukkit OP versus Vanilla OP
-                packetdataserializer = packetplayincustompayload.b();
-
-                try {
-                    byte b0 = packetdataserializer.readByte();
-                    CommandBlockListenerAbstract commandblocklistenerabstract = null;
-
-                    if (b0 == 0) {
-                        TileEntity tileentity = this.player.world.getTileEntity(new BlockPosition(packetdataserializer.readInt(), packetdataserializer.readInt(), packetdataserializer.readInt()));
-
-                        if (tileentity instanceof TileEntityCommand) {
-                            commandblocklistenerabstract = ((TileEntityCommand) tileentity).getCommandBlock();
-                        }
-                    } else if (b0 == 1) {
-                        Entity entity = this.player.world.a(packetdataserializer.readInt());
-
-                        if (entity instanceof EntityMinecartCommandBlock) {
-                            commandblocklistenerabstract = ((EntityMinecartCommandBlock) entity).getCommandBlock();
-                        }
-                    }
-
-                    String s = packetdataserializer.c(packetdataserializer.readableBytes());
-                    boolean flag = packetdataserializer.readBoolean();
-
-                    if (commandblocklistenerabstract != null) {
-                        commandblocklistenerabstract.setCommand(s);
-                        commandblocklistenerabstract.a(flag);
-                        if (!flag) {
-                            commandblocklistenerabstract.b((IChatBaseComponent) null);
-                        }
-
-                        commandblocklistenerabstract.h();
-                        this.player.sendMessage(new ChatMessage("advMode.setCommand.success", new Object[] { s}));
-                    }
-                } catch (Exception exception3) {
-                    Logger.error("Couldn\'t set command block", exception3);
-                    this.disconnect("Invalid CommandBlock data!"); // CraftBukkit
-                } finally {
-                    packetdataserializer.release();
-                }
-            } else {
-                this.player.sendMessage(new ChatMessage("advMode.notAllowed", new Object[0]));
-            }
+            this.player.sendMessage(new ChatMessage("advMode.notEnabled", new Object[0]));
         } else if ("MC|Beacon".equals(packetplayincustompayload.a())) {
             if (this.player.activeContainer instanceof ContainerBeacon) {
                 try {

@@ -57,16 +57,7 @@ public class ItemWrittenBook extends Item {
                     for (int i = 0; i < nbttaglist.size(); ++i) {
                         String s = nbttaglist.getString(i);
 
-                        Object object;
-
-                        try {
-                            IChatBaseComponent ichatbasecomponent = IChatBaseComponent.ChatSerializer.a(s);
-
-                            object = ChatComponentUtils.filterForDisplay(entityhuman, ichatbasecomponent, entityhuman);
-                        } catch (Exception exception) {
-                            object = new ChatComponentText(s);
-                        }
-
+                        Object object = new ChatComponentText(s);
                         nbttaglist.a(i, new NBTTagString(IChatBaseComponent.ChatSerializer.a((IChatBaseComponent) object)));
                     }
 

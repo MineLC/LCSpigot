@@ -13,15 +13,12 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.bukkit.Warning.WarningState;
-import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.server.ServerListPingEvent;
-import org.bukkit.help.HelpMap;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -543,15 +540,6 @@ public final class Bukkit {
         return server.getLogger();
     }
 
-    /**
-     * Gets a {@link PluginCommand} with the given name or alias.
-     *
-     * @param name the name of the command to retrieve
-     * @return a plugin command if found, null otherwise
-     */
-    public static PluginCommand getPluginCommand(String name) {
-        return server.getPluginCommand(name);
-    }
 
     /**
      * Writes loaded players to disk.
@@ -559,20 +547,7 @@ public final class Bukkit {
     public static void savePlayers() {
         server.savePlayers();
     }
-    
-    /**
-     * Dispatches a command on this server, and executes it if found.
-     *
-     * @param sender the apparent sender of the command
-     * @param commandLine the command + arguments. Example: <code>test abc
-     *     123</code>
-     * @return returns false if no target is found
-     * @throws CommandException thrown when the executor for the given command
-     *     fails with an unhandled exception
-     */
-    public static boolean dispatchCommand(CommandSender sender, String commandLine) throws CommandException {
-        return server.dispatchCommand(sender, commandLine);
-    }
+
 
     /**
      * Adds a recipe to the crafting manager.
@@ -855,15 +830,6 @@ public final class Bukkit {
      */
     public static Messenger getMessenger() {
         return server.getMessenger();
-    }
-
-    /**
-     * Gets the {@link HelpMap} providing help topics for this server.
-     *
-     * @return a help map for this server
-     */
-    public static HelpMap getHelpMap() {
-        return server.getHelpMap();
     }
 
     /**

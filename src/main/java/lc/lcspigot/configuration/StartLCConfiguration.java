@@ -24,7 +24,12 @@ public final class StartLCConfiguration {
         }
 
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-        final LCConfig lcConfig = new LCConfig(config.getInt("tick-time"));
+        final LCConfig lcConfig = new LCConfig(
+            Color.parse(config.getString("unknown-command")),
+            getInt(config, "tick-time", 20),
+            getInt(config, "container-update-delay", 1),
+            getInt(config, "", 10000)
+        );
 
         LCConfig.setInstance(lcConfig);   
     }
@@ -46,5 +51,10 @@ public final class StartLCConfiguration {
             Logger.error(e);
             return false;
         }
+    }
+
+    private int getInt(final FileConfiguration config, final String section, final int defaultValue) {
+        final int value = config.getInt(section);
+        return (value == 0) ? defaultValue : value;
     }
 }

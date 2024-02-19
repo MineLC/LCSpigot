@@ -6,6 +6,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import lc.lcspigot.configuration.LCConfig;
+
 import org.tinylog.Logger;
 
 // CraftBukkit start
@@ -577,13 +579,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     public void tickEntities() {
-        if (false && this.players.isEmpty()) { // CraftBukkit - this prevents entity cleanup, other issues on servers with no players
-            if (this.emptyTime++ >= 1200) {
-                return;
-            }
-        } else {
-            this.j();
-        }
+        this.j();
 
         super.tickEntities();
         spigotConfig.currentPrimedTnt = 0; // Spigot
@@ -596,70 +592,70 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     public boolean a(boolean flag) {
         if (this.worldData.getType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
             return false;
-        } else {
-            int i = this.M.size();
+        }
+        int i = this.M.size();
 
-            if (false) { // CraftBukkit
-                throw new IllegalStateException("TickNextTick list out of synch");
+            
+        if (i > 1000) {
+            // CraftBukkit start - If the server has too much to process over time, try to alleviate that
+            if (i > 20 * 1000) {
+                i = i / 20;
             } else {
-                if (i > 1000) {
-                    // CraftBukkit start - If the server has too much to process over time, try to alleviate that
-                    if (i > 20 * 1000) {
-                        i = i / 20;
-                    } else {
-                        i = 1000;
-                    }
-                    // CraftBukkit end
-                }
+                i = 1000;
+            }
+            // CraftBukkit end
+        }
 
-                this.methodProfiler.a("cleaning");
+        this.methodProfiler.a("cleaning");
 
-                NextTickListEntry nextticklistentry;
+        if (i > LCConfig.getConfig().getTickNextTickCap()) {
+            i = LCConfig.getConfig().getTickNextTickCap();
+        }
 
-                for (int j = 0; j < i; ++j) {
-                    nextticklistentry = (NextTickListEntry) this.M.first();
-                    if (!flag && nextticklistentry.b > this.worldData.getTime()) {
-                        break;
-                    }
+        NextTickListEntry nextticklistentry;
 
-                    // CraftBukkit - use M, PAIL: Rename nextTickList
-                    this.M.remove(nextticklistentry);
-                    this.V.add(nextticklistentry);
-                }
+        for (int j = 0; j < i; ++j) {
+            nextticklistentry = (NextTickListEntry) this.M.first();
+            if (!flag && nextticklistentry.b > this.worldData.getTime()) {
+                break;
+            }
 
-                this.methodProfiler.b();
-                this.methodProfiler.a("ticking");
-                Iterator iterator = this.V.iterator();
+            // CraftBukkit - use M, PAIL: Rename nextTickList
+            this.M.remove(nextticklistentry);
+            this.V.add(nextticklistentry);
+        }
 
-                while (iterator.hasNext()) {
-                    nextticklistentry = (NextTickListEntry) iterator.next();
-                    iterator.remove();
-                    byte b0 = 0;
+        this.methodProfiler.b();
+        this.methodProfiler.a("ticking");
+        Iterator iterator = this.V.iterator();
 
-                    if (this.areChunksLoadedBetween(nextticklistentry.a.a(-b0, -b0, -b0), nextticklistentry.a.a(b0, b0, b0))) {
-                        IBlockData iblockdata = this.getType(nextticklistentry.a);
+        while (iterator.hasNext()) {
+            nextticklistentry = (NextTickListEntry) iterator.next();
+            iterator.remove();
+            byte b0 = 0;
 
-                        if (iblockdata.getBlock().getMaterial() != Material.AIR && Block.a(iblockdata.getBlock(), nextticklistentry.a())) {
-                            try {
-                                iblockdata.getBlock().b((World) this, nextticklistentry.a, iblockdata, this.random);
-                            } catch (Throwable throwable) {
-                                CrashReport crashreport = CrashReport.a(throwable, "Exception while ticking a block");
-                                CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Block being ticked");
+            if (this.areChunksLoadedBetween(nextticklistentry.a.a(-b0, -b0, -b0), nextticklistentry.a.a(b0, b0, b0))) {
+                IBlockData iblockdata = this.getType(nextticklistentry.a);
 
-                                CrashReportSystemDetails.a(crashreportsystemdetails, nextticklistentry.a, iblockdata);
-                                throw new ReportedException(crashreport);
-                            }
-                        }
-                    } else {
-                        this.a(nextticklistentry.a, nextticklistentry.a(), 0);
+                if (iblockdata.getBlock().getMaterial() != Material.AIR && Block.a(iblockdata.getBlock(), nextticklistentry.a())) {
+                    try {
+                        iblockdata.getBlock().b((World) this, nextticklistentry.a, iblockdata, this.random);
+                    } catch (Throwable throwable) {
+                        CrashReport crashreport = CrashReport.a(throwable, "Exception while ticking a block");
+                        CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Block being ticked");
+
+                        CrashReportSystemDetails.a(crashreportsystemdetails, nextticklistentry.a, iblockdata);
+                        throw new ReportedException(crashreport);
                     }
                 }
-
-                this.methodProfiler.b();
-                this.V.clear();
-                return !this.M.isEmpty();
+            } else {
+                this.a(nextticklistentry.a, nextticklistentry.a(), 0);
             }
         }
+
+        this.methodProfiler.b();
+        this.V.clear();
+        return !this.M.isEmpty();
     }
 
     public List<NextTickListEntry> a(Chunk chunk, boolean flag) {

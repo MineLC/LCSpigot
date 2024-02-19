@@ -33,7 +33,7 @@ import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.plugin.PluginManager;
 // CraftBukkit end
 
-public abstract class Entity implements ICommandListener {
+public abstract class Entity {
 
     // CraftBukkit start
     private static final int CURRENT_LEVEL = 2;
@@ -112,7 +112,6 @@ public abstract class Entity implements ICommandListener {
     protected EnumDirection ap;
     private boolean invulnerable;
     protected UUID uniqueID;
-    private final CommandObjectiveExecutor au;
     public boolean valid; // CraftBukkit
     public org.bukkit.projectiles.ProjectileSource projectileSource; // CraftBukkit - For projectiles only
 
@@ -148,7 +147,6 @@ public abstract class Entity implements ICommandListener {
         this.maxFireTicks = 1;
         this.justCreated = true;
         this.uniqueID = MathHelper.a(this.random);
-        this.au = new CommandObjectiveExecutor();
         this.world = world;
         this.setPosition(0.0D, 0.0D, 0.0D);
         if (world != null) {
@@ -1201,7 +1199,6 @@ public abstract class Entity implements ICommandListener {
                 nbttagcompound.setBoolean("CustomNameVisible", this.getCustomNameVisible());
             }
 
-            this.au.b(nbttagcompound);
             if (this.R()) {
                 nbttagcompound.setBoolean("Silent", this.R());
             }
@@ -1275,7 +1272,6 @@ public abstract class Entity implements ICommandListener {
             }
 
             this.setCustomNameVisible(nbttagcompound.getBoolean("CustomNameVisible"));
-            this.au.a(nbttagcompound);
             this.b(nbttagcompound.getBoolean("Silent"));
             this.a(nbttagcompound);
             if (this.af()) {
@@ -2178,18 +2174,6 @@ public abstract class Entity implements ICommandListener {
 
     public boolean getSendCommandFeedback() {
         return false;
-    }
-
-    public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {
-        this.au.a(this, commandobjectiveexecutor_enumcommandresult, i);
-    }
-
-    public CommandObjectiveExecutor aU() {
-        return this.au;
-    }
-
-    public void o(Entity entity) {
-        this.au.a(entity.aU());
     }
 
     public NBTTagCompound getNBTTag() {

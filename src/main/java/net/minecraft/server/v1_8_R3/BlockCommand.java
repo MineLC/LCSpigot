@@ -42,12 +42,6 @@ public class BlockCommand extends BlockContainer {
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        TileEntity tileentity = world.getTileEntity(blockposition);
-
-        if (tileentity instanceof TileEntityCommand) {
-            ((TileEntityCommand) tileentity).getCommandBlock().a(world);
-            world.updateAdjacentComparators(blockposition, this);
-        }
 
     }
 
@@ -56,9 +50,7 @@ public class BlockCommand extends BlockContainer {
     }
 
     public boolean interact(World world, BlockPosition blockposition, IBlockData iblockdata, EntityHuman entityhuman, EnumDirection enumdirection, float f, float f1, float f2) {
-        TileEntity tileentity = world.getTileEntity(blockposition);
-
-        return tileentity instanceof TileEntityCommand ? ((TileEntityCommand) tileentity).getCommandBlock().a(entityhuman) : false;
+        return false;
     }
 
     public boolean isComplexRedstone() {
@@ -66,26 +58,10 @@ public class BlockCommand extends BlockContainer {
     }
 
     public int l(World world, BlockPosition blockposition) {
-        TileEntity tileentity = world.getTileEntity(blockposition);
-
-        return tileentity instanceof TileEntityCommand ? ((TileEntityCommand) tileentity).getCommandBlock().j() : 0;
+        return 0;
     }
 
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {
-        TileEntity tileentity = world.getTileEntity(blockposition);
-
-        if (tileentity instanceof TileEntityCommand) {
-            CommandBlockListenerAbstract commandblocklistenerabstract = ((TileEntityCommand) tileentity).getCommandBlock();
-
-            if (itemstack.hasName()) {
-                commandblocklistenerabstract.setName(itemstack.getName());
-            }
-
-            if (!world.isClientSide) {
-                commandblocklistenerabstract.a(world.getGameRules().getBoolean("sendCommandFeedback"));
-            }
-
-        }
     }
 
     public int a(Random random) {

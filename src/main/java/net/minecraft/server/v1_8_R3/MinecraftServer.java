@@ -43,7 +43,7 @@ import jline.console.ConsoleReader;
 import joptsimple.OptionSet;
 import lc.lcspigot.configuration.LCConfig;
 
-public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTick> implements Runnable, ICommandListener, IAsyncTaskHandler, IMojangStatistics {
+public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTick> implements Runnable, IAsyncTaskHandler, IMojangStatistics {
 
     public static final File a = new File("usercache.json");
     private static MinecraftServer l;
@@ -51,7 +51,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     private final MojangStatisticsGenerator n = new MojangStatisticsGenerator("server", this, az());
     public File universe; // CraftBukkit - remove final, public
     private final List<IUpdatePlayerListBox> p = Lists.newArrayList();
-    protected final ICommandHandler b;
     public final MethodProfiler methodProfiler = new MethodProfiler();
     private ServerConnection q; // Spigot
     private final ServerPing r = new ServerPing();
@@ -138,7 +137,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
         // this.universe = file; // CraftBukkit
         // this.q = new ServerConnection(this); // Spigot
         this.Z = new UserCache(this, file1);
-        this.b = this.h();
         // this.convertable = new WorldLoaderServer(file); // CraftBukkit - moved to DedicatedServer.init
         this.V = new YggdrasilAuthenticationService(proxy, UUID.randomUUID().toString());
         this.W = this.V.createMinecraftSessionService();
@@ -173,10 +171,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
 
     public abstract PropertyManager getPropertyManager();
     // CraftBukkit end
-
-    protected CommandDispatcher h() {
-        return new CommandDispatcher();
-    }
 
     protected abstract boolean init() throws IOException;
 
@@ -697,7 +691,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
 
     public void B() {
         this.methodProfiler.a("jobs");
-        Queue queue = this.j;
 
         // Spigot start
         FutureTask<?> entry;
@@ -746,8 +739,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
         int i;
 
         for (i = 0; i < this.worlds.size(); ++i) {
-            long j = System.nanoTime();
-
             // if (i == 0 || this.getAllowNether()) {
                 WorldServer worldserver = this.worlds.get(i);
 
@@ -953,12 +944,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
         Logger.error(s);
     }
 
-    public void h(String s) {
-        if (this.isDebugging()) {
-            Logger.info(s);
-        }
-
-    }
 
     public String getServerModName() {
         return "Spigot"; // Spigot - Spigot > // CraftBukkit - cb > vanilla!
@@ -989,51 +974,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
         return crashreport;
     }
 
-    public List<String> tabCompleteCommand(ICommandListener icommandlistener, String s, BlockPosition blockposition) {
-        /* CraftBukkit start - Allow tab-completion of Bukkit commands
-        ArrayList arraylist = Lists.newArrayList();
-
-        if (s.startsWith("/")) {
-            s = s.substring(1);
-            boolean flag = !s.contains(" ");
-            List list = this.b.a(icommandlistener, s, blockposition);
-
-            if (list != null) {
-                Iterator iterator = list.iterator();
-
-                while (iterator.hasNext()) {
-                    String s1 = (String) iterator.next();
-
-                    if (flag) {
-                        arraylist.add("/" + s1);
-                    } else {
-                        arraylist.add(s1);
-                    }
-                }
-            }
-
-            return arraylist;
-        } else {
-            String[] astring = s.split(" ", -1);
-            String s2 = astring[astring.length - 1];
-            String[] astring1 = this.v.f();
-            int i = astring1.length;
-
-            for (int j = 0; j < i; ++j) {
-                String s3 = astring1[j];
-
-                if (CommandAbstract.a(s2, s3)) {
-                    arraylist.add(s3);
-                }
-            }
-
-            return arraylist;
-        }
-        */
-        return server.tabComplete(icommandlistener, s);
-        // CraftBukkit end
-    }
-
     public static MinecraftServer getServer() {
         return MinecraftServer.l;
     }
@@ -1052,10 +992,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
 
     public boolean a(int i, String s) {
         return true;
-    }
-
-    public ICommandHandler getCommandHandler() {
-        return this.b;
     }
 
     public KeyPair Q() {
@@ -1423,8 +1359,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     public boolean getSendCommandFeedback() {
         return getServer().worlds.get(0).getGameRules().getBoolean("sendCommandFeedback");
     }
-
-    public void a(CommandObjectiveExecutor.EnumCommandResult commandobjectiveexecutor_enumcommandresult, int i) {}
 
     public int aI() {
         return 29999984;
