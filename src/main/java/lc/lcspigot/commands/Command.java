@@ -28,4 +28,8 @@ public interface Command {
         sender.sendMessage(ChatColor.RED + "You need the permission " + permission);
         return false;
     }
+
+    default String[] list(String... values) {
+        return values;
+    }
 }

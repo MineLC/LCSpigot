@@ -1610,7 +1610,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     public void a(PacketPlayInTabComplete packetplayintabcomplete) {
         PlayerConnectionUtils.ensureMainThread(packetplayintabcomplete, this, this.player.u());
 
-        final String[] tab = CommandStorage.tab(getPlayer(), packetplayintabcomplete.a());
+        final String[] tab = CommandStorage.tab(getPlayer(), packetplayintabcomplete.a().substring(1));
         if (tab != null) {
             this.player.playerConnection.sendPacket(new PacketPlayOutTabComplete(tab));
         }

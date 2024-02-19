@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import lc.lcspigot.commands.Command;
+import net.md_5.bungee.api.ChatColor;
 
 final class GamemodeCommand implements Command {
 
@@ -35,11 +36,11 @@ final class GamemodeCommand implements Command {
             return;
         }
         player.setGameMode(gameMode);
-        send(player, "You gamemode is now " + gameMode.name());
+        send(player, "You gamemode is now " + ChatColor.AQUA + gameMode.name());
     }
 
     @Override
     public String[] tab(CommandSender sender, String[] args) {
-        return (args.length == 1) ? new String[] {"0", "1", "2", "3"} : none();
+        return (args.length == 0) ? list("0", "1", "2", "3") : none();
     }
 }

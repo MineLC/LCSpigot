@@ -4,8 +4,8 @@ unknown-command:
   - " "
   - " &c&l ERROR &8- &c&l404"
   - " "
-  - " &7 El comando &7\"&a%command%&7\""
-  - " &7 no existe.. "
+  - " &7 El comando &8\"&a%command%&8\""
+  - " &7 no existe&8..."
   - " "
 
 container-update-delay: 4 # How many ticks wait to update the player inventory. Vanilla: 1
