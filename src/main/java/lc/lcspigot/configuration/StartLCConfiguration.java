@@ -25,7 +25,7 @@ public final class StartLCConfiguration {
 
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
         final LCConfig lcConfig = new LCConfig(
-            Color.parse(config.getString("unknown-command")),
+            Color.parse(config.get("unknown-command")),
             getInt(config, "tick-time", 20),
             getInt(config, "container-update-delay", 1),
             getInt(config, "", 10000)

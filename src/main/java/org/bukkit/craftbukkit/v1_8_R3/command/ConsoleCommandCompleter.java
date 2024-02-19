@@ -2,7 +2,6 @@ package org.bukkit.craftbukkit.v1_8_R3.command;
 
 import java.util.List;
 import org.bukkit.Bukkit;
-import org.tinylog.Logger;
 
 import jline.console.completer.Completer;
 import lc.lcspigot.commands.Command;

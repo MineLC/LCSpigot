@@ -1,6 +1,12 @@
 tick-time: 100 # How many ticks wait to send PacketPlayOutUpdateTime to player. Vanilla: 20
 
-unknown-command: "&cEl comando %command% no existe"
+unknown-command:
+  - " "
+  - " &c&l ERROR &8- &c&l404"
+  - " "
+  - " &7 El comando &7\"&a%command%&7\""
+  - " &7 no existe.. "
+  - " "
 
 container-update-delay: 4 # How many ticks wait to update the player inventory. Vanilla: 1
 
