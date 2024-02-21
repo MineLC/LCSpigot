@@ -1,6 +1,9 @@
 package net.minecraft.server.v1_8_R3;
 
 import com.google.common.collect.Lists;
+
+import io.netty.util.collection.LongObjectHashMap;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -15,7 +18,7 @@ public class PortalTravelAgent {
 
     private final WorldServer a;
     private final Random b;
-    private final LongHashMap<PortalTravelAgent.ChunkCoordinatesPortal> c = new LongHashMap();
+    private final LongObjectHashMap<PortalTravelAgent.ChunkCoordinatesPortal> c = new LongObjectHashMap<>();
     private final List<Long> d = Lists.newArrayList();
 
     public PortalTravelAgent(WorldServer worldserver) {
@@ -123,8 +126,8 @@ public class PortalTravelAgent {
         Object object = BlockPosition.ZERO;
         long k = ChunkCoordIntPair.a(i, j);
 
-        if (this.c.contains(k)) {
-            PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) this.c.getEntry(k);
+        if (this.c.containsKey(k)) {
+            PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) this.c.get(k);
 
             d0 = 0.0D;
             object = portaltravelagent_chunkcoordinatesportal;
@@ -461,7 +464,7 @@ public class PortalTravelAgent {
 
             while (iterator.hasNext()) {
                 Long olong = (Long) iterator.next();
-                PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) this.c.getEntry(olong.longValue());
+                PortalTravelAgent.ChunkCoordinatesPortal portaltravelagent_chunkcoordinatesportal = (PortalTravelAgent.ChunkCoordinatesPortal) this.c.get(olong.longValue());
 
                 if (portaltravelagent_chunkcoordinatesportal == null || portaltravelagent_chunkcoordinatesportal.c < j) {
                     iterator.remove();

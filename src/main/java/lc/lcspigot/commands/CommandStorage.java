@@ -1,11 +1,13 @@
 package lc.lcspigot.commands;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.command.CommandSender;
+import org.tinylog.Logger;
 
 import lc.lcspigot.configuration.LCConfig;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
@@ -23,7 +25,14 @@ public final class CommandStorage {
         }
         final String[] args = new String[split.length - 1];
         System.arraycopy(split, 1, args, 0, split.length - 1);
-        MinecraftServer.getServer().processQueue.add( () -> executor.handle(sender, args));
+        MinecraftServer.getServer().processQueue.add( () -> {
+            try {
+                executor.handle(sender, args);
+            } catch (Exception e) {
+                Logger.error("Error executing the command: " + command + ". Args: " + Arrays.toString(args));
+                Logger.error(e);
+            }
+        });
     }
 
     public static String[] tab(final CommandSender sender, final String command) {
@@ -34,7 +43,14 @@ public final class CommandStorage {
         }
         final String[] args = new String[split.length - 1];
         System.arraycopy(split, 1, args, 0, split.length - 1);
-        return executor.tab(sender, args);
+        
+        try {
+            return executor.tab(sender, args);
+        } catch (Exception e) {
+            Logger.error("Error on tab command: " + command + ". Args: " + Arrays.toString(args));
+            Logger.error(e);
+            return new String[0];
+        }
     }
 
     public static void register(final Command executor, final String... aliases) {

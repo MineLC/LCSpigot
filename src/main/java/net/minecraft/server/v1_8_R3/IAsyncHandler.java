@@ -133,6 +133,5 @@ public abstract class IAsyncHandler<R extends Runnable> implements Executor {
             if (e.getCause() instanceof ThreadDeath) throw e;
             Logger.error("Error executing task on {}", this.getName(), e);
         }
-
     }
 }

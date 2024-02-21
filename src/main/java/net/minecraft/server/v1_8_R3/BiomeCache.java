@@ -1,13 +1,16 @@
 package net.minecraft.server.v1_8_R3;
 
 import com.google.common.collect.Lists;
+
+import io.netty.util.collection.LongObjectHashMap;
+
 import java.util.List;
 
 public class BiomeCache {
 
     private final WorldChunkManager a;
     private long b;
-    private LongHashMap<BiomeCache.BiomeCacheBlock> c = new LongHashMap();
+    private LongObjectHashMap<BiomeCache.BiomeCacheBlock> c = new LongObjectHashMap<>();
     private List<BiomeCache.BiomeCacheBlock> d = Lists.newArrayList();
 
     public BiomeCache(WorldChunkManager worldchunkmanager) {
@@ -18,7 +21,7 @@ public class BiomeCache {
         i >>= 4;
         j >>= 4;
         long k = (long) i & 4294967295L | ((long) j & 4294967295L) << 32;
-        BiomeCache.BiomeCacheBlock biomecache_biomecacheblock = (BiomeCache.BiomeCacheBlock) this.c.getEntry(k);
+        BiomeCache.BiomeCacheBlock biomecache_biomecacheblock = (BiomeCache.BiomeCacheBlock) this.c.get(k);
 
         if (biomecache_biomecacheblock == null) {
             biomecache_biomecacheblock = new BiomeCache.BiomeCacheBlock(i, j);

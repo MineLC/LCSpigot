@@ -1,6 +1,9 @@
 package net.minecraft.server.v1_8_R3;
 
 import com.google.common.collect.Lists;
+
+import io.netty.util.collection.LongObjectHashMap;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +21,7 @@ public class PlayerChunkMap {
 
     private final WorldServer world;
     private final List<EntityPlayer> managedPlayers = Lists.newArrayList();
-    private final LongHashMap<PlayerChunkMap.PlayerChunk> d = new LongHashMap();
+    private final LongObjectHashMap<PlayerChunkMap.PlayerChunk> d = new LongObjectHashMap<>();
     private final Queue<PlayerChunkMap.PlayerChunk> e = new java.util.concurrent.ConcurrentLinkedQueue<PlayerChunkMap.PlayerChunk>(); // CraftBukkit ArrayList -> ConcurrentLinkedQueue
     private final Queue<PlayerChunkMap.PlayerChunk> f = new java.util.concurrent.ConcurrentLinkedQueue<PlayerChunkMap.PlayerChunk>(); // CraftBukkit ArrayList -> ConcurrentLinkedQueue
     private int g;
@@ -80,12 +83,12 @@ public class PlayerChunkMap {
     public boolean a(int i, int j) {
         long k = (long) i + 2147483647L | (long) j + 2147483647L << 32;
 
-        return this.d.getEntry(k) != null;
+        return this.d.get(k) != null;
     }
 
     private PlayerChunkMap.PlayerChunk a(int i, int j, boolean flag) {
         long k = (long) i + 2147483647L | (long) j + 2147483647L << 32;
-        PlayerChunkMap.PlayerChunk playerchunkmap_playerchunk = (PlayerChunkMap.PlayerChunk) this.d.getEntry(k);
+        PlayerChunkMap.PlayerChunk playerchunkmap_playerchunk = (PlayerChunkMap.PlayerChunk) this.d.get(k);
 
         if (playerchunkmap_playerchunk == null && flag) {
             playerchunkmap_playerchunk = new PlayerChunkMap.PlayerChunk(i, j);

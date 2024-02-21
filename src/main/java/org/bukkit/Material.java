@@ -2,6 +2,7 @@ package org.bukkit;
 
 import java.lang.reflect.Constructor;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.Validate;
 import org.bukkit.map.MapView;
@@ -1122,6 +1123,10 @@ public enum Material {
             default:
                 return false;
         }
+    }
+
+    public static Set<String> getMaterialNames() {
+        return BY_NAME.keySet();
     }
 
     /**

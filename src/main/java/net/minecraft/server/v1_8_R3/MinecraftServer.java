@@ -119,7 +119,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     public ConsoleReader reader;
     public static int currentTick = (int) (System.currentTimeMillis() / 50);
     public final Thread primaryThread;
-    public java.util.Queue<Runnable> processQueue = new java.util.concurrent.ConcurrentLinkedQueue<Runnable>();
+    public java.util.Queue<Runnable> processQueue = new CachedSizeConcurrentLinkedQueue<Runnable>();
     public int autosavePeriod;
     // CraftBukkit end
     // Spigot start

@@ -21,6 +21,10 @@ public interface Command {
         sender.sendMessage(message);
     }
 
+    default void sendWithColor(final CommandSender sender, final String message) {
+        sender.sendMessage(message.replace('&', ChatColor.COLOR_CHAR));
+    }
+
     default boolean checkPermission(final CommandSender sender, final String permission) {
         if (sender.hasPermission(permission)) {
             return true;
