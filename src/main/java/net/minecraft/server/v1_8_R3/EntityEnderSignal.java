@@ -41,7 +41,7 @@ public class EntityEnderSignal extends Entity {
         }
 
         this.d = 0;
-        this.e = this.random.nextInt(5) > 0;
+        this.e = RANDOM.nextInt(5) > 0;
     }
 
     public void t_() {
@@ -102,7 +102,7 @@ public class EntityEnderSignal extends Entity {
                 this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX - this.motX * (double) f3, this.locY - this.motY * (double) f3, this.locZ - this.motZ * (double) f3, this.motX, this.motY, this.motZ, new int[0]);
             }
         } else {
-            this.world.addParticle(EnumParticle.PORTAL, this.locX - this.motX * (double) f3 + this.random.nextDouble() * 0.6D - 0.3D, this.locY - this.motY * (double) f3 - 0.5D, this.locZ - this.motZ * (double) f3 + this.random.nextDouble() * 0.6D - 0.3D, this.motX, this.motY, this.motZ, new int[0]);
+            this.world.addParticle(EnumParticle.PORTAL, this.locX - this.motX * (double) f3 + RANDOM.nextDouble() * 0.6D - 0.3D, this.locY - this.motY * (double) f3 - 0.5D, this.locZ - this.motZ * (double) f3 + RANDOM.nextDouble() * 0.6D - 0.3D, this.motX, this.motY, this.motZ, new int[0]);
         }
 
         if (!this.world.isClientSide) {

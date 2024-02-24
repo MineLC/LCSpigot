@@ -410,21 +410,7 @@ public class BlockChest extends BlockContainer {
     }
 
     private boolean p(World world, BlockPosition blockposition) {
-        Iterator iterator = world.a(EntityOcelot.class, new AxisAlignedBB((double) blockposition.getX(), (double) (blockposition.getY() + 1), (double) blockposition.getZ(), (double) (blockposition.getX() + 1), (double) (blockposition.getY() + 2), (double) (blockposition.getZ() + 1))).iterator();
-
-        EntityOcelot entityocelot;
-
-        do {
-            if (!iterator.hasNext()) {
-                return false;
-            }
-
-            Entity entity = (Entity) iterator.next();
-
-            entityocelot = (EntityOcelot) entity;
-        } while (!entityocelot.isSitting());
-
-        return true;
+        return false;
     }
 
     public boolean isComplexRedstone() {

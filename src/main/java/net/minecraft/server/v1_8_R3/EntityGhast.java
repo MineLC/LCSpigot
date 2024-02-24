@@ -74,7 +74,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
     }
 
     protected void dropDeathLoot(boolean flag, int i) {
-        int j = this.random.nextInt(2) + this.random.nextInt(1 + i);
+        int j = RANDOM.nextInt(2) + RANDOM.nextInt(1 + i);
 
         int k;
 
@@ -82,7 +82,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
             this.a(Items.GHAST_TEAR, 1);
         }
 
-        j = this.random.nextInt(3) + this.random.nextInt(1 + i);
+        j = RANDOM.nextInt(3) + RANDOM.nextInt(1 + i);
 
         for (k = 0; k < j; ++k) {
             this.a(Items.GUNPOWDER, 1);
@@ -95,7 +95,7 @@ public class EntityGhast extends EntityFlying implements IMonster {
     }
 
     public boolean bR() {
-        return this.random.nextInt(20) == 0 && super.bR() && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
+        return RANDOM.nextInt(20) == 0 && super.bR() && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
     }
 
     public int bV() {

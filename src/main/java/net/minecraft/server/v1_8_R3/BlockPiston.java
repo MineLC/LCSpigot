@@ -141,7 +141,7 @@ public class BlockPiston extends Block {
             }
 
             world.setTypeAndData(blockposition, iblockdata.set(BlockPiston.EXTENDED, Boolean.valueOf(true)), 2);
-            world.makeSound((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, "tile.piston.out", 0.5F, world.random.nextFloat() * 0.25F + 0.6F);
+            world.makeSound((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, "tile.piston.out", 0.5F, World.RANDOM.nextFloat() * 0.25F + 0.6F);
         } else if (i == 1) {
             TileEntity tileentity = world.getTileEntity(blockposition.shift(enumdirection));
 
@@ -176,7 +176,7 @@ public class BlockPiston extends Block {
                 world.setAir(blockposition.shift(enumdirection));
             }
 
-            world.makeSound((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, "tile.piston.in", 0.5F, world.random.nextFloat() * 0.15F + 0.6F);
+            world.makeSound((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, "tile.piston.in", 0.5F, World.RANDOM.nextFloat() * 0.15F + 0.6F);
         }
 
         return true;

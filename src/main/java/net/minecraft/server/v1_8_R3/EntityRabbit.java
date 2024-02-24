@@ -63,7 +63,7 @@ public class EntityRabbit extends EntityAnimal {
             }
         } else {
             this.b(1.5D * (double) entityrabbit_enumrabbitstate.a());
-            this.makeSound(this.cm(), this.bB(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 0.8F);
+            this.makeSound(this.cm(), this.bB(), ((RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F + 1.0F) * 0.8F);
         }
 
         this.bq = flag;
@@ -96,7 +96,7 @@ public class EntityRabbit extends EntityAnimal {
         }
 
         if (this.bu > 0) {
-            this.bu -= this.random.nextInt(3);
+            this.bu -= RANDOM.nextInt(3);
             if (this.bu < 0) {
                 this.bu = 0;
             }
@@ -215,7 +215,7 @@ public class EntityRabbit extends EntityAnimal {
 
     public boolean r(Entity entity) {
         if (this.getRabbitType() == 99) {
-            this.makeSound("mob.attack", 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+            this.makeSound("mob.attack", 1.0F, (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F + 1.0F);
             return entity.damageEntity(DamageSource.mobAttack(this), 8.0F);
         } else {
             return entity.damageEntity(DamageSource.mobAttack(this), 3.0F);
@@ -235,7 +235,7 @@ public class EntityRabbit extends EntityAnimal {
     }
 
     protected void dropDeathLoot(boolean flag, int i) {
-        int j = this.random.nextInt(2) + this.random.nextInt(1 + i);
+        int j = RANDOM.nextInt(2) + RANDOM.nextInt(1 + i);
 
         int k;
 
@@ -243,7 +243,7 @@ public class EntityRabbit extends EntityAnimal {
             this.a(Items.RABBIT_HIDE, 1);
         }
 
-        j = this.random.nextInt(2);
+        j = RANDOM.nextInt(2);
 
         for (k = 0; k < j; ++k) {
             if (this.isBurning()) {
@@ -263,7 +263,7 @@ public class EntityRabbit extends EntityAnimal {
         EntityRabbit entityrabbit = new EntityRabbit(this.world);
 
         if (entityageable instanceof EntityRabbit) {
-            entityrabbit.setRabbitType(this.random.nextBoolean() ? this.getRabbitType() : ((EntityRabbit) entityageable).getRabbitType());
+            entityrabbit.setRabbitType(RANDOM.nextBoolean() ? this.getRabbitType() : ((EntityRabbit) entityageable).getRabbitType());
         }
 
         return entityrabbit;
@@ -294,7 +294,7 @@ public class EntityRabbit extends EntityAnimal {
 
     public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
         Object object = super.prepare(difficultydamagescaler, groupdataentity);
-        int i = this.random.nextInt(6);
+        int i = RANDOM.nextInt(6);
         boolean flag = false;
 
         if (object instanceof EntityRabbit.GroupDataRabbit) {
@@ -321,7 +321,7 @@ public class EntityRabbit extends EntityAnimal {
     }
 
     protected void cp() {
-        this.world.addParticle(EnumParticle.BLOCK_DUST, this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, 0.0D, 0.0D, 0.0D, new int[] { Block.getCombinedId(Blocks.CARROTS.fromLegacyData(7))});
+        this.world.addParticle(EnumParticle.BLOCK_DUST, this.locX + (double) (RANDOM.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (RANDOM.nextFloat() * this.length), this.locZ + (double) (RANDOM.nextFloat() * this.width * 2.0F) - (double) this.width, 0.0D, 0.0D, 0.0D, new int[] { Block.getCombinedId(Blocks.CARROTS.fromLegacyData(7))});
         this.bu = 100;
     }
 

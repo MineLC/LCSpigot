@@ -96,7 +96,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
                 i = 1;
             }
 
-            blockposition = worldserver.r(blockposition.a(this.random.nextInt(i * 2) - i, 0, this.random.nextInt(i * 2) - i));
+            blockposition = worldserver.r(blockposition.a(RANDOM.nextInt(i * 2) - i, 0, RANDOM.nextInt(i * 2) - i));
         }
 
         this.server = minecraftserver;

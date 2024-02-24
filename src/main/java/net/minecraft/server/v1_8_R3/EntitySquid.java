@@ -20,8 +20,8 @@ public class EntitySquid extends EntityWaterAnimal {
     public EntitySquid(World world) {
         super(world);
         this.setSize(0.95F, 0.95F);
-        this.random.setSeed((long) (1 + this.getId()));
-        this.bq = 1.0F / (this.random.nextFloat() + 1.0F) * 0.2F;
+        RANDOM.setSeed((long) (1 + this.getId()));
+        this.bq = 1.0F / (RANDOM.nextFloat() + 1.0F) * 0.2F;
         this.goalSelector.a(0, new EntitySquid.PathfinderGoalSquid(this));
     }
 
@@ -59,7 +59,7 @@ public class EntitySquid extends EntityWaterAnimal {
     }
 
     protected void dropDeathLoot(boolean flag, int i) {
-        int j = this.random.nextInt(3 + i) + 1;
+        int j = RANDOM.nextInt(3 + i) + 1;
 
         for (int k = 0; k < j; ++k) {
             this.a(new ItemStack(Items.DYE, 1, EnumColor.BLACK.getInvColorIndex()), 0.0F);
@@ -85,8 +85,8 @@ public class EntitySquid extends EntityWaterAnimal {
                 this.bl = 6.2831855F;
             } else {
                 this.bl = (float) ((double) this.bl - 6.283185307179586D);
-                if (this.random.nextInt(10) == 0) {
-                    this.bq = 1.0F / (this.random.nextFloat() + 1.0F) * 0.2F;
+                if (RANDOM.nextInt(10) == 0) {
+                    this.bq = 1.0F / (RANDOM.nextFloat() + 1.0F) * 0.2F;
                 }
 
                 this.world.broadcastEntityEffect(this, (byte) 19);

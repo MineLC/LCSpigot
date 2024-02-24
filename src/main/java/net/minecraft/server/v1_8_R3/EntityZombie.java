@@ -52,7 +52,7 @@ public class EntityZombie extends EntityMonster {
         this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).setValue(35.0D);
         this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.23000000417232513D);
         this.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(3.0D);
-        this.getAttributeMap().b(EntityZombie.a).setValue(this.random.nextDouble() * 0.10000000149011612D);
+        this.getAttributeMap().b(EntityZombie.a).setValue(RANDOM.nextDouble() * 0.10000000149011612D);
     }
 
     protected void h() {
@@ -127,13 +127,13 @@ public class EntityZombie extends EntityMonster {
             float f = this.c(1.0F);
             BlockPosition blockposition = new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);
 
-            if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.i(blockposition)) {
+            if (f > 0.5F && RANDOM.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.i(blockposition)) {
                 boolean flag = true;
                 ItemStack itemstack = this.getEquipment(4);
 
                 if (itemstack != null) {
                     if (itemstack.e()) {
-                        itemstack.setData(itemstack.h() + this.random.nextInt(2));
+                        itemstack.setData(itemstack.h() + RANDOM.nextInt(2));
                         if (itemstack.h() >= itemstack.j()) {
                             this.b(itemstack);
                             this.setEquipment(4, (ItemStack) null);
@@ -171,16 +171,16 @@ public class EntityZombie extends EntityMonster {
                 entityliving = (EntityLiving) damagesource.getEntity();
             }
 
-            if (entityliving != null && this.world.getDifficulty() == EnumDifficulty.HARD && (double) this.random.nextFloat() < this.getAttributeInstance(EntityZombie.a).getValue()) {
+            if (entityliving != null && this.world.getDifficulty() == EnumDifficulty.HARD && (double) RANDOM.nextFloat() < this.getAttributeInstance(EntityZombie.a).getValue()) {
                 int i = MathHelper.floor(this.locX);
                 int j = MathHelper.floor(this.locY);
                 int k = MathHelper.floor(this.locZ);
                 EntityZombie entityzombie = new EntityZombie(this.world);
 
                 for (int l = 0; l < 50; ++l) {
-                    int i1 = i + MathHelper.nextInt(this.random, 7, 40) * MathHelper.nextInt(this.random, -1, 1);
-                    int j1 = j + MathHelper.nextInt(this.random, 7, 40) * MathHelper.nextInt(this.random, -1, 1);
-                    int k1 = k + MathHelper.nextInt(this.random, 7, 40) * MathHelper.nextInt(this.random, -1, 1);
+                    int i1 = i + MathHelper.nextInt(RANDOM, 7, 40) * MathHelper.nextInt(RANDOM, -1, 1);
+                    int j1 = j + MathHelper.nextInt(RANDOM, 7, 40) * MathHelper.nextInt(RANDOM, -1, 1);
+                    int k1 = k + MathHelper.nextInt(RANDOM, 7, 40) * MathHelper.nextInt(RANDOM, -1, 1);
 
                     if (World.a((IBlockAccess) this.world, new BlockPosition(i1, j1 - 1, k1)) && this.world.getLightLevel(new BlockPosition(i1, j1, k1)) < 10) {
                         entityzombie.setPosition((double) i1, (double) j1, (double) k1);
@@ -227,7 +227,7 @@ public class EntityZombie extends EntityMonster {
         if (flag) {
             int i = this.world.getDifficulty().a();
 
-            if (this.bA() == null && this.isBurning() && this.random.nextFloat() < (float) i * 0.3F) {
+            if (this.bA() == null && this.isBurning() && RANDOM.nextFloat() < (float) i * 0.3F) {
                 // CraftBukkit start
                 EntityCombustByEntityEvent event = new EntityCombustByEntityEvent(this.getBukkitEntity(), entity.getBukkitEntity(), 2 * i);
                 this.world.getServer().getPluginManager().callEvent(event);
@@ -267,7 +267,7 @@ public class EntityZombie extends EntityMonster {
     }
 
     protected void getRareDrop() {
-        switch (this.random.nextInt(3)) {
+        switch (RANDOM.nextInt(3)) {
         case 0:
             this.a(Items.IRON_INGOT, 1);
             break;
@@ -284,8 +284,8 @@ public class EntityZombie extends EntityMonster {
 
     protected void a(DifficultyDamageScaler difficultydamagescaler) {
         super.a(difficultydamagescaler);
-        if (this.random.nextFloat() < (this.world.getDifficulty() == EnumDifficulty.HARD ? 0.05F : 0.01F)) {
-            int i = this.random.nextInt(3);
+        if (RANDOM.nextFloat() < (this.world.getDifficulty() == EnumDifficulty.HARD ? 0.05F : 0.01F)) {
+            int i = RANDOM.nextInt(3);
 
             if (i == 0) {
                 this.setEquipment(0, new ItemStack(Items.IRON_SWORD));
@@ -330,7 +330,7 @@ public class EntityZombie extends EntityMonster {
     public void a(EntityLiving entityliving) {
         super.a(entityliving);
         if ((this.world.getDifficulty() == EnumDifficulty.NORMAL || this.world.getDifficulty() == EnumDifficulty.HARD) && entityliving instanceof EntityVillager) {
-            if (this.world.getDifficulty() != EnumDifficulty.HARD && this.random.nextBoolean()) {
+            if (this.world.getDifficulty() != EnumDifficulty.HARD && RANDOM.nextBoolean()) {
                 return;
             }
 
@@ -375,9 +375,9 @@ public class EntityZombie extends EntityMonster {
         Object object = super.prepare(difficultydamagescaler, groupdataentity);
         float f = difficultydamagescaler.c();
 
-        this.j(this.random.nextFloat() < 0.55F * f);
+        this.j(RANDOM.nextFloat() < 0.55F * f);
         if (object == null) {
-            object = new EntityZombie.GroupDataZombie(this.world.random.nextFloat() < 0.05F, this.world.random.nextFloat() < 0.05F, (EntityZombie.SyntheticClass_1) null);
+            object = new EntityZombie.GroupDataZombie(RANDOM.nextFloat() < 0.05F, RANDOM.nextFloat() < 0.05F, (EntityZombie.SyntheticClass_1) null);
         }
 
         if (object instanceof EntityZombie.GroupDataZombie) {
@@ -389,7 +389,7 @@ public class EntityZombie extends EntityMonster {
 
             if (entityzombie_groupdatazombie.a) {
                 this.setBaby(true);
-                if ((double) this.world.random.nextFloat() < 0.05D) {
+                if ((double) RANDOM.nextFloat() < 0.05D) {
                     List list = this.world.a(EntityChicken.class, this.getBoundingBox().grow(5.0D, 3.0D, 5.0D), IEntitySelector.b);
 
                     if (!list.isEmpty()) {
@@ -398,7 +398,7 @@ public class EntityZombie extends EntityMonster {
                         entitychicken.l(true);
                         this.mount(entitychicken);
                     }
-                } else if ((double) this.world.random.nextFloat() < 0.05D) {
+                } else if ((double) RANDOM.nextFloat() < 0.05D) {
                     EntityChicken entitychicken1 = new EntityChicken(this.world);
 
                     entitychicken1.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, 0.0F);
@@ -410,28 +410,28 @@ public class EntityZombie extends EntityMonster {
             }
         }
 
-        this.a(this.random.nextFloat() < f * 0.1F);
+        this.a(RANDOM.nextFloat() < f * 0.1F);
         this.a(difficultydamagescaler);
         this.b(difficultydamagescaler);
         if (this.getEquipment(4) == null) {
             Calendar calendar = this.world.Y();
 
-            if (calendar.get(2) + 1 == 10 && calendar.get(5) == 31 && this.random.nextFloat() < 0.25F) {
-                this.setEquipment(4, new ItemStack(this.random.nextFloat() < 0.1F ? Blocks.LIT_PUMPKIN : Blocks.PUMPKIN));
+            if (calendar.get(2) + 1 == 10 && calendar.get(5) == 31 && RANDOM.nextFloat() < 0.25F) {
+                this.setEquipment(4, new ItemStack(RANDOM.nextFloat() < 0.1F ? Blocks.LIT_PUMPKIN : Blocks.PUMPKIN));
                 this.dropChances[4] = 0.0F;
             }
         }
 
-        this.getAttributeInstance(GenericAttributes.c).b(new AttributeModifier("Random spawn bonus", this.random.nextDouble() * 0.05000000074505806D, 0));
-        double d0 = this.random.nextDouble() * 1.5D * (double) f;
+        this.getAttributeInstance(GenericAttributes.c).b(new AttributeModifier("Random spawn bonus", RANDOM.nextDouble() * 0.05000000074505806D, 0));
+        double d0 = RANDOM.nextDouble() * 1.5D * (double) f;
 
         if (d0 > 1.0D) {
             this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).b(new AttributeModifier("Random zombie-spawn bonus", d0, 2));
         }
 
-        if (this.random.nextFloat() < f * 0.05F) {
-            this.getAttributeInstance(EntityZombie.a).b(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 0.25D + 0.5D, 0));
-            this.getAttributeInstance(GenericAttributes.maxHealth).b(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 3.0D + 1.0D, 2));
+        if (RANDOM.nextFloat() < f * 0.05F) {
+            this.getAttributeInstance(EntityZombie.a).b(new AttributeModifier("Leader zombie bonus", RANDOM.nextDouble() * 0.25D + 0.5D, 0));
+            this.getAttributeInstance(GenericAttributes.maxHealth).b(new AttributeModifier("Leader zombie bonus", RANDOM.nextDouble() * 3.0D + 1.0D, 2));
             this.a(true);
         }
 
@@ -451,7 +451,7 @@ public class EntityZombie extends EntityMonster {
             }
 
             if (!this.world.isClientSide) {
-                this.a(this.random.nextInt(2401) + 3600);
+                this.a(RANDOM.nextInt(2401) + 3600);
             }
 
             return true;
@@ -501,7 +501,7 @@ public class EntityZombie extends EntityMonster {
     protected int cr() {
         int i = 1;
 
-        if (this.random.nextFloat() < 0.01F) {
+        if (RANDOM.nextFloat() < 0.01F) {
             int j = 0;
             BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
@@ -511,7 +511,7 @@ public class EntityZombie extends EntityMonster {
                         Block block = this.world.getType(blockposition_mutableblockposition.c(k, l, i1)).getBlock();
 
                         if (block == Blocks.IRON_BARS || block == Blocks.BED) {
-                            if (this.random.nextFloat() < 0.3F) {
+                            if (RANDOM.nextFloat() < 0.3F) {
                                 ++i;
                             }
 

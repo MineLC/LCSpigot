@@ -120,7 +120,7 @@ public class EntityCreeper extends EntityMonster {
         if (damagesource.getEntity() instanceof EntitySkeleton) {
             int i = Item.getId(Items.RECORD_13);
             int j = Item.getId(Items.RECORD_WAIT);
-            int k = i + this.random.nextInt(j - i + 1);
+            int k = i + RANDOM.nextInt(j - i + 1);
 
             // CraftBukkit start - Store record for now, drop in dropDeathLoot
             // this.a(Item.getById(k), 1);
@@ -193,7 +193,7 @@ public class EntityCreeper extends EntityMonster {
         ItemStack itemstack = entityhuman.inventory.getItemInHand();
 
         if (itemstack != null && itemstack.getItem() == Items.FLINT_AND_STEEL) {
-            this.world.makeSound(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, "fire.ignite", 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
+            this.world.makeSound(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, "fire.ignite", 1.0F, RANDOM.nextFloat() * 0.4F + 0.8F);
             entityhuman.bw();
             if (!this.world.isClientSide) {
                 this.co();

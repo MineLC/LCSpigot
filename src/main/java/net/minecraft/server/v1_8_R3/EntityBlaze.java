@@ -52,12 +52,12 @@ public class EntityBlaze extends EntityMonster {
         }
 
         if (this.world.isClientSide) {
-            if (this.random.nextInt(24) == 0 && !this.R()) {
-                this.world.a(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, "fire.fire", 1.0F + this.random.nextFloat(), this.random.nextFloat() * 0.7F + 0.3F, false);
+            if (RANDOM.nextInt(24) == 0 && !this.R()) {
+                this.world.a(this.locX + 0.5D, this.locY + 0.5D, this.locZ + 0.5D, "fire.fire", 1.0F + RANDOM.nextFloat(), RANDOM.nextFloat() * 0.7F + 0.3F, false);
             }
 
             for (int i = 0; i < 2; ++i) {
-                this.world.addParticle(EnumParticle.SMOKE_LARGE, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D, new int[0]);
+                this.world.addParticle(EnumParticle.SMOKE_LARGE, this.locX + (RANDOM.nextDouble() - 0.5D) * (double) this.width, this.locY + RANDOM.nextDouble() * (double) this.length, this.locZ + (RANDOM.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D, new int[0]);
             }
         }
 
@@ -72,7 +72,7 @@ public class EntityBlaze extends EntityMonster {
         --this.b;
         if (this.b <= 0) {
             this.b = 100;
-            this.a = 0.5F + (float) this.random.nextGaussian() * 3.0F;
+            this.a = 0.5F + (float) RANDOM.nextGaussian() * 3.0F;
         }
 
         EntityLiving entityliving = this.getGoalTarget();
@@ -97,7 +97,7 @@ public class EntityBlaze extends EntityMonster {
 
     protected void dropDeathLoot(boolean flag, int i) {
         if (flag) {
-            int j = this.random.nextInt(2 + i);
+            int j = RANDOM.nextInt(2 + i);
 
             for (int k = 0; k < j; ++k) {
                 this.a(Items.BLAZE_ROD, 1);

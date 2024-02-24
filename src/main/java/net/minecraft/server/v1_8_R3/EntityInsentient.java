@@ -149,7 +149,7 @@ public abstract class EntityInsentient extends EntityLiving {
     public void K() {
         super.K();
         this.world.methodProfiler.a("mobBaseTick");
-        if (this.isAlive() && this.random.nextInt(1000) < this.a_++) {
+        if (this.isAlive() && RANDOM.nextInt(1000) < this.a_++) {
             this.a_ = -this.w();
             this.x();
         }
@@ -164,7 +164,7 @@ public abstract class EntityInsentient extends EntityLiving {
 
             for (int j = 0; j < aitemstack.length; ++j) {
                 if (aitemstack[j] != null && this.dropChances[j] <= 1.0F) {
-                    i += 1 + this.random.nextInt(3);
+                    i += 1 + RANDOM.nextInt(3);
                 }
             }
 
@@ -177,12 +177,12 @@ public abstract class EntityInsentient extends EntityLiving {
     public void y() {
         if (this.world.isClientSide) {
             for (int i = 0; i < 20; ++i) {
-                double d0 = this.random.nextGaussian() * 0.02D;
-                double d1 = this.random.nextGaussian() * 0.02D;
-                double d2 = this.random.nextGaussian() * 0.02D;
+                double d0 = RANDOM.nextGaussian() * 0.02D;
+                double d1 = RANDOM.nextGaussian() * 0.02D;
+                double d2 = RANDOM.nextGaussian() * 0.02D;
                 double d3 = 10.0D;
 
-                this.world.addParticle(EnumParticle.EXPLOSION_NORMAL, this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width - d0 * d3, this.locY + (double) (this.random.nextFloat() * this.length) - d1 * d3, this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width - d2 * d3, d0, d1, d2, new int[0]);
+                this.world.addParticle(EnumParticle.EXPLOSION_NORMAL, this.locX + (double) (RANDOM.nextFloat() * this.width * 2.0F) - (double) this.width - d0 * d3, this.locY + (double) (RANDOM.nextFloat() * this.length) - d1 * d3, this.locZ + (double) (RANDOM.nextFloat() * this.width * 2.0F) - (double) this.width - d2 * d3, d0, d1, d2, new int[0]);
             }
         } else {
             this.world.broadcastEntityEffect(this, (byte) 20);
@@ -216,10 +216,10 @@ public abstract class EntityInsentient extends EntityLiving {
         Item item = this.getLoot();
 
         if (item != null) {
-            int j = this.random.nextInt(3);
+            int j = RANDOM.nextInt(3);
 
             if (i > 0) {
-                j += this.random.nextInt(i + 1);
+                j += RANDOM.nextInt(i + 1);
             }
 
             for (int k = 0; k < j; ++k) {
@@ -397,7 +397,7 @@ public abstract class EntityInsentient extends EntityLiving {
             }
 
             if (flag && this.a(itemstack)) {
-                if (itemstack1 != null && this.random.nextFloat() - 0.1F < this.dropChances[i]) {
+                if (itemstack1 != null && RANDOM.nextFloat() - 0.1F < this.dropChances[i]) {
                     this.a(itemstack1, 0.0F);
                 }
 
@@ -443,7 +443,7 @@ public abstract class EntityInsentient extends EntityLiving {
                     this.die();
                 }
 
-                if (this.ticksFarFromPlayer > 600 && this.random.nextInt(800) == 0 && d3 > 1024.0D) { // CraftBukkit - remove isTypeNotPersistent() check
+                if (this.ticksFarFromPlayer > 600 && RANDOM.nextInt(800) == 0 && d3 > 1024.0D) { // CraftBukkit - remove isTypeNotPersistent() check
                     this.die();
                 } else if (d3 < 1024.0D) {
                     this.ticksFarFromPlayer = 0;
@@ -583,10 +583,10 @@ public abstract class EntityInsentient extends EntityLiving {
             ItemStack itemstack = this.getEquipment(j);
             boolean flag1 = this.dropChances[j] > 1.0F;
 
-            if (itemstack != null && (flag || flag1) && this.random.nextFloat() - (float) i * 0.01F < this.dropChances[j]) {
+            if (itemstack != null && (flag || flag1) && RANDOM.nextFloat() - (float) i * 0.01F < this.dropChances[j]) {
                 if (!flag1 && itemstack.e()) {
                     int k = Math.max(itemstack.j() - 25, 1);
-                    int l = itemstack.j() - this.random.nextInt(this.random.nextInt(k) + 1);
+                    int l = itemstack.j() - RANDOM.nextInt(RANDOM.nextInt(k) + 1);
 
                     if (l > k) {
                         l = k;
@@ -606,26 +606,26 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     protected void a(DifficultyDamageScaler difficultydamagescaler) {
-        if (this.random.nextFloat() < 0.15F * difficultydamagescaler.c()) {
-            int i = this.random.nextInt(2);
+        if (RANDOM.nextFloat() < 0.15F * difficultydamagescaler.c()) {
+            int i = RANDOM.nextInt(2);
             float f = this.world.getDifficulty() == EnumDifficulty.HARD ? 0.1F : 0.25F;
 
-            if (this.random.nextFloat() < 0.095F) {
+            if (RANDOM.nextFloat() < 0.095F) {
                 ++i;
             }
 
-            if (this.random.nextFloat() < 0.095F) {
+            if (RANDOM.nextFloat() < 0.095F) {
                 ++i;
             }
 
-            if (this.random.nextFloat() < 0.095F) {
+            if (RANDOM.nextFloat() < 0.095F) {
                 ++i;
             }
 
             for (int j = 3; j >= 0; --j) {
                 ItemStack itemstack = this.q(j);
 
-                if (j < 3 && this.random.nextFloat() < f) {
+                if (j < 3 && RANDOM.nextFloat() < f) {
                     break;
                 }
 
@@ -727,22 +727,22 @@ public abstract class EntityInsentient extends EntityLiving {
     protected void b(DifficultyDamageScaler difficultydamagescaler) {
         float f = difficultydamagescaler.c();
 
-        if (this.bA() != null && this.random.nextFloat() < 0.25F * f) {
-            EnchantmentManager.a(this.random, this.bA(), (int) (5.0F + f * (float) this.random.nextInt(18)));
+        if (this.bA() != null && RANDOM.nextFloat() < 0.25F * f) {
+            EnchantmentManager.a(RANDOM, this.bA(), (int) (5.0F + f * (float) RANDOM.nextInt(18)));
         }
 
         for (int i = 0; i < 4; ++i) {
             ItemStack itemstack = this.q(i);
 
-            if (itemstack != null && this.random.nextFloat() < 0.5F * f) {
-                EnchantmentManager.a(this.random, itemstack, (int) (5.0F + f * (float) this.random.nextInt(18)));
+            if (itemstack != null && RANDOM.nextFloat() < 0.5F * f) {
+                EnchantmentManager.a(RANDOM, itemstack, (int) (5.0F + f * (float) RANDOM.nextInt(18)));
             }
         }
 
     }
 
     public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
-        this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).b(new AttributeModifier("Random spawn bonus", this.random.nextGaussian() * 0.05D, 1));
+        this.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).b(new AttributeModifier("Random spawn bonus", RANDOM.nextGaussian() * 0.05D, 1));
         return groupdataentity;
     }
 

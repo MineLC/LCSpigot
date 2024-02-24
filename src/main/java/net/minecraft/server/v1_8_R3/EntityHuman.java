@@ -259,17 +259,17 @@ public abstract class EntityHuman extends EntityLiving {
 
     protected void b(ItemStack itemstack, int i) {
         if (itemstack.m() == EnumAnimation.DRINK) {
-            this.makeSound("random.drink", 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+            this.makeSound("random.drink", 0.5F, RANDOM.nextFloat() * 0.1F + 0.9F);
         }
 
         if (itemstack.m() == EnumAnimation.EAT) {
             for (int j = 0; j < i; ++j) {
-                Vec3D vec3d = new Vec3D(((double) this.random.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
+                Vec3D vec3d = new Vec3D(((double) RANDOM.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
 
                 vec3d = vec3d.a(-this.pitch * 3.1415927F / 180.0F);
                 vec3d = vec3d.b(-this.yaw * 3.1415927F / 180.0F);
-                double d0 = (double) (-this.random.nextFloat()) * 0.6D - 0.3D;
-                Vec3D vec3d1 = new Vec3D(((double) this.random.nextFloat() - 0.5D) * 0.3D, d0, 0.6D);
+                double d0 = (double) (-RANDOM.nextFloat()) * 0.6D - 0.3D;
+                Vec3D vec3d1 = new Vec3D(((double) RANDOM.nextFloat() - 0.5D) * 0.3D, d0, 0.6D);
 
                 vec3d1 = vec3d1.a(-this.pitch * 3.1415927F / 180.0F);
                 vec3d1 = vec3d1.b(-this.yaw * 3.1415927F / 180.0F);
@@ -281,7 +281,7 @@ public abstract class EntityHuman extends EntityLiving {
                 }
             }
 
-            this.makeSound("random.eat", 0.5F + 0.5F * (float) this.random.nextInt(2), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+            this.makeSound("random.eat", 0.5F + 0.5F * (float) RANDOM.nextInt(2), (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F + 1.0F);
         }
 
     }
@@ -576,8 +576,8 @@ public abstract class EntityHuman extends EntityLiving {
             float f1;
 
             if (flag) {
-                f = this.random.nextFloat() * 0.5F;
-                f1 = this.random.nextFloat() * 3.1415927F * 2.0F;
+                f = RANDOM.nextFloat() * 0.5F;
+                f1 = RANDOM.nextFloat() * 3.1415927F * 2.0F;
                 entityitem.motX = (double) (-MathHelper.sin(f1) * f);
                 entityitem.motZ = (double) (MathHelper.cos(f1) * f);
                 entityitem.motY = 0.20000000298023224D;
@@ -586,10 +586,10 @@ public abstract class EntityHuman extends EntityLiving {
                 entityitem.motX = (double) (-MathHelper.sin(this.yaw / 180.0F * 3.1415927F) * MathHelper.cos(this.pitch / 180.0F * 3.1415927F) * f);
                 entityitem.motZ = (double) (MathHelper.cos(this.yaw / 180.0F * 3.1415927F) * MathHelper.cos(this.pitch / 180.0F * 3.1415927F) * f);
                 entityitem.motY = (double) (-MathHelper.sin(this.pitch / 180.0F * 3.1415927F) * f + 0.1F);
-                f1 = this.random.nextFloat() * 3.1415927F * 2.0F;
-                f = 0.02F * this.random.nextFloat();
+                f1 = RANDOM.nextFloat() * 3.1415927F * 2.0F;
+                f = 0.02F * RANDOM.nextFloat();
                 entityitem.motX += Math.cos((double) f1) * (double) f;
-                entityitem.motY += (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F);
+                entityitem.motY += (double) ((RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.1F);
                 entityitem.motZ += Math.sin((double) f1) * (double) f;
             }
 
@@ -699,7 +699,7 @@ public abstract class EntityHuman extends EntityLiving {
         this.expTotal = nbttagcompound.getInt("XpTotal");
         this.f = nbttagcompound.getInt("XpSeed");
         if (this.f == 0) {
-            this.f = this.random.nextInt();
+            this.f = RANDOM.nextInt();
         }
 
         this.setScore(nbttagcompound.getInt("Score"));
@@ -1503,7 +1503,7 @@ public abstract class EntityHuman extends EntityLiving {
             this.expTotal = 0;
         }
 
-        this.f = this.random.nextInt();
+        this.f = RANDOM.nextInt();
     }
 
     public void levelDown(int i) {

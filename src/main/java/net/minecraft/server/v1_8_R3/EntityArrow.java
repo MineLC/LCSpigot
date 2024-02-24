@@ -108,9 +108,9 @@ public class EntityArrow extends Entity implements IProjectile {
         d0 /= (double) f2;
         d1 /= (double) f2;
         d2 /= (double) f2;
-        d0 += this.random.nextGaussian() * (double) (this.random.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) f1;
-        d1 += this.random.nextGaussian() * (double) (this.random.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) f1;
-        d2 += this.random.nextGaussian() * (double) (this.random.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) f1;
+        d0 += RANDOM.nextGaussian() * (double) (RANDOM.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) f1;
+        d1 += RANDOM.nextGaussian() * (double) (RANDOM.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) f1;
+        d2 += RANDOM.nextGaussian() * (double) (RANDOM.nextBoolean() ? -1 : 1) * 0.007499999832361937D * (double) f1;
         d0 *= (double) f;
         d1 *= (double) f;
         d2 *= (double) f;
@@ -160,9 +160,9 @@ public class EntityArrow extends Entity implements IProjectile {
                 }
             } else {
                 this.inGround = false;
-                this.motX *= (double) (this.random.nextFloat() * 0.2F);
-                this.motY *= (double) (this.random.nextFloat() * 0.2F);
-                this.motZ *= (double) (this.random.nextFloat() * 0.2F);
+                this.motX *= (double) (RANDOM.nextFloat() * 0.2F);
+                this.motY *= (double) (RANDOM.nextFloat() * 0.2F);
+                this.motZ *= (double) (RANDOM.nextFloat() * 0.2F);
                 this.ar = 0;
                 this.as = 0;
             }
@@ -227,7 +227,7 @@ public class EntityArrow extends Entity implements IProjectile {
                     int k = MathHelper.f((double) f2 * this.damage);
 
                     if (this.isCritical()) {
-                        k += this.random.nextInt(k / 2 + 2);
+                        k += RANDOM.nextInt(k / 2 + 2);
                     }
 
                     DamageSource damagesource;
@@ -274,7 +274,7 @@ public class EntityArrow extends Entity implements IProjectile {
                             }
                         }
 
-                        this.makeSound("random.bowhit", 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+                        this.makeSound("random.bowhit", 1.0F, 1.2F / (RANDOM.nextFloat() * 0.2F + 0.9F));
                         if (!(movingobjectposition.entity instanceof EntityEnderman)) {
                             this.die();
                         }
@@ -303,7 +303,7 @@ public class EntityArrow extends Entity implements IProjectile {
                     this.locX -= this.motX / (double) f1 * 0.05000000074505806D;
                     this.locY -= this.motY / (double) f1 * 0.05000000074505806D;
                     this.locZ -= this.motZ / (double) f1 * 0.05000000074505806D;
-                    this.makeSound("random.bowhit", 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
+                    this.makeSound("random.bowhit", 1.0F, 1.2F / (RANDOM.nextFloat() * 0.2F + 0.9F));
                     this.inGround = true;
                     this.shake = 7;
                     this.setCritical(false);
@@ -432,7 +432,7 @@ public class EntityArrow extends Entity implements IProjectile {
             }
 
             if (flag) {
-                this.makeSound("random.pop", 0.2F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                this.makeSound("random.pop", 0.2F, ((RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 entityhuman.receive(this, 1);
                 this.die();
             }

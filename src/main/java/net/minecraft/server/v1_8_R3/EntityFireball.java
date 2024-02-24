@@ -53,9 +53,9 @@ public abstract class EntityFireball extends Entity {
 
     public void setDirection(double d0, double d1, double d2) {
         // CraftBukkit end
-        d0 += this.random.nextGaussian() * 0.4D;
-        d1 += this.random.nextGaussian() * 0.4D;
-        d2 += this.random.nextGaussian() * 0.4D;
+        d0 += RANDOM.nextGaussian() * 0.4D;
+        d1 += RANDOM.nextGaussian() * 0.4D;
+        d2 += RANDOM.nextGaussian() * 0.4D;
         double d3 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
 
         this.dirX = d0 / d3 * 0.1D;
@@ -80,9 +80,9 @@ public abstract class EntityFireball extends Entity {
                 }
 
                 this.i = false;
-                this.motX *= (double) (this.random.nextFloat() * 0.2F);
-                this.motY *= (double) (this.random.nextFloat() * 0.2F);
-                this.motZ *= (double) (this.random.nextFloat() * 0.2F);
+                this.motX *= (double) (RANDOM.nextFloat() * 0.2F);
+                this.motY *= (double) (RANDOM.nextFloat() * 0.2F);
+                this.motZ *= (double) (RANDOM.nextFloat() * 0.2F);
                 this.ar = 0;
                 this.as = 0;
             } else {

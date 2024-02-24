@@ -170,7 +170,7 @@ public abstract class BlockFluids extends Block {
         double d1 = (double) blockposition.getY();
         double d2 = (double) blockposition.getZ();
 
-        world.makeSound(d0 + 0.5D, d1 + 0.5D, d2 + 0.5D, "random.fizz", 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+        world.makeSound(d0 + 0.5D, d1 + 0.5D, d2 + 0.5D, "random.fizz", 0.5F, 2.6F + (World.RANDOM.nextFloat() - World.RANDOM.nextFloat()) * 0.8F);
 
         for (int i = 0; i < 8; ++i) {
             world.addParticle(EnumParticle.SMOKE_LARGE, d0 + Math.random(), d1 + 1.2D, d2 + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);

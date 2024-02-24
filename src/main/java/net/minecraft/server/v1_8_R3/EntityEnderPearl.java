@@ -31,7 +31,7 @@ public class EntityEnderPearl extends EntityProjectile {
         }
 
         for (int i = 0; i < 32; ++i) {
-            this.world.addParticle(EnumParticle.PORTAL, this.locX, this.locY + this.random.nextDouble() * 2.0D, this.locZ, this.random.nextGaussian(), 0.0D, this.random.nextGaussian(), new int[0]);
+            this.world.addParticle(EnumParticle.PORTAL, this.locX, this.locY + RANDOM.nextDouble() * 2.0D, this.locZ, RANDOM.nextGaussian(), 0.0D, RANDOM.nextGaussian(), new int[0]);
         }
 
         if (!this.world.isClientSide) {
@@ -49,7 +49,7 @@ public class EntityEnderPearl extends EntityProjectile {
                     Bukkit.getPluginManager().callEvent(teleEvent);
 
                     if (!teleEvent.isCancelled() && !entityplayer.playerConnection.isDisconnected()) {
-                        if (this.random.nextFloat() < 0.05F && this.world.getGameRules().getBoolean("doMobSpawning")) {
+                        if (RANDOM.nextFloat() < 0.05F && this.world.getGameRules().getBoolean("doMobSpawning")) {
                             EntityEndermite entityendermite = new EntityEndermite(this.world);
 
                             entityendermite.a(true);

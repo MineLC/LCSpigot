@@ -17,7 +17,7 @@ public class BlockCocoa extends BlockDirectional implements IBlockFragilePlantEl
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         if (!this.e(world, blockposition, iblockdata)) {
             this.f(world, blockposition, iblockdata);
-        } else if (world.random.nextInt(5) == 0) {
+        } else if (World.RANDOM.nextInt(5) == 0) {
             int i = ((Integer) iblockdata.get(BlockCocoa.AGE)).intValue();
 
             if (i < 2) {

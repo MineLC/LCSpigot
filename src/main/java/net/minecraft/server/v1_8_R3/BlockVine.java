@@ -165,7 +165,7 @@ public class BlockVine extends Block {
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         if (!world.isClientSide) {
-            if (world.random.nextInt(4) == 0) {
+            if (World.RANDOM.nextInt(4) == 0) {
                 byte b0 = 4;
                 int i = 5;
                 boolean flag = false;

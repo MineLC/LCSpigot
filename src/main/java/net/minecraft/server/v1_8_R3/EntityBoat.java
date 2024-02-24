@@ -192,12 +192,12 @@ public class EntityBoat extends Entity {
             d5 = Math.sin((double) this.yaw * 3.141592653589793D / 180.0D);
 
             for (j = 0; (double) j < 1.0D + d3 * 60.0D; ++j) {
-                double d6 = (double) (this.random.nextFloat() * 2.0F - 1.0F);
-                double d7 = (double) (this.random.nextInt(2) * 2 - 1) * 0.7D;
+                double d6 = (double) (RANDOM.nextFloat() * 2.0F - 1.0F);
+                double d7 = (double) (RANDOM.nextInt(2) * 2 - 1) * 0.7D;
                 double d8;
                 double d9;
 
-                if (this.random.nextBoolean()) {
+                if (RANDOM.nextBoolean()) {
                     d8 = this.locX - d4 * d6 * 0.8D + d5 * d7;
                     d9 = this.locZ - d5 * d6 * 0.8D - d4 * d7;
                     this.world.addParticle(EnumParticle.WATER_SPLASH, d8, this.locY - 0.125D, d9, this.motX, this.motY, this.motZ, new int[0]);

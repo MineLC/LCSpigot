@@ -13,7 +13,7 @@ public class EntityChicken extends EntityAnimal {
     public EntityChicken(World world) {
         super(world);
         this.setSize(0.4F, 0.7F);
-        this.bs = this.random.nextInt(6000) + 6000;
+        this.bs = RANDOM.nextInt(6000) + 6000;
         this.goalSelector.a(0, new PathfinderGoalFloat(this));
         this.goalSelector.a(1, new PathfinderGoalPanic(this, 1.4D));
         this.goalSelector.a(2, new PathfinderGoalBreed(this, 1.0D));
@@ -56,9 +56,9 @@ public class EntityChicken extends EntityAnimal {
 
         this.bm += this.br * 2.0F;
         if (!this.world.isClientSide && !this.isBaby() && !this.isChickenJockey() && --this.bs <= 0) {
-            this.makeSound("mob.chicken.plop", 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+            this.makeSound("mob.chicken.plop", 1.0F, (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F + 1.0F);
             this.a(Items.EGG, 1);
-            this.bs = this.random.nextInt(6000) + 6000;
+            this.bs = RANDOM.nextInt(6000) + 6000;
         }
 
     }
@@ -86,7 +86,7 @@ public class EntityChicken extends EntityAnimal {
     }
 
     protected void dropDeathLoot(boolean flag, int i) {
-        int j = this.random.nextInt(3) + this.random.nextInt(1 + i);
+        int j = RANDOM.nextInt(3) + RANDOM.nextInt(1 + i);
 
         for (int k = 0; k < j; ++k) {
             this.a(Items.FEATHER, 1);

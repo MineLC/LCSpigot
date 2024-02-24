@@ -163,8 +163,8 @@ public abstract class BlockLeaves extends BlockTransparent {
                 }
             }
 
-            if (world.random.nextInt(j) == 0) {
-                Item item = this.getDropType(iblockdata, world.random, i);
+            if (World.RANDOM.nextInt(j) == 0) {
+                Item item = this.getDropType(iblockdata, World.RANDOM, i);
 
                 a(world, blockposition, new ItemStack(item, 1, this.getDropData(iblockdata)));
             }

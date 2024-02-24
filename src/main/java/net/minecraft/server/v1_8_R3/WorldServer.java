@@ -269,7 +269,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     public BiomeBase.BiomeMeta a(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
         List list = this.N().getMobsFor(enumcreaturetype, blockposition);
 
-        return list != null && !list.isEmpty() ? (BiomeBase.BiomeMeta) WeightedRandom.a(this.random, list) : null;
+        return list != null && !list.isEmpty() ? (BiomeBase.BiomeMeta) WeightedRandom.a(RANDOM, list) : null;
     }
 
     public boolean a(EnumCreatureType enumcreaturetype, BiomeBase.BiomeMeta biomebase_biomemeta, BlockPosition blockposition) {
@@ -415,7 +415,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                 int i1;
                 BlockPosition blockposition;
 
-                if (this.random.nextInt(100000) == 0 && this.S() && this.R()) {
+                if (RANDOM.nextInt(100000) == 0 && this.S() && this.R()) {
                     this.m = this.m * 3 + 1013904223;
                     i1 = this.m >> 2;
                     blockposition = this.a(new BlockPosition(k + (i1 & 15), 0, l + (i1 >> 8 & 15)));
@@ -425,7 +425,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                 }
 
                 this.methodProfiler.c("iceandsnow");
-                if (this.random.nextInt(16) == 0) {
+                if (RANDOM.nextInt(16) == 0) {
                     this.m = this.m * 3 + 1013904223;
                     i1 = this.m >> 2;
                     blockposition = this.q(new BlockPosition(k + (i1 & 15), 0, l + (i1 >> 8 & 15)));
@@ -485,7 +485,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
                                 if (block.isTicking()) {
                                     ++i;
-                                    block.a((World) this, new BlockPosition(j2 + k, l2 + chunksection.getYPosition(), k2 + l), iblockdata, this.random);
+                                    block.a((World) this, new BlockPosition(j2 + k, l2 + chunksection.getYPosition(), k2 + l), iblockdata, RANDOM);
                                 }
                             }
                         }
@@ -515,7 +515,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             }
         });
 
-        return !list.isEmpty() ? ((EntityLiving) list.get(this.random.nextInt(list.size()))).getChunkCoordinates() : blockposition1;
+        return !list.isEmpty() ? ((EntityLiving) list.get(RANDOM.nextInt(list.size()))).getChunkCoordinates() : blockposition1;
     }
 
     public boolean a(BlockPosition blockposition, Block block) {
@@ -539,7 +539,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                     IBlockData iblockdata = this.getType(nextticklistentry.a);
 
                     if (iblockdata.getBlock().getMaterial() != Material.AIR && iblockdata.getBlock() == nextticklistentry.a()) {
-                        iblockdata.getBlock().b((World) this, nextticklistentry.a, iblockdata, this.random);
+                        iblockdata.getBlock().b((World) this, nextticklistentry.a, iblockdata, RANDOM);
                     }
                 }
 
@@ -639,7 +639,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
                 if (iblockdata.getBlock().getMaterial() != Material.AIR && Block.a(iblockdata.getBlock(), nextticklistentry.a())) {
                     try {
-                        iblockdata.getBlock().b((World) this, nextticklistentry.a, iblockdata, this.random);
+                        iblockdata.getBlock().b((World) this, nextticklistentry.a, iblockdata, RANDOM);
                     } catch (Throwable throwable) {
                         CrashReport crashreport = CrashReport.a(throwable, "Exception while ticking a block");
                         CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Block being ticked");
@@ -888,11 +888,11 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         WorldGenBonusChest worldgenbonuschest = new WorldGenBonusChest(WorldServer.U, 10);
 
         for (int i = 0; i < 10; ++i) {
-            int j = this.worldData.c() + this.random.nextInt(6) - this.random.nextInt(6);
-            int k = this.worldData.e() + this.random.nextInt(6) - this.random.nextInt(6);
+            int j = this.worldData.c() + RANDOM.nextInt(6) - RANDOM.nextInt(6);
+            int k = this.worldData.e() + RANDOM.nextInt(6) - RANDOM.nextInt(6);
             BlockPosition blockposition = this.r(new BlockPosition(j, 0, k)).up();
 
-            if (worldgenbonuschest.generate(this, this.random, blockposition)) {
+            if (worldgenbonuschest.generate(this, RANDOM, blockposition)) {
                 break;
             }
         }

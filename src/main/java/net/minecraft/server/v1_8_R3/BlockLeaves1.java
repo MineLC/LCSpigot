@@ -19,7 +19,7 @@ public class BlockLeaves1 extends BlockLeaves {
     }
 
     protected void a(World world, BlockPosition blockposition, IBlockData iblockdata, int i) {
-        if (iblockdata.get(BlockLeaves1.VARIANT) == BlockWood.EnumLogVariant.OAK && world.random.nextInt(i) == 0) {
+        if (iblockdata.get(BlockLeaves1.VARIANT) == BlockWood.EnumLogVariant.OAK && World.RANDOM.nextInt(i) == 0) {
             a(world, blockposition, new ItemStack(Items.APPLE, 1, 0));
         }
 

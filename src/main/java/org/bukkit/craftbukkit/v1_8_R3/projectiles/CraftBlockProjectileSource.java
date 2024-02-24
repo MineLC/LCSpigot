@@ -38,6 +38,7 @@ import net.minecraft.server.v1_8_R3.IProjectile;
 import net.minecraft.server.v1_8_R3.MathHelper;
 import net.minecraft.server.v1_8_R3.SourceBlock;
 import net.minecraft.server.v1_8_R3.TileEntityDispenser;
+import net.minecraft.server.v1_8_R3.World;
 
 public class CraftBlockProjectileSource implements BlockProjectileSource {
     private final TileEntityDispenser dispenserBlock;
@@ -86,7 +87,7 @@ public class CraftBlockProjectileSource implements BlockProjectileSource {
             double d0 = iposition.getX() + (double) ((float) enumdirection.getAdjacentX() * 0.3F);
             double d1 = iposition.getY() + (double) ((float) enumdirection.getAdjacentY() * 0.3F);
             double d2 = iposition.getZ() + (double) ((float) enumdirection.getAdjacentZ() * 0.3F);
-            Random random = world.random;
+            Random random = World.RANDOM;
             double d3 = random.nextGaussian() * 0.05D + (double) enumdirection.getAdjacentX();
             double d4 = random.nextGaussian() * 0.05D + (double) enumdirection.getAdjacentY();
             double d5 = random.nextGaussian() * 0.05D + (double) enumdirection.getAdjacentZ();

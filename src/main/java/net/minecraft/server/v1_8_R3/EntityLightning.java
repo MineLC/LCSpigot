@@ -28,8 +28,8 @@ public class EntityLightning extends EntityWeather {
 
         this.setPositionRotation(d0, d1, d2, 0.0F, 0.0F);
         this.lifeTicks = 2;
-        this.a = this.random.nextLong();
-        this.c = this.random.nextInt(3) + 1;
+        this.a = RANDOM.nextLong();
+        this.c = RANDOM.nextInt(3) + 1;
         BlockPosition blockposition = new BlockPosition(this);
 
         // CraftBukkit - add "!isEffect"
@@ -43,7 +43,7 @@ public class EntityLightning extends EntityWeather {
             }
 
             for (int i = 0; i < 4; ++i) {
-                BlockPosition blockposition1 = blockposition.a(this.random.nextInt(3) - 1, this.random.nextInt(3) - 1, this.random.nextInt(3) - 1);
+                BlockPosition blockposition1 = blockposition.a(RANDOM.nextInt(3) - 1, RANDOM.nextInt(3) - 1, RANDOM.nextInt(3) - 1);
 
                 if (world.getType(blockposition1).getBlock().getMaterial() == Material.AIR && Blocks.FIRE.canPlace(world, blockposition1)) {
                     // CraftBukkit start
@@ -68,8 +68,8 @@ public class EntityLightning extends EntityWeather {
         super.t_();
         if (!isSilent && this.lifeTicks == 2) { // Spigot
             // CraftBukkit start - Use relative location for far away sounds
-            //this.world.makeSound(this.locX, this.locY, this.locZ, "ambient.weather.thunder", 10000.0F, 0.8F + this.random.nextFloat() * 0.2F);
-            float pitch = 0.8F + this.random.nextFloat() * 0.2F;
+            //this.world.makeSound(this.locX, this.locY, this.locZ, "ambient.weather.thunder", 10000.0F, 0.8F + RANDOM.nextFloat() * 0.2F);
+            float pitch = 0.8F + RANDOM.nextFloat() * 0.2F;
             int viewDistance = ((WorldServer) this.world).getServer().getViewDistance() * 16;
             for (EntityPlayer player : (List<EntityPlayer>) (List) this.world.players) {
                 double deltaX = this.locX - player.locX;
@@ -85,17 +85,17 @@ public class EntityLightning extends EntityWeather {
                 }
             }
             // CraftBukkit end
-            this.world.makeSound(this.locX, this.locY, this.locZ, "random.explode", 2.0F, 0.5F + this.random.nextFloat() * 0.2F);
+            this.world.makeSound(this.locX, this.locY, this.locZ, "random.explode", 2.0F, 0.5F + RANDOM.nextFloat() * 0.2F);
         }
 
         --this.lifeTicks;
         if (this.lifeTicks < 0) {
             if (this.c == 0) {
                 this.die();
-            } else if (this.lifeTicks < -this.random.nextInt(10)) {
+            } else if (this.lifeTicks < -RANDOM.nextInt(10)) {
                 --this.c;
                 this.lifeTicks = 1;
-                this.a = this.random.nextLong();
+                this.a = RANDOM.nextLong();
                 BlockPosition blockposition = new BlockPosition(this);
 
                 // CraftBukkit - add "!isEffect"

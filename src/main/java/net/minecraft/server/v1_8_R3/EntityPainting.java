@@ -9,7 +9,7 @@ public class EntityPainting extends EntityHanging {
 
     public EntityPainting(World world) {
         super(world);
-        this.art = EnumArt.values()[this.random.nextInt(EnumArt.values().length)]; // CraftBukkit - generate a non-null painting
+        this.art = EnumArt.values()[RANDOM.nextInt(EnumArt.values().length)]; // CraftBukkit - generate a non-null painting
     }
 
     public EntityPainting(World world, BlockPosition blockposition, EnumDirection enumdirection) {
@@ -29,7 +29,7 @@ public class EntityPainting extends EntityHanging {
         }
 
         if (!arraylist.isEmpty()) {
-            this.art = (EntityPainting.EnumArt) arraylist.get(this.random.nextInt(arraylist.size()));
+            this.art = (EntityPainting.EnumArt) arraylist.get(RANDOM.nextInt(arraylist.size()));
         }
 
         this.setDirection(enumdirection);

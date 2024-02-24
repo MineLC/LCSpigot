@@ -171,7 +171,7 @@ public class DispenserRegistry {
                 double d1 = iposition.getY() + (double) ((float) enumdirection.getAdjacentY() * 0.3F);
                 double d2 = iposition.getZ() + (double) ((float) enumdirection.getAdjacentZ() * 0.3F);
                 World world = isourceblock.i();
-                Random random = world.random;
+                Random random = World.RANDOM;
                 double d3 = random.nextGaussian() * 0.05D + (double) enumdirection.getAdjacentX();
                 double d4 = random.nextGaussian() * 0.05D + (double) enumdirection.getAdjacentY();
                 double d5 = random.nextGaussian() * 0.05D + (double) enumdirection.getAdjacentZ();
@@ -426,7 +426,7 @@ public class DispenserRegistry {
                     // CraftBukkit start - Ignition by dispensing flint and steel
                     if (!org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory.callBlockIgniteEvent(world, blockposition.getX(), blockposition.getY(), blockposition.getZ(), isourceblock.getBlockPosition().getX(), isourceblock.getBlockPosition().getY(), isourceblock.getBlockPosition().getZ()).isCancelled()) {
                         world.setTypeUpdate(blockposition, Blocks.FIRE.getBlockData());
-                        if (itemstack.isDamaged(1, world.random)) {
+                        if (itemstack.isDamaged(1, World.RANDOM)) {
                             itemstack.count = 0;
                         }
                     }

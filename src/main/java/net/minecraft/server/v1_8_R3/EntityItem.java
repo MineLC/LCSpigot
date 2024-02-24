@@ -76,9 +76,9 @@ public class EntityItem extends Entity {
             if (flag || this.ticksLived % 25 == 0) {
                 if (this.world.getType(new BlockPosition(this)).getBlock().getMaterial() == Material.LAVA) {
                     this.motY = 0.20000000298023224D;
-                    this.motX = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
-                    this.motZ = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
-                    this.makeSound("random.fizz", 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
+                    this.motX = (double) ((RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F);
+                    this.motZ = (double) ((RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F);
+                    this.makeSound("random.fizz", 0.4F, 2.0F + RANDOM.nextFloat() * 0.4F);
                 }
 
                 if (!this.world.isClientSide) {
@@ -351,7 +351,7 @@ public class EntityItem extends Entity {
                 }
 
                 if (!this.R()) {
-                    this.world.makeSound(entityhuman, "random.pop", 0.2F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+                    this.world.makeSound(entityhuman, "random.pop", 0.2F, ((RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 }
 
                 entityhuman.receive(this, i);

@@ -81,7 +81,7 @@ public class EntityPig extends EntityAnimal {
     }
 
     protected void dropDeathLoot(boolean flag, int i) {
-        int j = this.random.nextInt(3) + 1 + this.random.nextInt(1 + i);
+        int j = RANDOM.nextInt(3) + 1 + RANDOM.nextInt(1 + i);
 
         for (int k = 0; k < j; ++k) {
             if (this.isBurning()) {

@@ -44,10 +44,10 @@ public class EntityMagmaCube extends EntitySlime {
         Item item = this.getLoot();
 
         if (item != null && this.getSize() > 1) {
-            int j = this.random.nextInt(4) - 2;
+            int j = RANDOM.nextInt(4) - 2;
 
             if (i > 0) {
-                j += this.random.nextInt(i + 1);
+                j += RANDOM.nextInt(i + 1);
             }
 
             for (int k = 0; k < j; ++k) {

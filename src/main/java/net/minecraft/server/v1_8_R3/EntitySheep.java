@@ -79,7 +79,7 @@ public class EntitySheep extends EntityAnimal {
             this.a(new ItemStack(Item.getItemOf(Blocks.WOOL), 1, this.getColor().getColorIndex()), 0.0F);
         }
 
-        int j = this.random.nextInt(2) + 1 + this.random.nextInt(1 + i);
+        int j = RANDOM.nextInt(2) + 1 + RANDOM.nextInt(1 + i);
 
         for (int k = 0; k < j; ++k) {
             if (this.isBurning()) {
@@ -110,14 +110,14 @@ public class EntitySheep extends EntityAnimal {
                 // CraftBukkit end
 
                 this.setSheared(true);
-                int i = 1 + this.random.nextInt(3);
+                int i = 1 + RANDOM.nextInt(3);
 
                 for (int j = 0; j < i; ++j) {
                     EntityItem entityitem = this.a(new ItemStack(Item.getItemOf(Blocks.WOOL), 1, this.getColor().getColorIndex()), 1.0F);
 
-                    entityitem.motY += (double) (this.random.nextFloat() * 0.05F);
-                    entityitem.motX += (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F);
-                    entityitem.motZ += (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F);
+                    entityitem.motY += (double) (RANDOM.nextFloat() * 0.05F);
+                    entityitem.motX += (double) ((RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.1F);
+                    entityitem.motZ += (double) ((RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.1F);
                 }
             }
 
@@ -212,7 +212,7 @@ public class EntitySheep extends EntityAnimal {
 
     public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
         groupdataentity = super.prepare(difficultydamagescaler, groupdataentity);
-        this.setColor(a(this.world.random));
+        this.setColor(a(RANDOM));
         return groupdataentity;
     }
 
@@ -228,7 +228,7 @@ public class EntitySheep extends EntityAnimal {
         if (itemstack != null && itemstack.getItem() == Items.DYE) {
             k = itemstack.getData();
         } else {
-            k = this.world.random.nextBoolean() ? i : j;
+            k = RANDOM.nextBoolean() ? i : j;
         }
 
         return EnumColor.fromInvColorIndex(k);

@@ -30,7 +30,7 @@ public class VillageSiege {
                     return;
                 }
 
-                this.c = this.a.random.nextInt(10) == 0 ? 1 : 2;
+                this.c = World.RANDOM.nextInt(10) == 0 ? 1 : 2;
                 this.b = false;
                 if (this.c == 2) {
                     return;
@@ -79,7 +79,7 @@ public class VillageSiege {
 
                     while (true) {
                         if (i < 10) {
-                            float f1 = this.a.random.nextFloat() * 3.1415927F * 2.0F;
+                            float f1 = World.RANDOM.nextFloat() * 3.1415927F * 2.0F;
 
                             this.g = blockposition.getX() + (int) ((double) (MathHelper.cos(f1) * f) * 0.9D);
                             this.h = blockposition.getY();
@@ -139,7 +139,7 @@ public class VillageSiege {
                 return false;
             }
 
-            entityzombie.setPositionRotation(vec3d.a, vec3d.b, vec3d.c, this.a.random.nextFloat() * 360.0F, 0.0F);
+            entityzombie.setPositionRotation(vec3d.a, vec3d.b, vec3d.c, World.RANDOM.nextFloat() * 360.0F, 0.0F);
             this.a.addEntity(entityzombie, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.VILLAGE_INVASION); // CraftBukkit
             BlockPosition blockposition = this.f.a();
 
@@ -150,7 +150,7 @@ public class VillageSiege {
 
     private Vec3D a(BlockPosition blockposition) {
         for (int i = 0; i < 10; ++i) {
-            BlockPosition blockposition1 = blockposition.a(this.a.random.nextInt(16) - 8, this.a.random.nextInt(6) - 3, this.a.random.nextInt(16) - 8);
+            BlockPosition blockposition1 = blockposition.a(World.RANDOM.nextInt(16) - 8, World.RANDOM.nextInt(6) - 3, World.RANDOM.nextInt(16) - 8);
 
             if (this.f.a(blockposition1) && SpawnerCreature.a(EntityInsentient.EnumEntityPositionType.ON_GROUND, this.a, blockposition1)) {
                 return new Vec3D((double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());

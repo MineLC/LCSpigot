@@ -61,10 +61,10 @@ public abstract class MobSpawnerAbstract {
             double d0;
 
             if (this.a().isClientSide) {
-                double d1 = (double) ((float) blockposition.getX() + this.a().random.nextFloat());
-                double d2 = (double) ((float) blockposition.getY() + this.a().random.nextFloat());
+                double d1 = (double) ((float) blockposition.getX() + World.RANDOM.nextFloat());
+                double d2 = (double) ((float) blockposition.getY() + World.RANDOM.nextFloat());
 
-                d0 = (double) ((float) blockposition.getZ() + this.a().random.nextFloat());
+                d0 = (double) ((float) blockposition.getZ() + World.RANDOM.nextFloat());
                 this.a().addParticle(EnumParticle.SMOKE_NORMAL, d1, d2, d0, 0.0D, 0.0D, 0.0D, new int[0]);
                 this.a().addParticle(EnumParticle.FLAME, d1, d2, d0, 0.0D, 0.0D, 0.0D, new int[0]);
                 if (this.spawnDelay > 0) {
@@ -99,12 +99,12 @@ public abstract class MobSpawnerAbstract {
                         return;
                     }
 
-                    d0 = (double) blockposition.getX() + (this.a().random.nextDouble() - this.a().random.nextDouble()) * (double) this.spawnRange + 0.5D;
-                    double d3 = (double) (blockposition.getY() + this.a().random.nextInt(3) - 1);
-                    double d4 = (double) blockposition.getZ() + (this.a().random.nextDouble() - this.a().random.nextDouble()) * (double) this.spawnRange + 0.5D;
+                    d0 = (double) blockposition.getX() + (World.RANDOM.nextDouble() - World.RANDOM.nextDouble()) * (double) this.spawnRange + 0.5D;
+                    double d3 = (double) (blockposition.getY() + World.RANDOM.nextInt(3) - 1);
+                    double d4 = (double) blockposition.getZ() + (World.RANDOM.nextDouble() - World.RANDOM.nextDouble()) * (double) this.spawnRange + 0.5D;
                     EntityInsentient entityinsentient = entity instanceof EntityInsentient ? (EntityInsentient) entity : null;
 
-                    entity.setPositionRotation(d0, d3, d4, this.a().random.nextFloat() * 360.0F, 0.0F);
+                    entity.setPositionRotation(d0, d3, d4, World.RANDOM.nextFloat() * 360.0F, 0.0F);
                     if (entityinsentient == null || entityinsentient.bR() && entityinsentient.canSpawn()) {
                         this.a(entity, true);
                         this.a().triggerEffect(2004, blockposition, 0);
@@ -216,11 +216,11 @@ public abstract class MobSpawnerAbstract {
         } else {
             int i = this.maxSpawnDelay - this.minSpawnDelay;
 
-            this.spawnDelay = this.minSpawnDelay + this.a().random.nextInt(i);
+            this.spawnDelay = this.minSpawnDelay + World.RANDOM.nextInt(i);
         }
 
         if (this.mobs.size() > 0) {
-            this.a((MobSpawnerAbstract.a) WeightedRandom.a(this.a().random, this.mobs));
+            this.a((MobSpawnerAbstract.a) WeightedRandom.a(World.RANDOM, this.mobs));
         }
 
         this.a(1);

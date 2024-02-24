@@ -62,9 +62,9 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
         d0 /= (double) f2;
         d1 /= (double) f2;
         d2 /= (double) f2;
-        d0 += this.random.nextGaussian() * 0.007499999832361937D * (double) f1;
-        d1 += this.random.nextGaussian() * 0.007499999832361937D * (double) f1;
-        d2 += this.random.nextGaussian() * 0.007499999832361937D * (double) f1;
+        d0 += RANDOM.nextGaussian() * 0.007499999832361937D * (double) f1;
+        d1 += RANDOM.nextGaussian() * 0.007499999832361937D * (double) f1;
+        d2 += RANDOM.nextGaussian() * 0.007499999832361937D * (double) f1;
         d0 *= (double) f;
         d1 *= (double) f;
         d2 *= (double) f;
@@ -98,9 +98,9 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
             }
 
             this.inGround = false;
-            this.motX *= (double) (this.random.nextFloat() * 0.2F);
-            this.motY *= (double) (this.random.nextFloat() * 0.2F);
-            this.motZ *= (double) (this.random.nextFloat() * 0.2F);
+            this.motX *= (double) (RANDOM.nextFloat() * 0.2F);
+            this.motY *= (double) (RANDOM.nextFloat() * 0.2F);
+            this.motZ *= (double) (RANDOM.nextFloat() * 0.2F);
             this.i = 0;
             this.ar = 0;
         } else {

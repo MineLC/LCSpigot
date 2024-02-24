@@ -55,7 +55,7 @@ public class Village {
 
         int j = this.h / 10;
 
-        if (this.l < j && this.b.size() > 20 && this.a.random.nextInt(7000) == 0) {
+        if (this.l < j && this.b.size() > 20 && World.RANDOM.nextInt(7000) == 0) {
             Vec3D vec3d = this.a(this.d, 2, 4, 2);
 
             if (vec3d != null) {
@@ -71,7 +71,7 @@ public class Village {
 
     private Vec3D a(BlockPosition blockposition, int i, int j, int k) {
         for (int l = 0; l < 10; ++l) {
-            BlockPosition blockposition1 = blockposition.a(this.a.random.nextInt(16) - 8, this.a.random.nextInt(6) - 3, this.a.random.nextInt(16) - 8);
+            BlockPosition blockposition1 = blockposition.a(World.RANDOM.nextInt(16) - 8, World.RANDOM.nextInt(6) - 3, World.RANDOM.nextInt(16) - 8);
 
             if (this.a(blockposition1) && this.a(new BlockPosition(i, j, k), blockposition1)) {
                 return new Vec3D((double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
@@ -293,7 +293,7 @@ public class Village {
 
     private void m() {
         boolean flag = false;
-        boolean flag1 = this.a.random.nextInt(50) == 0;
+        boolean flag1 = World.RANDOM.nextInt(50) == 0;
         Iterator iterator = this.b.iterator();
 
         while (iterator.hasNext()) {

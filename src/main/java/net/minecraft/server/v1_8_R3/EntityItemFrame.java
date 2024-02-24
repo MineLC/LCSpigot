@@ -71,7 +71,7 @@ public class EntityItemFrame extends EntityHanging {
                 this.a(new ItemStack(Items.ITEM_FRAME), 0.0F);
             }
 
-            if (itemstack != null && this.random.nextFloat() < this.c) {
+            if (itemstack != null && RANDOM.nextFloat() < this.c) {
                 itemstack = itemstack.cloneItemStack();
                 this.b(itemstack);
                 this.a(itemstack, 0.0F);

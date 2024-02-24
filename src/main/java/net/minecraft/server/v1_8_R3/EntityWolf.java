@@ -113,7 +113,7 @@ public class EntityWolf extends EntityTameableAnimal {
 
     protected String z() {
         // CraftBukkit - (getFloat(18) < 10) -> (getFloat(18) < this.getMaxHealth() / 2)
-        return this.isAngry() ? "mob.wolf.growl" : (this.random.nextInt(3) == 0 ? (this.isTamed() && this.datawatcher.getFloat(18) < this.getMaxHealth() / 2 ? "mob.wolf.whine" : "mob.wolf.panting") : "mob.wolf.bark");
+        return this.isAngry() ? "mob.wolf.growl" : (RANDOM.nextInt(3) == 0 ? (this.isTamed() && this.datawatcher.getFloat(18) < this.getMaxHealth() / 2 ? "mob.wolf.whine" : "mob.wolf.panting") : "mob.wolf.bark");
     }
 
     protected String bo() {
@@ -163,7 +163,7 @@ public class EntityWolf extends EntityTameableAnimal {
             this.bt = 0.0F;
         } else if ((this.bq || this.br) && this.br) {
             if (this.bs == 0.0F) {
-                this.makeSound("mob.wolf.shake", this.bB(), (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+                this.makeSound("mob.wolf.shake", this.bB(), (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F + 1.0F);
             }
 
             this.bt = this.bs;
@@ -180,8 +180,8 @@ public class EntityWolf extends EntityTameableAnimal {
                 int i = (int) (MathHelper.sin((this.bs - 0.4F) * 3.1415927F) * 7.0F);
 
                 for (int j = 0; j < i; ++j) {
-                    float f1 = (this.random.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
-                    float f2 = (this.random.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
+                    float f1 = (RANDOM.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
+                    float f2 = (RANDOM.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
 
                     this.world.addParticle(EnumParticle.WATER_SPLASH, this.locX + (double) f1, (double) (f + 0.8F), this.locZ + (double) f2, this.motX, this.motY, this.motZ, new int[0]);
                 }
@@ -286,7 +286,7 @@ public class EntityWolf extends EntityTameableAnimal {
 
             if (!this.world.isClientSide) {
                 // CraftBukkit - added event call and isCancelled check.
-                if (this.random.nextInt(3) == 0 && !CraftEventFactory.callEntityTameEvent(this, entityhuman).isCancelled()) {
+                if (RANDOM.nextInt(3) == 0 && !CraftEventFactory.callEntityTameEvent(this, entityhuman).isCancelled()) {
                     this.setTamed(true);
                     this.navigation.n();
                     this.setGoalTarget((EntityLiving) null, TargetReason.FORGOT_TARGET, true);

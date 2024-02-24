@@ -132,7 +132,7 @@ public class ItemBucket extends Item {
                     int j = blockposition.getY();
                     int k = blockposition.getZ();
 
-                    world.makeSound((double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F), "random.fizz", 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+                    world.makeSound((double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F), "random.fizz", 0.5F, 2.6F + (World.RANDOM.nextFloat() - World.RANDOM.nextFloat()) * 0.8F);
 
                     for (int l = 0; l < 8; ++l) {
                         world.addParticle(EnumParticle.SMOKE_LARGE, (double) i + Math.random(), (double) j + Math.random(), (double) k + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);

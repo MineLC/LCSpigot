@@ -42,6 +42,7 @@ public abstract class Entity {
     }
     // CraftBukikt end
 
+    protected static final Random RANDOM = new Random();
     private static final AxisAlignedBB a = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
     private static int entityCount;
     private int id;
@@ -57,9 +58,9 @@ public abstract class Entity {
     public double locX;
     public double locY;
     public double locZ;
-    public double motX;
-    public double motY;
-    public double motZ;
+    public double motX = 0;
+    public double motY = 0;
+    public double motZ = 0;
     public float yaw;
     public float pitch;
     public float lastYaw;
@@ -86,7 +87,6 @@ public abstract class Entity {
     public float S;
     public boolean noclip;
     public float U;
-    protected Random random;
     public int ticksLived;
     public int maxFireTicks;
     public int fireTicks; // CraftBukkit - public
@@ -136,6 +136,18 @@ public abstract class Entity {
         this.die();
     }
 
+    public Entity() {
+        this.id = Entity.entityCount++;
+        this.datawatcher = new DataWatcher(this);
+        this.datawatcher.a(0, (byte) 0);
+        this.datawatcher.a(1, (short) 300);
+        this.datawatcher.a(3, (byte) 0);
+        this.datawatcher.a(2, "");
+        this.datawatcher.a(4, (byte) 0);
+
+        this.defaultActivationState = false;
+    }
+
     public Entity(World world) {
         this.id = Entity.entityCount++;
         this.j = 1.0D;
@@ -143,10 +155,9 @@ public abstract class Entity {
         this.width = 0.6F;
         this.length = 1.8F;
         this.h = 1;
-        this.random = new Random();
         this.maxFireTicks = 1;
         this.justCreated = true;
-        this.uniqueID = MathHelper.a(this.random);
+        this.uniqueID = MathHelper.a(RANDOM);
         this.world = world;
         this.setPosition(0.0D, 0.0D, 0.0D);
         if (world != null) {
@@ -159,11 +170,11 @@ public abstract class Entity {
         // Spigot end
 
         this.datawatcher = new DataWatcher(this);
-        this.datawatcher.a(0, Byte.valueOf((byte) 0));
-        this.datawatcher.a(1, Short.valueOf((short) 300));
-        this.datawatcher.a(3, Byte.valueOf((byte) 0));
+        this.datawatcher.a(0, (byte) 0);
+        this.datawatcher.a(1, (short) 300);
+        this.datawatcher.a(3, (byte) 0);
         this.datawatcher.a(2, "");
-        this.datawatcher.a(4, Byte.valueOf((byte) 0));
+        this.datawatcher.a(4, (byte) 0);
         this.h();
     }
 
@@ -679,7 +690,7 @@ public abstract class Entity {
                             f = 1.0F;
                         }
 
-                        this.makeSound(this.P(), f, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
+                        this.makeSound(this.P(), f, 1.0F + (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.4F);
                     }
 
                     this.a(blockposition, block);
@@ -725,7 +736,7 @@ public abstract class Entity {
             }
 
             if (flag2 && this.fireTicks > 0) {
-                this.makeSound("random.fizz", 0.7F, 1.6F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
+                this.makeSound("random.fizz", 0.7F, 1.6F + (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.4F);
                 this.fireTicks = -this.maxFireTicks;
             }
 
@@ -872,7 +883,7 @@ public abstract class Entity {
             f = 1.0F;
         }
 
-        this.makeSound(this.aa(), f, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
+        this.makeSound(this.aa(), f, 1.0F + (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.4F);
         float f1 = (float) MathHelper.floor(this.getBoundingBox().b);
 
         int i;
@@ -880,14 +891,14 @@ public abstract class Entity {
         float f3;
 
         for (i = 0; (float) i < 1.0F + this.width * 20.0F; ++i) {
-            f2 = (this.random.nextFloat() * 2.0F - 1.0F) * this.width;
-            f3 = (this.random.nextFloat() * 2.0F - 1.0F) * this.width;
-            this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX + (double) f2, (double) (f1 + 1.0F), this.locZ + (double) f3, this.motX, this.motY - (double) (this.random.nextFloat() * 0.2F), this.motZ, new int[0]);
+            f2 = (RANDOM.nextFloat() * 2.0F - 1.0F) * this.width;
+            f3 = (RANDOM.nextFloat() * 2.0F - 1.0F) * this.width;
+            this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX + (double) f2, (double) (f1 + 1.0F), this.locZ + (double) f3, this.motX, this.motY - (double) (RANDOM.nextFloat() * 0.2F), this.motZ, new int[0]);
         }
 
         for (i = 0; (float) i < 1.0F + this.width * 20.0F; ++i) {
-            f2 = (this.random.nextFloat() * 2.0F - 1.0F) * this.width;
-            f3 = (this.random.nextFloat() * 2.0F - 1.0F) * this.width;
+            f2 = (RANDOM.nextFloat() * 2.0F - 1.0F) * this.width;
+            f3 = (RANDOM.nextFloat() * 2.0F - 1.0F) * this.width;
             this.world.addParticle(EnumParticle.WATER_SPLASH, this.locX + (double) f2, (double) (f1 + 1.0F), this.locZ + (double) f3, this.motX, this.motY, this.motZ, new int[0]);
         }
 
@@ -909,7 +920,7 @@ public abstract class Entity {
         Block block = iblockdata.getBlock();
 
         if (block.b() != -1) {
-            this.world.addParticle(EnumParticle.BLOCK_CRACK, this.locX + ((double) this.random.nextFloat() - 0.5D) * (double) this.width, this.getBoundingBox().b + 0.1D, this.locZ + ((double) this.random.nextFloat() - 0.5D) * (double) this.width, -this.motX * 4.0D, 1.5D, -this.motZ * 4.0D, new int[] { Block.getCombinedId(iblockdata)});
+            this.world.addParticle(EnumParticle.BLOCK_CRACK, this.locX + ((double) RANDOM.nextFloat() - 0.5D) * (double) this.width, this.getBoundingBox().b + 0.1D, this.locZ + ((double) RANDOM.nextFloat() - 0.5D) * (double) this.width, -this.motX * 4.0D, 1.5D, -this.motZ * 4.0D, new int[] { Block.getCombinedId(iblockdata)});
         }
 
     }
@@ -1794,7 +1805,7 @@ public abstract class Entity {
                 b0 = 5;
             }
 
-            float f = this.random.nextFloat() * 0.2F + 0.1F;
+            float f = RANDOM.nextFloat() * 0.2F + 0.1F;
 
             if (b0 == 0) {
                 this.motX = (double) (-f);

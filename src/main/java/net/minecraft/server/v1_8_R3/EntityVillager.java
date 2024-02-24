@@ -82,7 +82,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, NPC {
             BlockPosition blockposition = new BlockPosition(this);
 
             this.world.ae().a(blockposition);
-            this.profession = 70 + this.random.nextInt(50);
+            this.profession = 70 + RANDOM.nextInt(50);
             this.village = this.world.ae().getClosestVillage(blockposition, 32);
             if (this.village == null) {
                 this.cj();
@@ -107,7 +107,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, NPC {
                         MerchantRecipe merchantrecipe = (MerchantRecipe) iterator.next();
 
                         if (merchantrecipe.h()) {
-                            merchantrecipe.a(this.random.nextInt(6) + this.random.nextInt(6) + 2);
+                            merchantrecipe.a(RANDOM.nextInt(6) + RANDOM.nextInt(6) + 2);
                         }
                     }
 
@@ -329,9 +329,9 @@ public class EntityVillager extends EntityAgeable implements IMerchant, NPC {
         merchantrecipe.g();
         this.a_ = -this.w();
         this.makeSound("mob.villager.yes", this.bB(), this.bC());
-        int i = 3 + this.random.nextInt(4);
+        int i = 3 + RANDOM.nextInt(4);
 
-        if (merchantrecipe.e() == 1 || this.random.nextInt(5) == 0) {
+        if (merchantrecipe.e() == 1 || RANDOM.nextInt(5) == 0) {
             this.bs = 40;
             this.bt = true;
             this.bu = true;
@@ -380,7 +380,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, NPC {
         if (this.bx != 0 && this.by != 0) {
             ++this.by;
         } else {
-            this.bx = this.random.nextInt(aentityvillager_imerchantrecipeoption.length) + 1;
+            this.bx = RANDOM.nextInt(aentityvillager_imerchantrecipeoption.length) + 1;
             this.by = 1;
         }
 
@@ -400,7 +400,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, NPC {
             for (int l = 0; l < k; ++l) {
                 EntityVillager.IMerchantRecipeOption entityvillager_imerchantrecipeoption = aentityvillager_imerchantrecipeoption3[l];
 
-                entityvillager_imerchantrecipeoption.a(this.br, this.random);
+                entityvillager_imerchantrecipeoption.a(this.br, RANDOM);
             }
         }
 
@@ -485,7 +485,7 @@ public class EntityVillager extends EntityAgeable implements IMerchant, NPC {
 
     public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
         groupdataentity = super.prepare(difficultydamagescaler, groupdataentity);
-        this.setProfession(this.world.random.nextInt(5));
+        this.setProfession(RANDOM.nextInt(5));
         this.cv();
         return groupdataentity;
     }

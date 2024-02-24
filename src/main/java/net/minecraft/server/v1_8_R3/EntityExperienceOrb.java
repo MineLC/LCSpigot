@@ -51,9 +51,9 @@ public class EntityExperienceOrb extends Entity {
         this.motY -= 0.029999999329447746D;
         if (this.world.getType(new BlockPosition(this)).getBlock().getMaterial() == Material.LAVA) {
             this.motY = 0.20000000298023224D;
-            this.motX = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
-            this.motZ = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
-            this.makeSound("random.fizz", 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
+            this.motX = (double) ((RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F);
+            this.motZ = (double) ((RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F);
+            this.makeSound("random.fizz", 0.4F, 2.0F + RANDOM.nextFloat() * 0.4F);
         }
 
         this.j(this.locX, (this.getBoundingBox().b + this.getBoundingBox().e) / 2.0D, this.locZ);
@@ -158,7 +158,7 @@ public class EntityExperienceOrb extends Entity {
         if (!this.world.isClientSide) {
             if (this.c == 0 && entityhuman.bp == 0) {
                 entityhuman.bp = 2;
-                this.world.makeSound(entityhuman, "random.orb", 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
+                this.world.makeSound(entityhuman, "random.orb", 0.1F, 0.5F * ((RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.7F + 1.8F));
                 entityhuman.receive(this, 1);
                 entityhuman.giveExp(CraftEventFactory.callPlayerExpChangeEvent(entityhuman, this.value).getAmount()); // CraftBukkit - this.value -> event.getAmount()
                 this.die();

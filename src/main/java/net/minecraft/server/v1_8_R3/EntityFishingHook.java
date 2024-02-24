@@ -72,9 +72,9 @@ public class EntityFishingHook extends Entity {
         d0 /= (double) f2;
         d1 /= (double) f2;
         d2 /= (double) f2;
-        d0 += this.random.nextGaussian() * 0.007499999832361937D * (double) f1;
-        d1 += this.random.nextGaussian() * 0.007499999832361937D * (double) f1;
-        d2 += this.random.nextGaussian() * 0.007499999832361937D * (double) f1;
+        d0 += RANDOM.nextGaussian() * 0.007499999832361937D * (double) f1;
+        d1 += RANDOM.nextGaussian() * 0.007499999832361937D * (double) f1;
+        d2 += RANDOM.nextGaussian() * 0.007499999832361937D * (double) f1;
         d0 *= (double) f;
         d1 *= (double) f;
         d2 *= (double) f;
@@ -140,9 +140,9 @@ public class EntityFishingHook extends Entity {
                 }
 
                 this.as = false;
-                this.motX *= (double) (this.random.nextFloat() * 0.2F);
-                this.motY *= (double) (this.random.nextFloat() * 0.2F);
-                this.motZ *= (double) (this.random.nextFloat() * 0.2F);
+                this.motX *= (double) (RANDOM.nextFloat() * 0.2F);
+                this.motY *= (double) (RANDOM.nextFloat() * 0.2F);
+                this.motZ *= (double) (RANDOM.nextFloat() * 0.2F);
                 this.at = 0;
                 this.au = 0;
             } else {
@@ -251,11 +251,11 @@ public class EntityFishingHook extends Entity {
                     int k = 1;
                     BlockPosition blockposition = (new BlockPosition(this)).up();
 
-                    if (this.random.nextFloat() < 0.25F && this.world.isRainingAt(blockposition)) {
+                    if (RANDOM.nextFloat() < 0.25F && this.world.isRainingAt(blockposition)) {
                         k = 2;
                     }
 
-                    if (this.random.nextFloat() < 0.5F && !this.world.i(blockposition)) {
+                    if (RANDOM.nextFloat() < 0.5F && !this.world.i(blockposition)) {
                         --k;
                     }
 
@@ -277,13 +277,13 @@ public class EntityFishingHook extends Entity {
                             this.ax -= k;
                             if (this.ax <= 0) {
                                 this.motY -= 0.20000000298023224D;
-                                this.makeSound("random.splash", 0.25F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
+                                this.makeSound("random.splash", 0.25F, 1.0F + (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.4F);
                                 f3 = (float) MathHelper.floor(this.getBoundingBox().b);
                                 worldserver.a(EnumParticle.WATER_BUBBLE, this.locX, (double) (f3 + 1.0F), this.locZ, (int) (1.0F + this.width * 20.0F), (double) this.width, 0.0D, (double) this.width, 0.20000000298023224D, new int[0]);
                                 worldserver.a(EnumParticle.WATER_WAKE, this.locX, (double) (f3 + 1.0F), this.locZ, (int) (1.0F + this.width * 20.0F), (double) this.width, 0.0D, (double) this.width, 0.20000000298023224D, new int[0]);
-                                this.av = MathHelper.nextInt(this.random, 10, 30);
+                                this.av = MathHelper.nextInt(RANDOM, 10, 30);
                             } else {
-                                this.ay = (float) ((double) this.ay + this.random.nextGaussian() * 4.0D);
+                                this.ay = (float) ((double) this.ay + RANDOM.nextGaussian() * 4.0D);
                                 f3 = this.ay * 0.017453292F;
                                 f5 = MathHelper.sin(f3);
                                 f4 = MathHelper.cos(f3);
@@ -292,7 +292,7 @@ public class EntityFishingHook extends Entity {
                                 d11 = this.locZ + (double) (f4 * (float) this.ax * 0.1F);
                                 block = worldserver.getType(new BlockPosition((int) d8, (int) d12 - 1, (int) d11)).getBlock();
                                 if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {
-                                    if (this.random.nextFloat() < 0.15F) {
+                                    if (RANDOM.nextFloat() < 0.15F) {
                                         worldserver.a(EnumParticle.WATER_BUBBLE, d8, d12 - 0.10000000149011612D, d11, 1, (double) f5, 0.1D, (double) f4, 0.0D, new int[0]);
                                     }
 
@@ -314,30 +314,30 @@ public class EntityFishingHook extends Entity {
                                 f3 = (float) ((double) f3 + (double) (60 - this.aw) * 0.01D);
                             }
 
-                            if (this.random.nextFloat() < f3) {
-                                f5 = MathHelper.a(this.random, 0.0F, 360.0F) * 0.017453292F;
-                                f4 = MathHelper.a(this.random, 25.0F, 60.0F);
+                            if (RANDOM.nextFloat() < f3) {
+                                f5 = MathHelper.a(RANDOM, 0.0F, 360.0F) * 0.017453292F;
+                                f4 = MathHelper.a(RANDOM, 25.0F, 60.0F);
                                 d8 = this.locX + (double) (MathHelper.sin(f5) * f4 * 0.1F);
                                 d12 = (double) ((float) MathHelper.floor(this.getBoundingBox().b) + 1.0F);
                                 d11 = this.locZ + (double) (MathHelper.cos(f5) * f4 * 0.1F);
                                 block = worldserver.getType(new BlockPosition((int) d8, (int) d12 - 1, (int) d11)).getBlock();
                                 if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {
-                                    worldserver.a(EnumParticle.WATER_SPLASH, d8, d12, d11, 2 + this.random.nextInt(2), 0.10000000149011612D, 0.0D, 0.10000000149011612D, 0.0D, new int[0]);
+                                    worldserver.a(EnumParticle.WATER_SPLASH, d8, d12, d11, 2 + RANDOM.nextInt(2), 0.10000000149011612D, 0.0D, 0.10000000149011612D, 0.0D, new int[0]);
                                 }
                             }
 
                             if (this.aw <= 0) {
-                                this.ay = MathHelper.a(this.random, 0.0F, 360.0F);
-                                this.ax = MathHelper.nextInt(this.random, 20, 80);
+                                this.ay = MathHelper.a(RANDOM, 0.0F, 360.0F);
+                                this.ax = MathHelper.nextInt(RANDOM, 20, 80);
                             }
                         } else {
-                            this.aw = MathHelper.nextInt(this.random, 100, 900);
+                            this.aw = MathHelper.nextInt(RANDOM, 100, 900);
                             this.aw -= EnchantmentManager.h(this.owner) * 20 * 5;
                         }
                     }
 
                     if (this.av > 0) {
-                        this.motY -= (double) (this.random.nextFloat() * this.random.nextFloat() * this.random.nextFloat()) * 0.2D;
+                        this.motY -= (double) (RANDOM.nextFloat() * RANDOM.nextFloat() * RANDOM.nextFloat()) * 0.2D;
                     }
                 }
 
@@ -411,7 +411,7 @@ public class EntityFishingHook extends Entity {
                 EntityItem entityitem = new EntityItem(this.world, this.locX, this.locY, this.locZ, this.m());
                 // CraftBukkit start
                 PlayerFishEvent playerFishEvent = new PlayerFishEvent((Player) this.owner.getBukkitEntity(), entityitem.getBukkitEntity(), (Fish) this.getBukkitEntity(), PlayerFishEvent.State.CAUGHT_FISH);
-                playerFishEvent.setExpToDrop(this.random.nextInt(6) + 1);
+                playerFishEvent.setExpToDrop(RANDOM.nextInt(6) + 1);
                 this.world.getServer().getPluginManager().callEvent(playerFishEvent);
 
                 if (playerFishEvent.isCancelled()) {
@@ -428,7 +428,7 @@ public class EntityFishingHook extends Entity {
                 entityitem.motY = d6 * d9 + (double) MathHelper.sqrt(d8) * 0.08D;
                 entityitem.motZ = d7 * d9;
                 this.world.addEntity(entityitem);
-                // CraftBukkit start - this.random.nextInt(6) + 1 -> playerFishEvent.getExpToDrop()
+                // CraftBukkit start - RANDOM.nextInt(6) + 1 -> playerFishEvent.getExpToDrop()
                 if (playerFishEvent.getExpToDrop() > 0) {
                 this.owner.world.addEntity(new EntityExperienceOrb(this.owner.world, this.owner.locX, this.owner.locY + 0.5D, this.owner.locZ + 0.5D, playerFishEvent.getExpToDrop()));
                 } // CraftBukkit end
@@ -464,7 +464,7 @@ public class EntityFishingHook extends Entity {
     }
 
     private ItemStack m() {
-        float f = this.world.random.nextFloat();
+        float f = RANDOM.nextFloat();
         int i = EnchantmentManager.g(this.owner);
         int j = EnchantmentManager.h(this.owner);
         float f1 = 0.1F - (float) i * 0.025F - (float) j * 0.01F;
@@ -474,17 +474,17 @@ public class EntityFishingHook extends Entity {
         f2 = MathHelper.a(f2, 0.0F, 1.0F);
         if (f < f1) {
             this.owner.b(StatisticList.D);
-            return ((PossibleFishingResult) WeightedRandom.a(this.random, EntityFishingHook.d)).a(this.random);
+            return ((PossibleFishingResult) WeightedRandom.a(RANDOM, EntityFishingHook.d)).a(RANDOM);
         } else {
             f -= f1;
             if (f < f2) {
                 this.owner.b(StatisticList.E);
-                return ((PossibleFishingResult) WeightedRandom.a(this.random, EntityFishingHook.e)).a(this.random);
+                return ((PossibleFishingResult) WeightedRandom.a(RANDOM, EntityFishingHook.e)).a(RANDOM);
             } else {
                 float f3 = f - f2;
 
                 this.owner.b(StatisticList.C);
-                return ((PossibleFishingResult) WeightedRandom.a(this.random, EntityFishingHook.f)).a(this.random);
+                return ((PossibleFishingResult) WeightedRandom.a(RANDOM, EntityFishingHook.f)).a(RANDOM);
             }
         }
     }

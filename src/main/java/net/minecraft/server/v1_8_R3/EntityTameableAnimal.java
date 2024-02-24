@@ -57,11 +57,11 @@ public abstract class EntityTameableAnimal extends EntityAnimal implements Entit
         }
 
         for (int i = 0; i < 7; ++i) {
-            double d0 = this.random.nextGaussian() * 0.02D;
-            double d1 = this.random.nextGaussian() * 0.02D;
-            double d2 = this.random.nextGaussian() * 0.02D;
+            double d0 = RANDOM.nextGaussian() * 0.02D;
+            double d1 = RANDOM.nextGaussian() * 0.02D;
+            double d2 = RANDOM.nextGaussian() * 0.02D;
 
-            this.world.addParticle(enumparticle, this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2, new int[0]);
+            this.world.addParticle(enumparticle, this.locX + (double) (RANDOM.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (RANDOM.nextFloat() * this.length), this.locZ + (double) (RANDOM.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2, new int[0]);
         }
 
     }

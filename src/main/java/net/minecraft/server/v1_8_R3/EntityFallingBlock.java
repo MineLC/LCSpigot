@@ -151,7 +151,7 @@ public class EntityFallingBlock extends Entity {
                     CraftEventFactory.entityDamage = null; // CraftBukkit
                 }
 
-                if (flag && (double) this.random.nextFloat() < 0.05000000074505806D + (double) i * 0.05D) {
+                if (flag && (double) RANDOM.nextFloat() < 0.05000000074505806D + (double) i * 0.05D) {
                     int j = ((Integer) this.block.get(BlockAnvil.DAMAGE)).intValue();
 
                     ++j;

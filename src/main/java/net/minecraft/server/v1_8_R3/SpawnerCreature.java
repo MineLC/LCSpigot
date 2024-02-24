@@ -149,9 +149,9 @@ public final class SpawnerCreature {
                                     while (true) {
                                         if (i4 < 4) {
                                             label108: {
-                                                j3 += worldserver.random.nextInt(b1) - worldserver.random.nextInt(b1);
-                                                k3 += worldserver.random.nextInt(1) - worldserver.random.nextInt(1);
-                                                l3 += worldserver.random.nextInt(b1) - worldserver.random.nextInt(b1);
+                                                j3 += World.RANDOM.nextInt(b1) - World.RANDOM.nextInt(b1);
+                                                k3 += World.RANDOM.nextInt(1) - World.RANDOM.nextInt(1);
+                                                l3 += World.RANDOM.nextInt(b1) - World.RANDOM.nextInt(b1);
                                                 BlockPosition blockposition2 = new BlockPosition(j3, k3, l3);
                                                 float f = (float) j3 + 0.5F;
                                                 float f1 = (float) l3 + 0.5F;
@@ -174,7 +174,7 @@ public final class SpawnerCreature {
                                                             return j1;
                                                         }
 
-                                                        entityinsentient.setPositionRotation((double) f, (double) k3, (double) f1, worldserver.random.nextFloat() * 360.0F, 0.0F);
+                                                        entityinsentient.setPositionRotation((double) f, (double) k3, (double) f1, World.RANDOM.nextFloat() * 360.0F, 0.0F);
                                                         if (entityinsentient.bR() && entityinsentient.canSpawn()) {
                                                             groupdataentity = entityinsentient.prepare(worldserver.E(new BlockPosition(entityinsentient)), groupdataentity);
                                                             if (entityinsentient.canSpawn()) {
@@ -219,10 +219,10 @@ public final class SpawnerCreature {
 
     protected static BlockPosition getRandomPosition(World world, int i, int j) {
         Chunk chunk = world.getChunkAt(i, j);
-        int k = i * 16 + world.random.nextInt(16);
-        int l = j * 16 + world.random.nextInt(16);
+        int k = i * 16 + World.RANDOM.nextInt(16);
+        int l = j * 16 + World.RANDOM.nextInt(16);
         int i1 = MathHelper.c(chunk.f(new BlockPosition(k, 0, l)) + 1, 16);
-        int j1 = world.random.nextInt(i1 > 0 ? i1 : chunk.g() + 16 - 1);
+        int j1 = World.RANDOM.nextInt(i1 > 0 ? i1 : chunk.g() + 16 - 1);
 
         return new BlockPosition(k, j1, l);
     }
@@ -255,7 +255,7 @@ public final class SpawnerCreature {
 
         if (!list.isEmpty()) {
             while (random.nextFloat() < biomebase.g()) {
-                BiomeBase.BiomeMeta biomebase_biomemeta = (BiomeBase.BiomeMeta) WeightedRandom.a(world.random, list);
+                BiomeBase.BiomeMeta biomebase_biomemeta = (BiomeBase.BiomeMeta) WeightedRandom.a(World.RANDOM, list);
                 int i1 = biomebase_biomemeta.c + random.nextInt(1 + biomebase_biomemeta.d - biomebase_biomemeta.c);
                 GroupDataEntity groupdataentity = null;
                 int j1 = i + random.nextInt(k);

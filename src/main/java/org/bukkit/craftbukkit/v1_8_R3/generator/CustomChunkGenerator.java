@@ -32,7 +32,7 @@ public class CustomChunkGenerator extends InternalChunkGenerator {
         this.world = (WorldServer) world;
         this.generator = generator;
 
-        this.random = new Random(seed);
+        random = new Random(seed);
     }
 
     public boolean isChunkLoaded(int x, int z) {
@@ -50,7 +50,7 @@ public class CustomChunkGenerator extends InternalChunkGenerator {
         world.getWorldChunkManager().getBiomeBlock(biomegrid.biome, x << 4, z << 4, 16, 16);
 
         // Try extended block method (1.2+)
-        short[][] xbtypes = generator.generateExtBlockSections(this.world.getWorld(), this.random, x, z, biomegrid);
+        short[][] xbtypes = generator.generateExtBlockSections(this.world.getWorld(), random, x, z, biomegrid);
         if (xbtypes != null) {
             chunk = new Chunk(this.world, x, z);
 
@@ -73,7 +73,7 @@ public class CustomChunkGenerator extends InternalChunkGenerator {
             }
         }
         else { // Else check for byte-per-block section data
-            byte[][] btypes = generator.generateBlockSections(this.world.getWorld(), this.random, x, z, biomegrid);
+            byte[][] btypes = generator.generateBlockSections(this.world.getWorld(), random, x, z, biomegrid);
 
             if (btypes != null) {
                 chunk = new Chunk(this.world, x, z);
@@ -96,7 +96,7 @@ public class CustomChunkGenerator extends InternalChunkGenerator {
             }
             else { // Else, fall back to pre 1.2 method
                 @SuppressWarnings("deprecation")
-                byte[] types = generator.generate(this.world.getWorld(), this.random, x, z);
+                byte[] types = generator.generate(this.world.getWorld(), random, x, z);
                 int ydim = types.length / 256;
                 int scnt = ydim / 16;
 

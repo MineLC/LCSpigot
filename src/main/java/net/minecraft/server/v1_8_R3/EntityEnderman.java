@@ -105,7 +105,7 @@ public class EntityEnderman extends EntityMonster {
     public void m() {
         if (this.world.isClientSide) {
             for (int i = 0; i < 2; ++i) {
-                this.world.addParticle(EnumParticle.PORTAL, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length - 0.25D, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D, new int[0]);
+                this.world.addParticle(EnumParticle.PORTAL, this.locX + (RANDOM.nextDouble() - 0.5D) * (double) this.width, this.locY + RANDOM.nextDouble() * (double) this.length - 0.25D, this.locZ + (RANDOM.nextDouble() - 0.5D) * (double) this.width, (RANDOM.nextDouble() - 0.5D) * 2.0D, -RANDOM.nextDouble(), (RANDOM.nextDouble() - 0.5D) * 2.0D, new int[0]);
             }
         }
 
@@ -118,14 +118,14 @@ public class EntityEnderman extends EntityMonster {
             this.damageEntity(DamageSource.DROWN, 1.0F);
         }
 
-        if (this.co() && !this.bm && this.random.nextInt(100) == 0) {
+        if (this.co() && !this.bm && RANDOM.nextInt(100) == 0) {
             this.a(false);
         }
 
         if (this.world.w()) {
             float f = this.c(1.0F);
 
-            if (f > 0.5F && this.world.i(new BlockPosition(this)) && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
+            if (f > 0.5F && this.world.i(new BlockPosition(this)) && RANDOM.nextFloat() * 30.0F < (f - 0.4F) * 2.0F) {
                 this.setGoalTarget((EntityLiving) null);
                 this.a(false);
                 this.bm = false;
@@ -137,9 +137,9 @@ public class EntityEnderman extends EntityMonster {
     }
 
     protected boolean n() {
-        double d0 = this.locX + (this.random.nextDouble() - 0.5D) * 64.0D;
-        double d1 = this.locY + (double) (this.random.nextInt(64) - 32);
-        double d2 = this.locZ + (this.random.nextDouble() - 0.5D) * 64.0D;
+        double d0 = this.locX + (RANDOM.nextDouble() - 0.5D) * 64.0D;
+        double d1 = this.locY + (double) (RANDOM.nextInt(64) - 32);
+        double d2 = this.locZ + (RANDOM.nextDouble() - 0.5D) * 64.0D;
 
         return this.k(d0, d1, d2);
     }
@@ -149,9 +149,9 @@ public class EntityEnderman extends EntityMonster {
 
         vec3d = vec3d.a();
         double d0 = 16.0D;
-        double d1 = this.locX + (this.random.nextDouble() - 0.5D) * 8.0D - vec3d.a * d0;
-        double d2 = this.locY + (double) (this.random.nextInt(16) - 8) - vec3d.b * d0;
-        double d3 = this.locZ + (this.random.nextDouble() - 0.5D) * 8.0D - vec3d.c * d0;
+        double d1 = this.locX + (RANDOM.nextDouble() - 0.5D) * 8.0D - vec3d.a * d0;
+        double d2 = this.locY + (double) (RANDOM.nextInt(16) - 8) - vec3d.b * d0;
+        double d3 = this.locZ + (RANDOM.nextDouble() - 0.5D) * 8.0D - vec3d.c * d0;
 
         return this.k(d1, d2, d3);
     }
@@ -208,12 +208,12 @@ public class EntityEnderman extends EntityMonster {
 
             for (int i = 0; i < short0; ++i) {
                 double d6 = (double) i / ((double) short0 - 1.0D);
-                float f = (this.random.nextFloat() - 0.5F) * 0.2F;
-                float f1 = (this.random.nextFloat() - 0.5F) * 0.2F;
-                float f2 = (this.random.nextFloat() - 0.5F) * 0.2F;
-                double d7 = d3 + (this.locX - d3) * d6 + (this.random.nextDouble() - 0.5D) * (double) this.width * 2.0D;
-                double d8 = d4 + (this.locY - d4) * d6 + this.random.nextDouble() * (double) this.length;
-                double d9 = d5 + (this.locZ - d5) * d6 + (this.random.nextDouble() - 0.5D) * (double) this.width * 2.0D;
+                float f = (RANDOM.nextFloat() - 0.5F) * 0.2F;
+                float f1 = (RANDOM.nextFloat() - 0.5F) * 0.2F;
+                float f2 = (RANDOM.nextFloat() - 0.5F) * 0.2F;
+                double d7 = d3 + (this.locX - d3) * d6 + (RANDOM.nextDouble() - 0.5D) * (double) this.width * 2.0D;
+                double d8 = d4 + (this.locY - d4) * d6 + RANDOM.nextDouble() * (double) this.length;
+                double d9 = d5 + (this.locZ - d5) * d6 + (RANDOM.nextDouble() - 0.5D) * (double) this.width * 2.0D;
 
                 this.world.addParticle(EnumParticle.PORTAL, d7, d8, d9, (double) f, (double) f1, (double) f2, new int[0]);
             }
@@ -244,7 +244,7 @@ public class EntityEnderman extends EntityMonster {
         Item item = this.getLoot();
 
         if (item != null) {
-            int j = this.random.nextInt(2 + i);
+            int j = RANDOM.nextInt(2 + i);
 
             for (int k = 0; k < j; ++k) {
                 this.a(item, 1);
@@ -293,7 +293,7 @@ public class EntityEnderman extends EntityMonster {
 
             boolean flag = super.damageEntity(damagesource, f);
 
-            if (damagesource.ignoresArmor() && this.random.nextInt(10) != 0) {
+            if (damagesource.ignoresArmor() && RANDOM.nextInt(10) != 0) {
                 this.n();
             }
 

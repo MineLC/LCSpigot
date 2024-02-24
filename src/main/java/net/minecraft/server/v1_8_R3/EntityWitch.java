@@ -81,15 +81,15 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
             } else {
                 short short0 = -1;
 
-                if (this.random.nextFloat() < 0.15F && this.a(Material.WATER) && !this.hasEffect(MobEffectList.WATER_BREATHING)) {
+                if (RANDOM.nextFloat() < 0.15F && this.a(Material.WATER) && !this.hasEffect(MobEffectList.WATER_BREATHING)) {
                     short0 = 8237;
-                } else if (this.random.nextFloat() < 0.15F && this.isBurning() && !this.hasEffect(MobEffectList.FIRE_RESISTANCE)) {
+                } else if (RANDOM.nextFloat() < 0.15F && this.isBurning() && !this.hasEffect(MobEffectList.FIRE_RESISTANCE)) {
                     short0 = 16307;
-                } else if (this.random.nextFloat() < 0.05F && this.getHealth() < this.getMaxHealth()) {
+                } else if (RANDOM.nextFloat() < 0.05F && this.getHealth() < this.getMaxHealth()) {
                     short0 = 16341;
-                } else if (this.random.nextFloat() < 0.25F && this.getGoalTarget() != null && !this.hasEffect(MobEffectList.FASTER_MOVEMENT) && this.getGoalTarget().h(this) > 121.0D) {
+                } else if (RANDOM.nextFloat() < 0.25F && this.getGoalTarget() != null && !this.hasEffect(MobEffectList.FASTER_MOVEMENT) && this.getGoalTarget().h(this) > 121.0D) {
                     short0 = 16274;
-                } else if (this.random.nextFloat() < 0.25F && this.getGoalTarget() != null && !this.hasEffect(MobEffectList.FASTER_MOVEMENT) && this.getGoalTarget().h(this) > 121.0D) {
+                } else if (RANDOM.nextFloat() < 0.25F && this.getGoalTarget() != null && !this.hasEffect(MobEffectList.FASTER_MOVEMENT) && this.getGoalTarget().h(this) > 121.0D) {
                     short0 = 16274;
                 }
 
@@ -104,7 +104,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
                 }
             }
 
-            if (this.random.nextFloat() < 7.5E-4F) {
+            if (RANDOM.nextFloat() < 7.5E-4F) {
                 this.world.broadcastEntityEffect(this, (byte) 15);
             }
         }
@@ -126,14 +126,14 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
     }
 
     protected void dropDeathLoot(boolean flag, int i) {
-        int j = this.random.nextInt(3) + 1;
+        int j = RANDOM.nextInt(3) + 1;
 
         for (int k = 0; k < j; ++k) {
-            int l = this.random.nextInt(3);
-            Item item = EntityWitch.c[this.random.nextInt(EntityWitch.c.length)];
+            int l = RANDOM.nextInt(3);
+            Item item = EntityWitch.c[RANDOM.nextInt(EntityWitch.c.length)];
 
             if (i > 0) {
-                l += this.random.nextInt(i + 1);
+                l += RANDOM.nextInt(i + 1);
             }
 
             for (int i1 = 0; i1 < l; ++i1) {
@@ -158,7 +158,7 @@ public class EntityWitch extends EntityMonster implements IRangedEntity {
                 entitypotion.setPotionValue(32698);
             } else if (entityliving.getHealth() >= 8.0F && !entityliving.hasEffect(MobEffectList.POISON)) {
                 entitypotion.setPotionValue(32660);
-            } else if (f1 <= 3.0F && !entityliving.hasEffect(MobEffectList.WEAKNESS) && this.random.nextFloat() < 0.25F) {
+            } else if (f1 <= 3.0F && !entityliving.hasEffect(MobEffectList.WEAKNESS) && RANDOM.nextFloat() < 0.25F) {
                 entitypotion.setPotionValue(32696);
             }
 

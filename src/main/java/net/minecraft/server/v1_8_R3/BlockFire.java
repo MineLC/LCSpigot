@@ -336,7 +336,7 @@ public class BlockFire extends Block {
             if (!World.a((IBlockAccess) world, blockposition.down()) && !this.f(world, blockposition)) {
                 fireExtinguished(world, blockposition); // CraftBukkit - fuel block broke
             } else {
-                world.a(blockposition, (Block) this, this.a(world) + world.random.nextInt(10));
+                world.a(blockposition, (Block) this, this.a(world) + World.RANDOM.nextInt(10));
             }
         }
     }

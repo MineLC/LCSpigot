@@ -68,7 +68,7 @@ public class EntitySpider extends EntityMonster {
 
     protected void dropDeathLoot(boolean flag, int i) {
         super.dropDeathLoot(flag, i);
-        if (flag && (this.random.nextInt(3) == 0 || this.random.nextInt(1 + i) > 0)) {
+        if (flag && (RANDOM.nextInt(3) == 0 || RANDOM.nextInt(1 + i) > 0)) {
             this.a(Items.SPIDER_EYE, 1);
         }
 
@@ -107,7 +107,7 @@ public class EntitySpider extends EntityMonster {
     public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
         Object object = super.prepare(difficultydamagescaler, groupdataentity);
 
-        if (this.world.random.nextInt(100) == 0) {
+        if (RANDOM.nextInt(100) == 0) {
             EntitySkeleton entityskeleton = new EntitySkeleton(this.world);
 
             entityskeleton.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, 0.0F);
@@ -118,8 +118,8 @@ public class EntitySpider extends EntityMonster {
 
         if (object == null) {
             object = new EntitySpider.GroupDataSpider();
-            if (this.world.getDifficulty() == EnumDifficulty.HARD && this.world.random.nextFloat() < 0.1F * difficultydamagescaler.c()) {
-                ((EntitySpider.GroupDataSpider) object).a(this.world.random);
+            if (this.world.getDifficulty() == EnumDifficulty.HARD && RANDOM.nextFloat() < 0.1F * difficultydamagescaler.c()) {
+                ((EntitySpider.GroupDataSpider) object).a(RANDOM);
             }
         }
 

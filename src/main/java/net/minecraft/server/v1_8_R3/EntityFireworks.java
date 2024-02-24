@@ -40,10 +40,10 @@ public class EntityFireworks extends Entity {
             }
         }
 
-        this.motX = this.random.nextGaussian() * 0.001D;
-        this.motZ = this.random.nextGaussian() * 0.001D;
+        this.motX = RANDOM.nextGaussian() * 0.001D;
+        this.motZ = RANDOM.nextGaussian() * 0.001D;
         this.motY = 0.05D;
-        this.expectedLifespan = 10 * i + this.random.nextInt(6) + this.random.nextInt(7);
+        this.expectedLifespan = 10 * i + RANDOM.nextInt(6) + RANDOM.nextInt(7);
     }
 
     public void t_() {
@@ -83,7 +83,7 @@ public class EntityFireworks extends Entity {
 
         ++this.ticksFlown;
         if (this.world.isClientSide && this.ticksFlown % 2 < 2) {
-            this.world.addParticle(EnumParticle.FIREWORKS_SPARK, this.locX, this.locY - 0.3D, this.locZ, this.random.nextGaussian() * 0.05D, -this.motY * 0.5D, this.random.nextGaussian() * 0.05D, new int[0]);
+            this.world.addParticle(EnumParticle.FIREWORKS_SPARK, this.locX, this.locY - 0.3D, this.locZ, RANDOM.nextGaussian() * 0.05D, -this.motY * 0.5D, RANDOM.nextGaussian() * 0.05D, new int[0]);
         }
 
         if (!this.world.isClientSide && this.ticksFlown > this.expectedLifespan) {

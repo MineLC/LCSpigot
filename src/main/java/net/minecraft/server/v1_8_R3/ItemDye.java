@@ -71,8 +71,8 @@ public class ItemDye extends Item {
 
             if (iblockfragileplantelement.a(world, blockposition, iblockdata, world.isClientSide)) {
                 if (!world.isClientSide) {
-                    if (iblockfragileplantelement.a(world, world.random, blockposition, iblockdata)) {
-                        iblockfragileplantelement.b(world, world.random, blockposition, iblockdata);
+                    if (iblockfragileplantelement.a(world, World.RANDOM, blockposition, iblockdata)) {
+                        iblockfragileplantelement.b(world, World.RANDOM, blockposition, iblockdata);
                     }
 
                     --itemstack.count;

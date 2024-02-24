@@ -33,7 +33,7 @@ public class EntityIronGolem extends EntityGolem {
 
     protected void E() {
         if (--this.b <= 0) {
-            this.b = 70 + this.random.nextInt(50);
+            this.b = 70 + RANDOM.nextInt(50);
             this.a = this.world.ae().getClosestVillage(new BlockPosition(this), 32);
             if (this.a == null) {
                 this.cj();
@@ -75,7 +75,7 @@ public class EntityIronGolem extends EntityGolem {
             --this.bm;
         }
 
-        if (this.motX * this.motX + this.motZ * this.motZ > 2.500000277905201E-7D && this.random.nextInt(5) == 0) {
+        if (this.motX * this.motX + this.motZ * this.motZ > 2.500000277905201E-7D && RANDOM.nextInt(5) == 0) {
             int i = MathHelper.floor(this.locX);
             int j = MathHelper.floor(this.locY - 0.20000000298023224D);
             int k = MathHelper.floor(this.locZ);
@@ -83,7 +83,7 @@ public class EntityIronGolem extends EntityGolem {
             Block block = iblockdata.getBlock();
 
             if (block.getMaterial() != Material.AIR) {
-                this.world.addParticle(EnumParticle.BLOCK_CRACK, this.locX + ((double) this.random.nextFloat() - 0.5D) * (double) this.width, this.getBoundingBox().b + 0.1D, this.locZ + ((double) this.random.nextFloat() - 0.5D) * (double) this.width, 4.0D * ((double) this.random.nextFloat() - 0.5D), 0.5D, ((double) this.random.nextFloat() - 0.5D) * 4.0D, new int[] { Block.getCombinedId(iblockdata)});
+                this.world.addParticle(EnumParticle.BLOCK_CRACK, this.locX + ((double) RANDOM.nextFloat() - 0.5D) * (double) this.width, this.getBoundingBox().b + 0.1D, this.locZ + ((double) RANDOM.nextFloat() - 0.5D) * (double) this.width, 4.0D * ((double) RANDOM.nextFloat() - 0.5D), 0.5D, ((double) RANDOM.nextFloat() - 0.5D) * 4.0D, new int[] { Block.getCombinedId(iblockdata)});
             }
         }
 
@@ -106,7 +106,7 @@ public class EntityIronGolem extends EntityGolem {
     public boolean r(Entity entity) {
         this.c = 10;
         this.world.broadcastEntityEffect(this, (byte) 4);
-        boolean flag = entity.damageEntity(DamageSource.mobAttack(this), (float) (7 + this.random.nextInt(15)));
+        boolean flag = entity.damageEntity(DamageSource.mobAttack(this), (float) (7 + RANDOM.nextInt(15)));
 
         if (flag) {
             entity.motY += 0.4000000059604645D;
@@ -139,7 +139,7 @@ public class EntityIronGolem extends EntityGolem {
     }
 
     protected void dropDeathLoot(boolean flag, int i) {
-        int j = this.random.nextInt(3);
+        int j = RANDOM.nextInt(3);
 
         int k;
 
@@ -147,7 +147,7 @@ public class EntityIronGolem extends EntityGolem {
             this.a(Item.getItemOf(Blocks.RED_FLOWER), 1, (float) BlockFlowers.EnumFlowerVarient.POPPY.b());
         }
 
-        k = 3 + this.random.nextInt(3);
+        k = 3 + RANDOM.nextInt(3);
 
         for (int l = 0; l < k; ++l) {
             this.a(Items.IRON_INGOT, 1);

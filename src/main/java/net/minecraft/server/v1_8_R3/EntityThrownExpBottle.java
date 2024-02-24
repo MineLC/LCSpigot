@@ -30,7 +30,7 @@ public class EntityThrownExpBottle extends EntityProjectile {
         if (!this.world.isClientSide) {
             // CraftBukkit - moved to after event
             // this.world.triggerEffect(2002, new BlockPosition(this), 0);
-            int i = 3 + this.world.random.nextInt(5) + this.world.random.nextInt(5);
+            int i = 3 + RANDOM.nextInt(5) + RANDOM.nextInt(5);
 
             // CraftBukkit start
             org.bukkit.event.entity.ExpBottleEvent event = org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory.callExpBottleEvent(this, i);

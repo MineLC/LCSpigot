@@ -226,7 +226,7 @@ public class ChunkProviderTheEnd implements IChunkProvider {
         BlockFalling.instaFall = true;
         BlockPosition blockposition = new BlockPosition(i * 16, 0, j * 16);
 
-        this.l.getBiome(blockposition.a(16, 0, 16)).a(this.l, this.l.random, blockposition);
+        this.l.getBiome(blockposition.a(16, 0, 16)).a(this.l, World.RANDOM, blockposition);
         BlockFalling.instaFall = false;
     }
 

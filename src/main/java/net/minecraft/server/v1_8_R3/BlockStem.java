@@ -87,7 +87,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
     }
 
     public void g(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        int i = ((Integer) iblockdata.get(BlockStem.AGE)).intValue() + MathHelper.nextInt(world.random, 2, 5);
+        int i = ((Integer) iblockdata.get(BlockStem.AGE)).intValue() + MathHelper.nextInt(World.RANDOM, 2, 5);
 
         // world.setTypeAndData(blockposition, iblockdata.set(BlockStem.AGE, Integer.valueOf(Math.min(7, i))), 2);
         CraftEventFactory.handleBlockGrowEvent(world, blockposition.getX(), blockposition.getY(), blockposition.getZ(), this, Math.min(7, i)); // CraftBukkit
@@ -115,7 +115,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
                 int j = ((Integer) iblockdata.get(BlockStem.AGE)).intValue();
 
                 for (int k = 0; k < 3; ++k) {
-                    if (world.random.nextInt(15) <= j) {
+                    if (World.RANDOM.nextInt(15) <= j) {
                         a(world, blockposition, new ItemStack(item));
                     }
                 }

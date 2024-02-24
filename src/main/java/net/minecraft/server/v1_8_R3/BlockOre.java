@@ -38,19 +38,19 @@ public class BlockOre extends Block {
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         super.dropNaturally(world, blockposition, iblockdata, f, i);
         /* CraftBukkit start - Delegated to getExpDrop
-        if (this.getDropType(iblockdata, world.random, i) != Item.getItemOf(this)) {
+        if (this.getDropType(iblockdata, World.RANDOM, i) != Item.getItemOf(this)) {
             int j = 0;
 
             if (this == Blocks.COAL_ORE) {
-                j = MathHelper.nextInt(world.random, 0, 2);
+                j = MathHelper.nextInt(World.RANDOM, 0, 2);
             } else if (this == Blocks.DIAMOND_ORE) {
-                j = MathHelper.nextInt(world.random, 3, 7);
+                j = MathHelper.nextInt(World.RANDOM, 3, 7);
             } else if (this == Blocks.EMERALD_ORE) {
-                j = MathHelper.nextInt(world.random, 3, 7);
+                j = MathHelper.nextInt(World.RANDOM, 3, 7);
             } else if (this == Blocks.LAPIS_ORE) {
-                j = MathHelper.nextInt(world.random, 2, 5);
+                j = MathHelper.nextInt(World.RANDOM, 2, 5);
             } else if (this == Blocks.QUARTZ_ORE) {
-                j = MathHelper.nextInt(world.random, 2, 5);
+                j = MathHelper.nextInt(World.RANDOM, 2, 5);
             }
 
             this.dropExperience(world, blockposition, j);
@@ -61,19 +61,19 @@ public class BlockOre extends Block {
 
     @Override
     public int getExpDrop(World world, IBlockData iblockdata, int i) {
-        if (this.getDropType(iblockdata, world.random, i) != Item.getItemOf(this)) {
+        if (this.getDropType(iblockdata, World.RANDOM, i) != Item.getItemOf(this)) {
             int j = 0;
 
             if (this == Blocks.COAL_ORE) {
-                j = MathHelper.nextInt(world.random, 0, 2);
+                j = MathHelper.nextInt(World.RANDOM, 0, 2);
             } else if (this == Blocks.DIAMOND_ORE) {
-                j = MathHelper.nextInt(world.random, 3, 7);
+                j = MathHelper.nextInt(World.RANDOM, 3, 7);
             } else if (this == Blocks.EMERALD_ORE) {
-                j = MathHelper.nextInt(world.random, 3, 7);
+                j = MathHelper.nextInt(World.RANDOM, 3, 7);
             } else if (this == Blocks.LAPIS_ORE) {
-                j = MathHelper.nextInt(world.random, 2, 5);
+                j = MathHelper.nextInt(World.RANDOM, 2, 5);
             } else if (this == Blocks.QUARTZ_ORE) {
-                j = MathHelper.nextInt(world.random, 2, 5);
+                j = MathHelper.nextInt(World.RANDOM, 2, 5);
             }
 
             return j;

@@ -88,7 +88,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
             f = MathHelper.cos(this.bv * 3.1415927F * 2.0F);
             f1 = MathHelper.cos(this.bu * 3.1415927F * 2.0F);
             if (f1 <= -0.3F && f >= -0.3F && !this.R()) {
-                this.world.a(this.locX, this.locY, this.locZ, "mob.enderdragon.wings", 5.0F, 0.8F + this.random.nextFloat() * 0.3F, false);
+                this.world.a(this.locX, this.locY, this.locZ, "mob.enderdragon.wings", 5.0F, 0.8F + RANDOM.nextFloat() * 0.3F, false);
             }
         }
 
@@ -96,9 +96,9 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         float f2;
 
         if (this.getHealth() <= 0.0F) {
-            f = (this.random.nextFloat() - 0.5F) * 8.0F;
-            f1 = (this.random.nextFloat() - 0.5F) * 4.0F;
-            f2 = (this.random.nextFloat() - 0.5F) * 8.0F;
+            f = (RANDOM.nextFloat() - 0.5F) * 8.0F;
+            f1 = (RANDOM.nextFloat() - 0.5F) * 4.0F;
+            f2 = (RANDOM.nextFloat() - 0.5F) * 8.0F;
             this.world.addParticle(EnumParticle.EXPLOSION_LARGE, this.locX + (double) f, this.locY + 2.0D + (double) f1, this.locZ + (double) f2, 0.0D, 0.0D, 0.0D, new int[0]);
         } else {
             this.n();
@@ -166,8 +166,8 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
                         this.b = this.bA.getBoundingBox().b + d4;
                     } else {
-                        this.a += this.random.nextGaussian() * 2.0D;
-                        this.c += this.random.nextGaussian() * 2.0D;
+                        this.a += RANDOM.nextGaussian() * 2.0D;
+                        this.c += RANDOM.nextGaussian() * 2.0D;
                     }
 
                     if (this.bw || d2 < 100.0D || d2 > 22500.0D || this.positionChanged || this.E) {
@@ -324,7 +324,7 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
             }
         }
 
-        if (this.random.nextInt(10) == 0) {
+        if (RANDOM.nextInt(10) == 0) {
             float f = 32.0F;
             List list = this.world.a(EntityEnderCrystal.class, this.getBoundingBox().grow((double) f, (double) f, (double) f));
             EntityEnderCrystal entityendercrystal = null;
@@ -388,9 +388,9 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
             }
         }
 
-        if (this.random.nextInt(2) == 0 && !arraylist.isEmpty()) {
+        if (RANDOM.nextInt(2) == 0 && !arraylist.isEmpty()) {
             // CraftBukkit start
-            Entity target = (Entity) this.world.players.get(this.random.nextInt(this.world.players.size()));
+            Entity target = (Entity) this.world.players.get(RANDOM.nextInt(this.world.players.size()));
             EntityTargetEvent event = new EntityTargetEvent(this.getBukkitEntity(), target.getBukkitEntity(), EntityTargetEvent.TargetReason.RANDOM_TARGET);
             this.world.getServer().getPluginManager().callEvent(event);
 
@@ -407,10 +407,10 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
 
             do {
                 this.a = 0.0D;
-                this.b = (double) (70.0F + this.random.nextFloat() * 50.0F);
+                this.b = (double) (70.0F + RANDOM.nextFloat() * 50.0F);
                 this.c = 0.0D;
-                this.a += (double) (this.random.nextFloat() * 120.0F - 60.0F);
-                this.c += (double) (this.random.nextFloat() * 120.0F - 60.0F);
+                this.a += (double) (RANDOM.nextFloat() * 120.0F - 60.0F);
+                this.c += (double) (RANDOM.nextFloat() * 120.0F - 60.0F);
                 double d0 = this.locX - this.a;
                 double d1 = this.locY - this.b;
                 double d2 = this.locZ - this.c;
@@ -498,9 +498,9 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
                 }
             }
             // CraftBukkit end
-            double d0 = axisalignedbb.a + (axisalignedbb.d - axisalignedbb.a) * (double) this.random.nextFloat();
-            double d1 = axisalignedbb.b + (axisalignedbb.e - axisalignedbb.b) * (double) this.random.nextFloat();
-            double d2 = axisalignedbb.c + (axisalignedbb.f - axisalignedbb.c) * (double) this.random.nextFloat();
+            double d0 = axisalignedbb.a + (axisalignedbb.d - axisalignedbb.a) * (double) RANDOM.nextFloat();
+            double d1 = axisalignedbb.b + (axisalignedbb.e - axisalignedbb.b) * (double) RANDOM.nextFloat();
+            double d2 = axisalignedbb.c + (axisalignedbb.f - axisalignedbb.c) * (double) RANDOM.nextFloat();
 
             this.world.addParticle(EnumParticle.EXPLOSION_LARGE, d0, d1, d2, 0.0D, 0.0D, 0.0D, new int[0]);
         }
@@ -517,9 +517,9 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         float f2 = MathHelper.sin(f1);
         float f3 = MathHelper.cos(f1);
 
-        this.a = this.locX + (double) (f2 * 5.0F) + (double) ((this.random.nextFloat() - 0.5F) * 2.0F);
-        this.b = this.locY + (double) (this.random.nextFloat() * 3.0F) + 1.0D;
-        this.c = this.locZ - (double) (f3 * 5.0F) + (double) ((this.random.nextFloat() - 0.5F) * 2.0F);
+        this.a = this.locX + (double) (f2 * 5.0F) + (double) ((RANDOM.nextFloat() - 0.5F) * 2.0F);
+        this.b = this.locY + (double) (RANDOM.nextFloat() * 3.0F) + 1.0D;
+        this.c = this.locZ - (double) (f3 * 5.0F) + (double) ((RANDOM.nextFloat() - 0.5F) * 2.0F);
         this.bA = null;
         if (damagesource.getEntity() instanceof EntityHuman || damagesource.isExplosion()) {
             this.dealDamage(damagesource, f);
@@ -548,9 +548,9 @@ public class EntityEnderDragon extends EntityInsentient implements IComplex, IMo
         if (this.dead) return; // CraftBukkit - can't kill what's already dead
         ++this.by;
         if (this.by >= 180 && this.by <= 200) {
-            float f = (this.random.nextFloat() - 0.5F) * 8.0F;
-            float f1 = (this.random.nextFloat() - 0.5F) * 4.0F;
-            float f2 = (this.random.nextFloat() - 0.5F) * 8.0F;
+            float f = (RANDOM.nextFloat() - 0.5F) * 8.0F;
+            float f1 = (RANDOM.nextFloat() - 0.5F) * 4.0F;
+            float f2 = (RANDOM.nextFloat() - 0.5F) * 8.0F;
 
             this.world.addParticle(EnumParticle.EXPLOSION_HUGE, this.locX + (double) f, this.locY + 2.0D + (double) f1, this.locZ + (double) f2, 0.0D, 0.0D, 0.0D, new int[0]);
         }

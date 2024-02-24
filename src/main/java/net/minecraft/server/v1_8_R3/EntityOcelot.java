@@ -74,7 +74,7 @@ public class EntityOcelot extends EntityTameableAnimal {
     }
 
     protected String z() {
-        return this.isTamed() ? (this.isInLove() ? "mob.cat.purr" : (this.random.nextInt(4) == 0 ? "mob.cat.purreow" : "mob.cat.meow")) : "";
+        return this.isTamed() ? (this.isInLove() ? "mob.cat.purr" : (RANDOM.nextInt(4) == 0 ? "mob.cat.purreow" : "mob.cat.meow")) : "";
     }
 
     protected String bo() {
@@ -130,9 +130,9 @@ public class EntityOcelot extends EntityTameableAnimal {
 
             if (!this.world.isClientSide) {
                 // CraftBukkit - added event call and isCancelled check
-                if (this.random.nextInt(3) == 0 && !org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory.callEntityTameEvent(this, entityhuman).isCancelled()) {
+                if (RANDOM.nextInt(3) == 0 && !org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory.callEntityTameEvent(this, entityhuman).isCancelled()) {
                     this.setTamed(true);
-                    this.setCatType(1 + this.world.random.nextInt(3));
+                    this.setCatType(1 + RANDOM.nextInt(3));
                     this.setOwnerUUID(entityhuman.getUniqueID().toString());
                     this.l(true);
                     this.bm.setSitting(true);
@@ -188,7 +188,7 @@ public class EntityOcelot extends EntityTameableAnimal {
     }
 
     public boolean bR() {
-        return this.world.random.nextInt(3) != 0;
+        return RANDOM.nextInt(3) != 0;
     }
 
     public boolean canSpawn() {
@@ -231,7 +231,7 @@ public class EntityOcelot extends EntityTameableAnimal {
 
     public GroupDataEntity prepare(DifficultyDamageScaler difficultydamagescaler, GroupDataEntity groupdataentity) {
         groupdataentity = super.prepare(difficultydamagescaler, groupdataentity);
-        if (spawnBonus && this.world.random.nextInt(7) == 0) { // Spigot
+        if (spawnBonus && RANDOM.nextInt(7) == 0) { // Spigot
             for (int i = 0; i < 2; ++i) {
                 EntityOcelot entityocelot = new EntityOcelot(this.world);
 

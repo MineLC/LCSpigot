@@ -26,7 +26,7 @@ public class EntityBat extends EntityAmbient {
     }
 
     protected String z() {
-        return this.isAsleep() && this.random.nextInt(4) != 0 ? null : "mob.bat.idle";
+        return this.isAsleep() && RANDOM.nextInt(4) != 0 ? null : "mob.bat.idle";
     }
 
     protected String bo() {
@@ -86,8 +86,8 @@ public class EntityBat extends EntityAmbient {
                 this.setAsleep(false);
                 this.world.a((EntityHuman) null, 1015, blockposition, 0);
             } else {
-                if (this.random.nextInt(200) == 0) {
-                    this.aK = (float) this.random.nextInt(360);
+                if (RANDOM.nextInt(200) == 0) {
+                    this.aK = (float) RANDOM.nextInt(360);
                 }
 
                 if (this.world.findNearbyPlayer(this, 4.0D) != null) {
@@ -100,8 +100,8 @@ public class EntityBat extends EntityAmbient {
                 this.a = null;
             }
 
-            if (this.a == null || this.random.nextInt(30) == 0 || this.a.c((double) ((int) this.locX), (double) ((int) this.locY), (double) ((int) this.locZ)) < 4.0D) {
-                this.a = new BlockPosition((int) this.locX + this.random.nextInt(7) - this.random.nextInt(7), (int) this.locY + this.random.nextInt(6) - 2, (int) this.locZ + this.random.nextInt(7) - this.random.nextInt(7));
+            if (this.a == null || RANDOM.nextInt(30) == 0 || this.a.c((double) ((int) this.locX), (double) ((int) this.locY), (double) ((int) this.locZ)) < 4.0D) {
+                this.a = new BlockPosition((int) this.locX + RANDOM.nextInt(7) - RANDOM.nextInt(7), (int) this.locY + RANDOM.nextInt(6) - 2, (int) this.locZ + RANDOM.nextInt(7) - RANDOM.nextInt(7));
             }
 
             double d0 = (double) this.a.getX() + 0.5D - this.locX;
@@ -116,7 +116,7 @@ public class EntityBat extends EntityAmbient {
 
             this.ba = 0.5F;
             this.yaw += f1;
-            if (this.random.nextInt(100) == 0 && this.world.getType(blockposition1).getBlock().isOccluding()) {
+            if (RANDOM.nextInt(100) == 0 && this.world.getType(blockposition1).getBlock().isOccluding()) {
                 this.setAsleep(true);
             }
         }
@@ -168,11 +168,11 @@ public class EntityBat extends EntityAmbient {
 
             if (this.a(this.world.Y())) {
                 b0 = 7;
-            } else if (this.random.nextBoolean()) {
+            } else if (RANDOM.nextBoolean()) {
                 return false;
             }
 
-            return i > this.random.nextInt(b0) ? false : super.bR();
+            return i > RANDOM.nextInt(b0) ? false : super.bR();
         }
     }
 

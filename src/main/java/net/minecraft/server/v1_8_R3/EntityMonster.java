@@ -104,7 +104,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
     protected boolean n_() {
         BlockPosition blockposition = new BlockPosition(this.locX, this.getBoundingBox().b, this.locZ);
 
-        if (this.world.b(EnumSkyBlock.SKY, blockposition) > this.random.nextInt(32)) {
+        if (this.world.b(EnumSkyBlock.SKY, blockposition) > RANDOM.nextInt(32)) {
             return false;
         } else {
             int i = this.world.getLightLevel(blockposition);
@@ -117,7 +117,7 @@ public abstract class EntityMonster extends EntityCreature implements IMonster {
                 this.world.c(j);
             }
 
-            return i <= this.random.nextInt(8);
+            return i <= RANDOM.nextInt(8);
         }
     }
 

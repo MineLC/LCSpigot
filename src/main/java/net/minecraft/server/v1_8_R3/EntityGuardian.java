@@ -32,7 +32,7 @@ public class EntityGuardian extends EntityMonster {
         pathfindergoalmovetowardsrestriction.a(3);
         this.targetSelector.a(1, new PathfinderGoalNearestAttackableTarget(this, EntityLiving.class, 10, true, false, new EntityGuardian.EntitySelectorGuardianTargetHumanSquid(this)));
         this.moveController = new EntityGuardian.ControllerMoveGuardian(this);
-        this.b = this.a = this.random.nextFloat();
+        this.b = this.a = RANDOM.nextFloat();
     }
 
     public void initAttributes() { // CraftBukkit - public
@@ -200,7 +200,7 @@ public class EntityGuardian extends EntityMonster {
             this.a += this.c;
             this.bn = this.bm;
             if (!this.V()) {
-                this.bm = this.random.nextFloat();
+                this.bm = RANDOM.nextFloat();
             } else if (this.n()) {
                 this.bm += (0.0F - this.bm) * 0.25F;
             } else {
@@ -211,7 +211,7 @@ public class EntityGuardian extends EntityMonster {
                 Vec3D vec3d = this.d(0.0F);
 
                 for (int i = 0; i < 2; ++i) {
-                    this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width - vec3d.a * 1.5D, this.locY + this.random.nextDouble() * (double) this.length - vec3d.b * 1.5D, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width - vec3d.c * 1.5D, 0.0D, 0.0D, 0.0D, new int[0]);
+                    this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX + (RANDOM.nextDouble() - 0.5D) * (double) this.width - vec3d.a * 1.5D, this.locY + RANDOM.nextDouble() * (double) this.length - vec3d.b * 1.5D, this.locZ + (RANDOM.nextDouble() - 0.5D) * (double) this.width - vec3d.c * 1.5D, 0.0D, 0.0D, 0.0D, new int[0]);
                 }
             }
 
@@ -234,10 +234,10 @@ public class EntityGuardian extends EntityMonster {
                     d1 /= d4;
                     d2 /= d4;
                     d3 /= d4;
-                    double d5 = this.random.nextDouble();
+                    double d5 = RANDOM.nextDouble();
 
                     while (d5 < d4) {
-                        d5 += 1.8D - d0 + this.random.nextDouble() * (1.7D - d0);
+                        d5 += 1.8D - d0 + RANDOM.nextDouble() * (1.7D - d0);
                         this.world.addParticle(EnumParticle.WATER_BUBBLE, this.locX + d1 * d5, this.locY + d2 * d5 + (double) this.getHeadHeight(), this.locZ + d3 * d5, 0.0D, 0.0D, 0.0D, new int[0]);
                     }
                 }
@@ -248,9 +248,9 @@ public class EntityGuardian extends EntityMonster {
             this.setAirTicks(300);
         } else if (this.onGround) {
             this.motY += 0.5D;
-            this.motX += (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.4F);
-            this.motZ += (double) ((this.random.nextFloat() * 2.0F - 1.0F) * 0.4F);
-            this.yaw = this.random.nextFloat() * 360.0F;
+            this.motX += (double) ((RANDOM.nextFloat() * 2.0F - 1.0F) * 0.4F);
+            this.motZ += (double) ((RANDOM.nextFloat() * 2.0F - 1.0F) * 0.4F);
+            this.yaw = RANDOM.nextFloat() * 360.0F;
             this.onGround = false;
             this.ai = true;
         }
@@ -305,15 +305,15 @@ public class EntityGuardian extends EntityMonster {
     }
 
     protected void dropDeathLoot(boolean flag, int i) {
-        int j = this.random.nextInt(3) + this.random.nextInt(i + 1);
+        int j = RANDOM.nextInt(3) + RANDOM.nextInt(i + 1);
 
         if (j > 0) {
             this.a(new ItemStack(Items.PRISMARINE_SHARD, j, 0), 1.0F);
         }
 
-        if (this.random.nextInt(3 + i) > 1) {
+        if (RANDOM.nextInt(3 + i) > 1) {
             this.a(new ItemStack(Items.FISH, 1, ItemFish.EnumFish.COD.a()), 1.0F);
-        } else if (this.random.nextInt(3 + i) > 1) {
+        } else if (RANDOM.nextInt(3 + i) > 1) {
             this.a(new ItemStack(Items.PRISMARINE_CRYSTALS, 1, 0), 1.0F);
         }
 
@@ -324,7 +324,7 @@ public class EntityGuardian extends EntityMonster {
     }
 
     protected void getRareDrop() {
-        ItemStack itemstack = ((PossibleFishingResult) WeightedRandom.a(this.random, EntityFishingHook.j())).a(this.random);
+        ItemStack itemstack = ((PossibleFishingResult) WeightedRandom.a(RANDOM, EntityFishingHook.j())).a(RANDOM);
 
         this.a(itemstack, 1.0F);
     }
@@ -338,7 +338,7 @@ public class EntityGuardian extends EntityMonster {
     }
 
     public boolean bR() {
-        return (this.random.nextInt(20) == 0 || !this.world.j(new BlockPosition(this))) && super.bR();
+        return (RANDOM.nextInt(20) == 0 || !this.world.j(new BlockPosition(this))) && super.bR();
     }
 
     public boolean damageEntity(DamageSource damagesource, float f) {

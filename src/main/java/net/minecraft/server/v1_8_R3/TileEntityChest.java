@@ -281,7 +281,7 @@ public class TileEntityChest extends TileEntityContainer implements IUpdatePlaye
                 d1 += 0.5D;
             }
 
-            this.world.makeSound(d1, (double) j + 0.5D, d0, "random.chestopen", 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+            this.world.makeSound(d1, (double) j + 0.5D, d0, "random.chestopen", 0.5F, World.RANDOM.nextFloat() * 0.1F + 0.9F);
         }
 
         if (this.l == 0 && this.j > 0.0F || this.l > 0 && this.j < 1.0F) {
@@ -311,7 +311,7 @@ public class TileEntityChest extends TileEntityContainer implements IUpdatePlaye
                     d0 += 0.5D;
                 }
 
-                this.world.makeSound(d0, (double) j + 0.5D, d2, "random.chestclosed", 0.5F, this.world.random.nextFloat() * 0.1F + 0.9F);
+                this.world.makeSound(d0, (double) j + 0.5D, d2, "random.chestclosed", 0.5F, World.RANDOM.nextFloat() * 0.1F + 0.9F);
             }
 
             if (this.j < 0.0F) {

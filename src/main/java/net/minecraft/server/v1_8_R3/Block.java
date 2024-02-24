@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 public class Block {
-
     private static final MinecraftKey a = new MinecraftKey("air");
     public static final RegistryBlocks<MinecraftKey, Block> REGISTRY = new RegistryBlocks(Block.a);
     public static final RegistryID<IBlockData> d = new RegistryID();
@@ -337,12 +336,12 @@ public class Block {
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         if (!world.isClientSide) {
-            int j = this.getDropCount(i, world.random);
+            int j = this.getDropCount(i, World.RANDOM);
 
             for (int k = 0; k < j; ++k) {
                 // CraftBukkit - <= to < to allow for plugins to completely disable block drops from explosions
-                if (world.random.nextFloat() < f) {
-                    Item item = this.getDropType(iblockdata, world.random, i);
+                if (World.RANDOM.nextFloat() < f) {
+                    Item item = this.getDropType(iblockdata, World.RANDOM, i);
 
                     if (item != null) {
                         a(world, blockposition, new ItemStack(item, 1, this.getDropData(iblockdata)));
@@ -356,9 +355,9 @@ public class Block {
     public static void a(World world, BlockPosition blockposition, ItemStack itemstack) {
         if (!world.isClientSide && world.getGameRules().getBoolean("doTileDrops")) {
             float f = 0.5F;
-            double d0 = (double) (world.random.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-            double d1 = (double) (world.random.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-            double d2 = (double) (world.random.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+            double d0 = (double) (World.RANDOM.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+            double d1 = (double) (World.RANDOM.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+            double d2 = (double) (World.RANDOM.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
             EntityItem entityitem = new EntityItem(world, (double) blockposition.getX() + d0, (double) blockposition.getY() + d1, (double) blockposition.getZ() + d2, itemstack);
 
             entityitem.p();

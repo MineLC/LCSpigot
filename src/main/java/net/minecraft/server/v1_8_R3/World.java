@@ -64,6 +64,7 @@ public abstract class World implements IBlockAccess {
         }
     };
     // Spigot end
+    public static final Random RANDOM = new Random();
     protected final List<Entity> g = Lists.newArrayList();
     public final List<TileEntity> h = Lists.newArrayList();
     public final List<TileEntity> tileEntityList = Lists.newArrayList();
@@ -74,14 +75,13 @@ public abstract class World implements IBlockAccess {
     protected final IntHashMap<Entity> entitiesById = new IntHashMap();
     private long d = 16777215L;
     private int I;
-    protected int m = (new Random()).nextInt();
+    protected int m = RANDOM.nextInt();
     protected final int n = 1013904223;
     protected float o;
     protected float p;
     protected float q;
     protected float r;
     private int J;
-    public final Random random = new Random();
     public WorldProvider worldProvider; // CraftBukkit - remove final
     protected List<IWorldAccess> u = Lists.newArrayList();
     protected IChunkProvider chunkProvider;
@@ -189,7 +189,7 @@ public abstract class World implements IBlockAccess {
         this.chunkTickList.setAutoCompactionFactor( 0 );
         // Spigot end
 
-        this.L = this.random.nextInt(12000);
+        this.L = RANDOM.nextInt(12000);
         this.allowMonsters = true;
         this.allowAnimals = true;
         this.H = new int['\u8000'];
@@ -2083,9 +2083,9 @@ public abstract class World implements IBlockAccess {
 
                 if (j <= 0) {
                     if (this.worldData.isThundering()) {
-                        this.worldData.setThunderDuration(this.random.nextInt(12000) + 3600);
+                        this.worldData.setThunderDuration(RANDOM.nextInt(12000) + 3600);
                     } else {
-                        this.worldData.setThunderDuration(this.random.nextInt(168000) + 12000);
+                        this.worldData.setThunderDuration(RANDOM.nextInt(168000) + 12000);
                     }
                 } else {
                     --j;
@@ -2107,9 +2107,9 @@ public abstract class World implements IBlockAccess {
 
                 if (k <= 0) {
                     if (this.worldData.hasStorm()) {
-                        this.worldData.setWeatherDuration(this.random.nextInt(12000) + 12000);
+                        this.worldData.setWeatherDuration(RANDOM.nextInt(12000) + 12000);
                     } else {
-                        this.worldData.setWeatherDuration(this.random.nextInt(168000) + 12000);
+                        this.worldData.setWeatherDuration(RANDOM.nextInt(168000) + 12000);
                     }
                 } else {
                     --k;
@@ -2178,8 +2178,8 @@ public abstract class World implements IBlockAccess {
             // Check and see if we update the chunks surrounding the player this tick
             for ( int chunk = 0; chunk < chunksPerPlayer; chunk++ )
             {
-                int dx = ( random.nextBoolean() ? 1 : -1 ) * random.nextInt( randRange );
-                int dz = ( random.nextBoolean() ? 1 : -1 ) * random.nextInt( randRange );
+                int dx = ( RANDOM.nextBoolean() ? 1 : -1 ) * RANDOM.nextInt( randRange );
+                int dz = ( RANDOM.nextBoolean() ? 1 : -1 ) * RANDOM.nextInt( randRange );
                 long hash = chunkToKey( dx + j, dz + k );
                 if ( !chunkTickList.contains( hash ) && this.chunkProvider.isChunkLoaded(dx + j, dz + k ) )
                 {
@@ -2196,11 +2196,11 @@ public abstract class World implements IBlockAccess {
 
         this.methodProfiler.a("playerCheckLight");
         if (spigotConfig.randomLightUpdates && !this.players.isEmpty()) { // Spigot
-            i = this.random.nextInt(this.players.size());
+            i = RANDOM.nextInt(this.players.size());
             entityhuman = (EntityHuman) this.players.get(i);
-            j = MathHelper.floor(entityhuman.locX) + this.random.nextInt(11) - 5;
-            k = MathHelper.floor(entityhuman.locY) + this.random.nextInt(11) - 5;
-            l = MathHelper.floor(entityhuman.locZ) + this.random.nextInt(11) - 5;
+            j = MathHelper.floor(entityhuman.locX) + RANDOM.nextInt(11) - 5;
+            k = MathHelper.floor(entityhuman.locY) + RANDOM.nextInt(11) - 5;
+            l = MathHelper.floor(entityhuman.locZ) + RANDOM.nextInt(11) - 5;
             this.x(new BlockPosition(j, k, l));
         }
 
@@ -2222,12 +2222,12 @@ public abstract class World implements IBlockAccess {
 
             l += i;
             i1 += j;
-            if (block.getMaterial() == Material.AIR && this.k(blockposition) <= this.random.nextInt(8) && this.b(EnumSkyBlock.SKY, blockposition) <= 0) {
+            if (block.getMaterial() == Material.AIR && this.k(blockposition) <= RANDOM.nextInt(8) && this.b(EnumSkyBlock.SKY, blockposition) <= 0) {
                 EntityHuman entityhuman = this.findNearbyPlayer((double) l + 0.5D, (double) j1 + 0.5D, (double) i1 + 0.5D, 8.0D);
 
                 if (entityhuman != null && entityhuman.e((double) l + 0.5D, (double) j1 + 0.5D, (double) i1 + 0.5D) > 4.0D) {
-                    this.makeSound((double) l + 0.5D, (double) j1 + 0.5D, (double) i1 + 0.5D, "ambient.cave.cave", 0.7F, 0.8F + this.random.nextFloat() * 0.2F);
-                    this.L = this.random.nextInt(12000) + 6000;
+                    this.makeSound((double) l + 0.5D, (double) j1 + 0.5D, (double) i1 + 0.5D, "ambient.cave.cave", 0.7F, 0.8F + RANDOM.nextFloat() * 0.2F);
+                    this.L = RANDOM.nextInt(12000) + 6000;
                 }
             }
         }
@@ -2991,8 +2991,8 @@ public abstract class World implements IBlockAccess {
     public Random a(int i, int j, int k) {
         long l = (long) i * 341873128712L + (long) j * 132897987541L + this.getWorldData().getSeed() + (long) k;
 
-        this.random.setSeed(l);
-        return this.random;
+        RANDOM.setSeed(l);
+        return RANDOM;
     }
 
     public BlockPosition a(String s, BlockPosition blockposition) {

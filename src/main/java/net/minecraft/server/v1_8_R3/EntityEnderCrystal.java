@@ -15,7 +15,7 @@ public class EntityEnderCrystal extends Entity {
         this.k = true;
         this.setSize(2.0F, 2.0F);
         this.b = 5;
-        this.a = this.random.nextInt(100000);
+        this.a = RANDOM.nextInt(100000);
     }
 
     protected boolean s_() {

@@ -82,7 +82,7 @@ public class EntityEndermite extends EntityMonster {
         super.m();
         if (this.world.isClientSide) {
             for (int i = 0; i < 2; ++i) {
-                this.world.addParticle(EnumParticle.PORTAL, this.locX + (this.random.nextDouble() - 0.5D) * (double) this.width, this.locY + this.random.nextDouble() * (double) this.length, this.locZ + (this.random.nextDouble() - 0.5D) * (double) this.width, (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D, new int[0]);
+                this.world.addParticle(EnumParticle.PORTAL, this.locX + (RANDOM.nextDouble() - 0.5D) * (double) this.width, this.locY + RANDOM.nextDouble() * (double) this.length, this.locZ + (RANDOM.nextDouble() - 0.5D) * (double) this.width, (RANDOM.nextDouble() - 0.5D) * 2.0D, -RANDOM.nextDouble(), (RANDOM.nextDouble() - 0.5D) * 2.0D, new int[0]);
             }
         } else {
             if (!this.isPersistent()) {

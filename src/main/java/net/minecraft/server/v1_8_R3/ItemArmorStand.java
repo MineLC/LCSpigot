@@ -41,7 +41,7 @@ public class ItemArmorStand extends Item {
                             float f3 = (float) MathHelper.d((MathHelper.g(entityhuman.yaw - 180.0F) + 22.5F) / 45.0F) * 45.0F;
 
                             entityarmorstand.setPositionRotation(d0 + 0.5D, d1, d2 + 0.5D, f3, 0.0F);
-                            this.a(entityarmorstand, world.random);
+                            this.a(entityarmorstand, World.RANDOM);
                             NBTTagCompound nbttagcompound = itemstack.getTag();
 
                             if (nbttagcompound != null && nbttagcompound.hasKeyOfType("EntityTag", 10)) {

@@ -27,7 +27,7 @@ public abstract class EntityWaterAnimal extends EntityInsentient implements IAni
     }
 
     protected int getExpValue(EntityHuman entityhuman) {
-        return 1 + this.world.random.nextInt(3);
+        return 1 + RANDOM.nextInt(3);
     }
 
     public void K() {

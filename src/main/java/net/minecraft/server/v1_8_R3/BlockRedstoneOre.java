@@ -95,8 +95,8 @@ public class BlockRedstoneOre extends Block {
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         super.dropNaturally(world, blockposition, iblockdata, f, i);
         /* CraftBukkit start - Delegated to getExpDrop
-        if (this.getDropType(iblockdata, world.random, i) != Item.getItemOf(this)) {
-            int j = 1 + world.random.nextInt(5);
+        if (this.getDropType(iblockdata, World.RANDOM, i) != Item.getItemOf(this)) {
+            int j = 1 + World.RANDOM.nextInt(5);
 
             this.dropExperience(world, blockposition, j);
         }
@@ -105,8 +105,8 @@ public class BlockRedstoneOre extends Block {
 
     @Override
     public int getExpDrop(World world, IBlockData data, int i) {
-        if (this.getDropType(data, world.random, i) != Item.getItemOf(this)) {
-            int j = 1 + world.random.nextInt(5);
+        if (this.getDropType(data, World.RANDOM, i) != Item.getItemOf(this)) {
+            int j = 1 + World.RANDOM.nextInt(5);
 
             return j;
         }
@@ -115,7 +115,7 @@ public class BlockRedstoneOre extends Block {
     }
 
     private void f(World world, BlockPosition blockposition) {
-        Random random = world.random;
+        Random random = World.RANDOM;
         double d0 = 0.0625D;
 
         for (int i = 0; i < 6; ++i) {

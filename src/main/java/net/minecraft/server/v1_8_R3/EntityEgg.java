@@ -27,8 +27,8 @@ public class EntityEgg extends EntityProjectile {
         }
 
         // CraftBukkit start - Fire PlayerEggThrowEvent
-        boolean hatching = !this.world.isClientSide && this.random.nextInt(8) == 0;
-        int numHatching = (this.random.nextInt(32) == 0) ? 4 : 1;
+        boolean hatching = !this.world.isClientSide && RANDOM.nextInt(8) == 0;
+        int numHatching = (RANDOM.nextInt(32) == 0) ? 4 : 1;
         if (!hatching) {
             numHatching = 0;
         }
@@ -60,7 +60,7 @@ public class EntityEgg extends EntityProjectile {
         double d0 = 0.08D;
 
         for (int j = 0; j < 8; ++j) {
-            this.world.addParticle(EnumParticle.ITEM_CRACK, this.locX, this.locY, this.locZ, ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D, ((double) this.random.nextFloat() - 0.5D) * 0.08D, new int[] { Item.getId(Items.EGG)});
+            this.world.addParticle(EnumParticle.ITEM_CRACK, this.locX, this.locY, this.locZ, ((double) RANDOM.nextFloat() - 0.5D) * 0.08D, ((double) RANDOM.nextFloat() - 0.5D) * 0.08D, ((double) RANDOM.nextFloat() - 0.5D) * 0.08D, new int[] { Item.getId(Items.EGG)});
         }
 
         if (!this.world.isClientSide) {

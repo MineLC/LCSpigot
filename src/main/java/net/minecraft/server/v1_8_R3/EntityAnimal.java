@@ -28,11 +28,11 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
         if (this.bm > 0) {
             --this.bm;
             if (this.bm % 10 == 0) {
-                double d0 = this.random.nextGaussian() * 0.02D;
-                double d1 = this.random.nextGaussian() * 0.02D;
-                double d2 = this.random.nextGaussian() * 0.02D;
+                double d0 = RANDOM.nextGaussian() * 0.02D;
+                double d1 = RANDOM.nextGaussian() * 0.02D;
+                double d2 = RANDOM.nextGaussian() * 0.02D;
 
-                this.world.addParticle(EnumParticle.HEART, this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2, new int[0]);
+                this.world.addParticle(EnumParticle.HEART, this.locX + (double) (RANDOM.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + 0.5D + (double) (RANDOM.nextFloat() * this.length), this.locZ + (double) (RANDOM.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2, new int[0]);
             }
         }
 
@@ -83,7 +83,7 @@ public abstract class EntityAnimal extends EntityAgeable implements IAnimal {
     }
 
     protected int getExpValue(EntityHuman entityhuman) {
-        return 1 + this.world.random.nextInt(3);
+        return 1 + RANDOM.nextInt(3);
     }
 
     public boolean d(ItemStack itemstack) {

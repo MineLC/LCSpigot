@@ -206,7 +206,7 @@ public class BlockSapling extends BlockPlant implements IBlockFragilePlantElemen
     }
 
     public boolean a(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        return (double) world.random.nextFloat() < 0.45D;
+        return (double) World.RANDOM.nextFloat() < 0.45D;
     }
 
     public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {

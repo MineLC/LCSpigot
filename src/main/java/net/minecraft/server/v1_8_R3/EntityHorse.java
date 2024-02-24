@@ -291,7 +291,7 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
     private void cY() {
         this.df();
         if (!this.R()) {
-            this.world.makeSound(this, "eating", 1.0F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+            this.world.makeSound(this, "eating", 1.0F, 1.0F + (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F);
         }
 
     }
@@ -413,7 +413,7 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
     }
 
     protected Item getLoot() {
-        boolean flag = this.random.nextInt(4) == 0;
+        boolean flag = RANDOM.nextInt(4) == 0;
         int i = this.getType();
 
         return i == 4 ? Items.BONE : (i == 3 ? (flag ? null : Items.ROTTEN_FLESH) : Items.LEATHER);
@@ -421,7 +421,7 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
 
     protected String bo() {
         this.df();
-        if (this.random.nextInt(3) == 0) {
+        if (RANDOM.nextInt(3) == 0) {
             this.dh();
         }
 
@@ -436,7 +436,7 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
 
     protected String z() {
         this.df();
-        if (this.random.nextInt(10) == 0 && !this.bD()) {
+        if (RANDOM.nextInt(10) == 0 && !this.bD()) {
             this.dh();
         }
 
@@ -467,7 +467,7 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
                 ++this.bN;
                 if (this.bN > 5 && this.bN % 3 == 0) {
                     this.makeSound("mob.horse.gallop", block_stepsound.getVolume1() * 0.15F, block_stepsound.getVolume2());
-                    if (i == 0 && this.random.nextInt(10) == 0) {
+                    if (i == 0 && RANDOM.nextInt(10) == 0) {
                         this.makeSound("mob.horse.breathe", block_stepsound.getVolume1() * 0.6F, block_stepsound.getVolume2());
                     }
                 } else if (this.bN <= 5) {
@@ -624,7 +624,7 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
 
                 if (!flag && this.cP() && !this.hasChest() && itemstack.getItem() == Item.getItemOf(Blocks.CHEST)) {
                     this.setHasChest(true);
-                    this.makeSound("mob.chickenplop", 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+                    this.makeSound("mob.chickenplop", 1.0F, (RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F + 1.0F);
                     flag = true;
                     this.loadChest();
                 }
@@ -721,17 +721,17 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
     // CraftBukkit end
 
     public void m() {
-        if (this.random.nextInt(200) == 0) {
+        if (RANDOM.nextInt(200) == 0) {
             this.de();
         }
 
         super.m();
         if (!this.world.isClientSide) {
-            if (this.random.nextInt(900) == 0 && this.deathTicks == 0) {
+            if (RANDOM.nextInt(900) == 0 && this.deathTicks == 0) {
                 this.heal(1.0F, RegainReason.REGEN); // CraftBukkit
             }
 
-            if (!this.cy() && this.passenger == null && this.random.nextInt(300) == 0 && this.world.getType(new BlockPosition(MathHelper.floor(this.locX), MathHelper.floor(this.locY) - 1, MathHelper.floor(this.locZ))).getBlock() == Blocks.GRASS) {
+            if (!this.cy() && this.passenger == null && RANDOM.nextInt(300) == 0 && this.world.getType(new BlockPosition(MathHelper.floor(this.locX), MathHelper.floor(this.locY) - 1, MathHelper.floor(this.locZ))).getBlock() == Blocks.GRASS) {
                 this.r(true);
             }
 
@@ -1116,7 +1116,7 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
         }
 
         if (k == 0) {
-            int l = this.random.nextInt(9);
+            int l = RANDOM.nextInt(9);
             int i1;
 
             if (l < 4) {
@@ -1124,17 +1124,17 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
             } else if (l < 8) {
                 i1 = entityhorse.getVariant() & 255;
             } else {
-                i1 = this.random.nextInt(7);
+                i1 = RANDOM.nextInt(7);
             }
 
-            int j1 = this.random.nextInt(5);
+            int j1 = RANDOM.nextInt(5);
 
             if (j1 < 2) {
                 i1 |= this.getVariant() & '\uff00';
             } else if (j1 < 4) {
                 i1 |= entityhorse.getVariant() & '\uff00';
             } else {
-                i1 |= this.random.nextInt(5) << 8 & '\uff00';
+                i1 |= RANDOM.nextInt(5) << 8 & '\uff00';
             }
 
             entityhorse1.setVariant(i1);
@@ -1161,13 +1161,13 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
 
         if (object instanceof EntityHorse.GroupDataHorse) {
             j = ((EntityHorse.GroupDataHorse) object).a;
-            i = ((EntityHorse.GroupDataHorse) object).b & 255 | this.random.nextInt(5) << 8;
+            i = ((EntityHorse.GroupDataHorse) object).b & 255 | RANDOM.nextInt(5) << 8;
         } else {
-            if (this.random.nextInt(10) == 0) {
+            if (RANDOM.nextInt(10) == 0) {
                 j = 1;
             } else {
-                int k = this.random.nextInt(7);
-                int l = this.random.nextInt(5);
+                int k = RANDOM.nextInt(7);
+                int l = RANDOM.nextInt(5);
 
                 j = 0;
                 i = k | l << 8;
@@ -1178,7 +1178,7 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
 
         this.setType(j);
         this.setVariant(i);
-        if (this.random.nextInt(5) == 0) {
+        if (RANDOM.nextInt(5) == 0) {
             this.setAgeRaw(-24000);
         }
 
@@ -1246,15 +1246,15 @@ public class EntityHorse extends EntityAnimal implements IInventoryListener {
     }
 
     private float di() {
-        return 15.0F + (float) this.random.nextInt(8) + (float) this.random.nextInt(9);
+        return 15.0F + (float) RANDOM.nextInt(8) + (float) RANDOM.nextInt(9);
     }
 
     private double dj() {
-        return 0.4000000059604645D + this.random.nextDouble() * 0.2D + this.random.nextDouble() * 0.2D + this.random.nextDouble() * 0.2D;
+        return 0.4000000059604645D + RANDOM.nextDouble() * 0.2D + RANDOM.nextDouble() * 0.2D + RANDOM.nextDouble() * 0.2D;
     }
 
     private double dk() {
-        return (0.44999998807907104D + this.random.nextDouble() * 0.3D + this.random.nextDouble() * 0.3D + this.random.nextDouble() * 0.3D) * 0.25D;
+        return (0.44999998807907104D + RANDOM.nextDouble() * 0.3D + RANDOM.nextDouble() * 0.3D + RANDOM.nextDouble() * 0.3D) * 0.25D;
     }
 
     public static boolean a(Item item) {

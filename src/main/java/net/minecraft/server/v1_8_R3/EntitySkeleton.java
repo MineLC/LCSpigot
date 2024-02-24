@@ -74,13 +74,13 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
             float f = this.c(1.0F);
             BlockPosition blockposition = new BlockPosition(this.locX, (double) Math.round(this.locY), this.locZ);
 
-            if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.i(blockposition)) {
+            if (f > 0.5F && RANDOM.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.i(blockposition)) {
                 boolean flag = true;
                 ItemStack itemstack = this.getEquipment(4);
 
                 if (itemstack != null) {
                     if (itemstack.e()) {
-                        itemstack.setData(itemstack.h() + this.random.nextInt(2));
+                        itemstack.setData(itemstack.h() + RANDOM.nextInt(2));
                         if (itemstack.h() >= itemstack.j()) {
                             this.b(itemstack);
                             this.setEquipment(4, (ItemStack) null);
@@ -155,20 +155,20 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
         int k;
 
         if (this.getSkeletonType() == 1) {
-            j = this.random.nextInt(3 + i) - 1;
+            j = RANDOM.nextInt(3 + i) - 1;
 
             for (k = 0; k < j; ++k) {
                 this.a(Items.COAL, 1);
             }
         } else {
-            j = this.random.nextInt(3 + i);
+            j = RANDOM.nextInt(3 + i);
 
             for (k = 0; k < j; ++k) {
                 this.a(Items.ARROW, 1);
             }
         }
 
-        j = this.random.nextInt(3 + i);
+        j = RANDOM.nextInt(3 + i);
 
         for (k = 0; k < j; ++k) {
             this.a(Items.BONE, 1);
@@ -201,12 +201,12 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
             this.b(difficultydamagescaler);
         }
 
-        this.j(this.random.nextFloat() < 0.55F * difficultydamagescaler.c());
+        this.j(RANDOM.nextFloat() < 0.55F * difficultydamagescaler.c());
         if (this.getEquipment(4) == null) {
             Calendar calendar = this.world.Y();
 
-            if (calendar.get(2) + 1 == 10 && calendar.get(5) == 31 && this.random.nextFloat() < 0.25F) {
-                this.setEquipment(4, new ItemStack(this.random.nextFloat() < 0.1F ? Blocks.LIT_PUMPKIN : Blocks.PUMPKIN));
+            if (calendar.get(2) + 1 == 10 && calendar.get(5) == 31 && RANDOM.nextFloat() < 0.25F) {
+                this.setEquipment(4, new ItemStack(RANDOM.nextFloat() < 0.1F ? Blocks.LIT_PUMPKIN : Blocks.PUMPKIN));
                 this.dropChances[4] = 0.0F;
             }
         }
@@ -232,7 +232,7 @@ public class EntitySkeleton extends EntityMonster implements IRangedEntity {
         int i = EnchantmentManager.getEnchantmentLevel(Enchantment.ARROW_DAMAGE.id, this.bA());
         int j = EnchantmentManager.getEnchantmentLevel(Enchantment.ARROW_KNOCKBACK.id, this.bA());
 
-        entityarrow.b((double) (f * 2.0F) + this.random.nextGaussian() * 0.25D + (double) ((float) this.world.getDifficulty().a() * 0.11F));
+        entityarrow.b((double) (f * 2.0F) + RANDOM.nextGaussian() * 0.25D + (double) ((float) this.world.getDifficulty().a() * 0.11F));
         if (i > 0) {
             entityarrow.b(entityarrow.j() + (double) i * 0.5D + 0.5D);
         }

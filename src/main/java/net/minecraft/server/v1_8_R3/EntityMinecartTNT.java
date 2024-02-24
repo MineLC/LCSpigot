@@ -75,7 +75,7 @@ public class EntityMinecartTNT extends EntityMinecartAbstract {
                 d1 = 5.0D;
             }
 
-            this.world.explode(this, this.locX, this.locY, this.locZ, (float) (4.0D + this.random.nextDouble() * 1.5D * d1), true);
+            this.world.explode(this, this.locX, this.locY, this.locZ, (float) (4.0D + RANDOM.nextDouble() * 1.5D * d1), true);
             this.die();
         }
 

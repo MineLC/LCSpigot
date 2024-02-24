@@ -53,7 +53,7 @@ public class EntityPigZombie extends EntityZombie {
         }
 
         if (this.soundDelay > 0 && --this.soundDelay == 0) {
-            this.makeSound("mob.zombiepig.zpigangry", this.bB() * 2.0F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 1.8F);
+            this.makeSound("mob.zombiepig.zpigangry", this.bB() * 2.0F, ((RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.2F + 1.0F) * 1.8F);
         }
 
         if (this.angerLevel > 0 && this.hurtBy != null && this.getLastDamager() == null) {
@@ -119,8 +119,8 @@ public class EntityPigZombie extends EntityZombie {
     }
 
     private void b(Entity entity) {
-        this.angerLevel = 400 + this.random.nextInt(400);
-        this.soundDelay = this.random.nextInt(40);
+        this.angerLevel = 400 + RANDOM.nextInt(400);
+        this.soundDelay = RANDOM.nextInt(40);
         if (entity instanceof EntityLiving) {
             this.b((EntityLiving) entity);
         }
@@ -144,7 +144,7 @@ public class EntityPigZombie extends EntityZombie {
     }
 
     protected void dropDeathLoot(boolean flag, int i) {
-        int j = this.random.nextInt(2 + i);
+        int j = RANDOM.nextInt(2 + i);
 
         int k;
 
@@ -152,7 +152,7 @@ public class EntityPigZombie extends EntityZombie {
             this.a(Items.ROTTEN_FLESH, 1);
         }
 
-        j = this.random.nextInt(2 + i);
+        j = RANDOM.nextInt(2 + i);
 
         for (k = 0; k < j; ++k) {
             this.a(Items.GOLD_NUGGET, 1);

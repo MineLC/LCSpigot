@@ -43,7 +43,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
     }
 
     public void g(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        int i = ((Integer) iblockdata.get(BlockCrops.AGE)).intValue() + MathHelper.nextInt(world.random, 2, 5);
+        int i = ((Integer) iblockdata.get(BlockCrops.AGE)).intValue() + MathHelper.nextInt(World.RANDOM, 2, 5);
 
         if (i > 7) {
             i = 7;
@@ -120,7 +120,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
                 int k = 3 + i;
 
                 for (int l = 0; l < k; ++l) {
-                    if (world.random.nextInt(15) <= j) {
+                    if (World.RANDOM.nextInt(15) <= j) {
                         a(world, blockposition, new ItemStack(this.l(), 1, 0));
                     }
                 }
