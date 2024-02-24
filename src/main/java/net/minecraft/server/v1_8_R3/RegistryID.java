@@ -9,7 +9,7 @@ import java.util.List;
 
 public class RegistryID<T> implements Registry<T> {
 
-    private final IdentityHashMap<T, Integer> a = new IdentityHashMap(512);
+    private final IdentityHashMap<T, Integer> a = new IdentityHashMap<>(512);
     private final List<T> b = Lists.newArrayList();
 
     public RegistryID() {}
