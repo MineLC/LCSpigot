@@ -564,8 +564,30 @@ public abstract class EntityHuman extends EntityLiving {
         } else if (itemstack.count == 0) {
             return null;
         } else {
+
             double d0 = this.locY - 0.30000001192092896D + (double) this.getHeadHeight();
             EntityItem entityitem = new EntityItem(this.world, this.locX, d0, this.locZ, itemstack);
+
+            // CraftBukkit start - fire PlayerDropItemEvent
+            Player player = (Player) this.getBukkitEntity();
+            CraftItem drop = new CraftItem(this.world.getServer(), entityitem);
+    
+            PlayerDropItemEvent event = new PlayerDropItemEvent(player, drop);
+            this.world.getServer().getPluginManager().callEvent(event);
+    
+            if (event.isCancelled()) {
+                ItemStack hand = inventory.items[inventory.itemInHandIndex];
+                if (flag1 && (hand == null || hand.count == 0)) {
+                    // The complete stack was dropped
+                    this.inventory.items[inventory.itemInHandIndex] = itemstack;
+                } else if (flag1) {
+                    if (ItemStack.matches(itemstack, hand)) {
+                        this.inventory.items[inventory.itemInHandIndex] = hand;
+                    }
+                }
+                return null;
+            }
+            // CraftBukkit end
 
             entityitem.a(40);
             if (flag1) {
@@ -592,30 +614,6 @@ public abstract class EntityHuman extends EntityLiving {
                 entityitem.motY += (double) ((RANDOM.nextFloat() - RANDOM.nextFloat()) * 0.1F);
                 entityitem.motZ += Math.sin((double) f1) * (double) f;
             }
-
-            // CraftBukkit start - fire PlayerDropItemEvent
-            Player player = (Player) this.getBukkitEntity();
-            CraftItem drop = new CraftItem(this.world.getServer(), entityitem);
-
-            PlayerDropItemEvent event = new PlayerDropItemEvent(player, drop);
-            this.world.getServer().getPluginManager().callEvent(event);
-
-            if (event.isCancelled()) {
-                org.bukkit.inventory.ItemStack cur = player.getInventory().getItemInHand();
-                if (flag1 && (cur == null || cur.getAmount() == 0)) {
-                    // The complete stack was dropped
-                    player.getInventory().setItemInHand(drop.getItemStack());
-                } else if (flag1 && cur.isSimilar(drop.getItemStack()) && drop.getItemStack().getAmount() == 1) {
-                    // Only one item is dropped
-                    cur.setAmount(cur.getAmount() + 1);
-                    player.getInventory().setItemInHand(cur);
-                } else {
-                    // Fallback
-                    player.getInventory().addItem(drop.getItemStack());
-                }
-                return null;
-            }
-            // CraftBukkit end
 
             this.a(entityitem);
             if (flag1) {

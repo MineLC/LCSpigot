@@ -817,7 +817,11 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         }
 
         if (message.charAt(0) == '/'){
-            CommandStorage.execute(getPlayer(), message.substring(1));
+            final String command = message.substring(1);
+            if (command.isEmpty()) {
+                return;
+            }
+            CommandStorage.execute(getPlayer(), command);
             return;
         }
 
@@ -1609,6 +1613,14 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
     public void a(PacketPlayInTabComplete packetplayintabcomplete) {
         PlayerConnectionUtils.ensureMainThread(packetplayintabcomplete, this, this.player.u());
+        if (packetplayintabcomplete.a().charAt(0) != '/') {
+            return;
+        }
+
+        final String command = packetplayintabcomplete.a().substring(1);
+        if (command.isEmpty()) {
+            return;
+        }
 
         final String[] tab = CommandStorage.tab(getPlayer(), packetplayintabcomplete.a().substring(1));
         if (tab != null) {

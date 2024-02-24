@@ -17,6 +17,9 @@ public final class CommandStorage {
 
     public static void execute(final CommandSender sender, final String command) {
         final String[] split = StringUtils.split(command, ' ');
+        if (split.length == 0) {
+            return;
+        }
         final Command executor = COMMANDS.get(split[0]);
     
         if (executor == null) {
@@ -37,6 +40,9 @@ public final class CommandStorage {
 
     public static String[] tab(final CommandSender sender, final String command) {
         final String[] split = StringUtils.split(command, ' ');
+        if (split.length == 0) {
+            return null;
+        }
         final Command executor = getCommand(split[0]);
         if (executor == null) {
             return null;
