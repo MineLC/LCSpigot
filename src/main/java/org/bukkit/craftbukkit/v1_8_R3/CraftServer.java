@@ -94,6 +94,7 @@ import org.bukkit.util.StringUtil;
 import org.bukkit.util.permissions.DefaultPermissions;
 import org.spigotmc.SpigotConfig;
 import org.tinylog.Logger;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.error.MarkedYAMLException;
@@ -174,7 +175,7 @@ public final class CraftServer implements Server {
         this.serverVersion = CraftServer.class.getPackage().getImplementationVersion();
         online = console.getPropertyManager().getBoolean("online-mode", true);
 
-        yaml = new Yaml(new SafeConstructor());
+        yaml = new Yaml(new SafeConstructor(new LoaderOptions()));
         bukkitVersion = Versioning.getBukkitVersion();
         servicesManager = new SimpleServicesManager();
         scheduler = new CraftScheduler();

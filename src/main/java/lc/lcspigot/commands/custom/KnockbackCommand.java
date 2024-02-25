@@ -65,7 +65,7 @@ final class KnockbackCommand implements Command {
         return
             "\n " +
             "\n §f§lPanda§6§lSpigot §7Knockback" +
-            "\n §8To save this, change lcconfig.yml" +
+            "\n §8To save this, change lcspigot.yml" +
             "\n §6/kb §7->" +
             "\n     §ffriction §7(decimal) - Set the weight of entity" +
             "\n     §fhorizontal §7(decimal) - Default horizontal knockback" +

@@ -1006,14 +1006,6 @@ public abstract class EntityLiving extends Entity {
             int j;
             float f1;
             
-            // CraftBukkit - Moved to d(DamageSource, float)
-            if (false && this.hasEffect(MobEffectList.RESISTANCE) && damagesource != DamageSource.OUT_OF_WORLD) {
-                i = (this.getEffect(MobEffectList.RESISTANCE).getAmplifier() + 1) * 5;
-                j = 25 - i;
-                f1 = f * (float) j;
-                f = f1 / 25.0F;
-            }
-
             if (f <= 0.0F) {
                 return 0.0F;
             } else {
