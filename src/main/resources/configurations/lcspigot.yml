@@ -13,3 +13,12 @@ container-update-delay: 4 # How many ticks wait to update the player inventory. 
 # How many ticks wait to disable the redstone or block physics. Reduce this value can HEAVY increase performance.
 # Vanilla: 10000
 tick-next-tick-cap: 100
+
+# Knockback pandaspigot:
+knockback:
+  friction: 2.0
+  horizontal: 0.4
+  vertical: 0.4
+  verticalLimit: 0.4000000059604645
+  extraHorizontal: 0.5
+  extraVertical: 0.1

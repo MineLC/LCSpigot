@@ -23,7 +23,7 @@ public final class CommandStorage {
         final Command executor = COMMANDS.get(split[0]);
     
         if (executor == null) {
-            sender.sendMessage(LCConfig.getConfig().getUnknownCommand().replace("%command%", split[0]));
+            sender.sendMessage(LCConfig.getConfig().unknownCommand.replace("%command%", split[0]));
             return;
         }
         final String[] args = new String[split.length - 1];

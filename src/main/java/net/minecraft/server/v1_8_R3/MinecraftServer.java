@@ -720,7 +720,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
 
         SpigotTimings.timeUpdateTimer.startTiming(); // Spigot
         // Send time updates to everyone, it will get the right time from the world the player is in.
-        if (this.ticks % LCConfig.getConfig().getTickTime() == 0) {
+        if (this.ticks % LCConfig.getConfig().tickTime == 0) {
             for (final WorldServer world : this.worlds) {
                 if (!world.getGameRules().getBoolean("doDaylightCycle")) {
                     break;

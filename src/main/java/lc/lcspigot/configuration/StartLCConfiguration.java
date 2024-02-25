@@ -12,6 +12,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.tinylog.Logger;
 
+import lc.lcspigot.configuration.sections.ConfigKnockback;
+
 public final class StartLCConfiguration {
 
     public void load() {       
@@ -23,15 +25,27 @@ public final class StartLCConfiguration {
             }
         }
 
-        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+        final FileConfiguration config = YamlConfiguration.loadConfiguration(file);
         final LCConfig lcConfig = new LCConfig(
             Color.parse(config.get("unknown-command")),
             getInt(config, "tick-time", 20),
             getInt(config, "container-update-delay", 1),
-            getInt(config, "", 10000)
+            getInt(config, "", 10000),
+            getKnockback(config)
         );
 
         LCConfig.setInstance(lcConfig);   
+    }
+
+    private ConfigKnockback getKnockback(final FileConfiguration config) {
+        final ConfigKnockback knockback = new ConfigKnockback();
+        knockback.friction = config.getDouble("knockback.friction");
+        knockback.horizontal = config.getDouble("knockback.horizontal");
+        knockback.vertical = config.getDouble("knockback.vertical");
+        knockback.verticalLimit = config.getDouble("knockback.verticalLimit");
+        knockback.extraHorizontal = config.getDouble("knockback.extraHorizontal");
+        knockback.extraVertical = config.getDouble("knockback.extraVertical");
+        return knockback;
     }
 
     private boolean createFile(final File file) {

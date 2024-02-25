@@ -1,34 +1,22 @@
 package lc.lcspigot.configuration;
 
+import lc.lcspigot.configuration.sections.ConfigKnockback;
+
 public final class LCConfig {
     private static LCConfig instance;
 
-    private final String unknownCommand;
-    private final int tickTime;
-    private final int containerUpdateDelay;
-    private final int tickNextTickCap;
+    public final String unknownCommand;
+    public final int tickTime;
+    public final int containerUpdateDelay;
+    public final int tickNextTickCap;
+    public final ConfigKnockback knockback;
 
-    LCConfig(String unknownCommand, int tickTime, int containerUpdateDelay, int tickNextTickCap) {
+    LCConfig(String unknownCommand, int tickTime, int containerUpdateDelay, int tickNextTickCap, ConfigKnockback knockback) {
         this.unknownCommand = unknownCommand;
         this.tickTime = tickTime;
         this.containerUpdateDelay = containerUpdateDelay;
         this.tickNextTickCap = tickNextTickCap;
-    }
-
-    public String getUnknownCommand() {
-        return unknownCommand;
-    }
-
-    public int getTickTime() {
-        return this.tickTime;
-    }
-
-    public int getContainerUpdateDelay() {
-        return containerUpdateDelay;
-    }
-
-    public int getTickNextTickCap() {
-        return tickNextTickCap;
+        this.knockback = knockback;
     }
 
     public static LCConfig getConfig() {

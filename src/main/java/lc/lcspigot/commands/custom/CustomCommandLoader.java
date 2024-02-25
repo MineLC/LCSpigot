@@ -7,5 +7,6 @@ public final class CustomCommandLoader {
     public void load() {
         CommandStorage.register(new VersionCommand(), "version");
         CommandStorage.register(new TpsCommand(), "tps");
+        CommandStorage.register(new KnockbackCommand(), "kb");
     }
 }

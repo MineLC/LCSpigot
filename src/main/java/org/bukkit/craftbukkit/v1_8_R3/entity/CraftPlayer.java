@@ -177,6 +177,38 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         getHandle().displayName = name == null ? getName() : name;
     }
 
+    // PandaSpigot start
+    @Override
+    public void setVelocity(org.bukkit.util.Vector vel) {
+        // To be consistent with old behavior, set the velocity before firing the event
+        this.setVelocityDirect(vel);
+        
+        org.bukkit.event.player.PlayerVelocityEvent event = new org.bukkit.event.player.PlayerVelocityEvent(this, vel.clone());
+        this.getServer().getPluginManager().callEvent(event);
+        
+        if(!event.isCancelled()) {
+            // Set the velocity again in case it was changed by event handlers
+            this.setVelocityDirect(event.getVelocity());
+            
+            // Send the new velocity to the player's client immediately, so it isn't affected by
+            // any movement packets from this player that may be processed before the end of the tick.
+            // Without this, player velocity changes tend to be very inconsistent.
+            this.getHandle().playerConnection.sendPacket(new PacketPlayOutEntityVelocity(this.getHandle()));
+        }
+        
+        // Note that cancelling the event does not restore the old velocity, it only prevents
+        // the packet from sending. Again, this is to be consistent with old behavior.
+    }
+    
+    public void setVelocityDirect(org.bukkit.util.Vector vel) {
+        entity.motX = vel.getX();
+        entity.motY = vel.getY();
+        entity.motZ = vel.getZ();
+        if (entity.motY > 0) {
+            entity.fallDistance = 0.0f;
+        }
+    }
+
     @Override
     public String getPlayerListName() {
         return getHandle().listName == null ? getName() : CraftChatMessage.fromComponent(getHandle().listName);

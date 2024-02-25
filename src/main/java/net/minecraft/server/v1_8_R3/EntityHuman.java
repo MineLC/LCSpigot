@@ -3,6 +3,10 @@ package net.minecraft.server.v1_8_R3;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
+
+import lc.lcspigot.configuration.LCConfig;
+import lc.lcspigot.configuration.sections.ConfigKnockback;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +23,6 @@ import org.bukkit.event.player.PlayerBedLeaveEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
-import org.bukkit.util.Vector;
 // CraftBukkit end
 
 public abstract class EntityHuman extends EntityLiving {
@@ -998,35 +1001,42 @@ public abstract class EntityHuman extends EntityLiving {
 
                     if (flag2) {
                         if (i > 0) {
-                            entity.g((double) (-MathHelper.sin(this.yaw * 3.1415927F / 180.0F) * (float) i * 0.5F), 0.1D, (double) (MathHelper.cos(this.yaw * 3.1415927F / 180.0F) * (float) i * 0.5F));
-                            this.motX *= 0.6D;
+                            // PandaSpigot start - Configurable knockback
+                            final ConfigKnockback knockbackConfig = LCConfig.getConfig().knockback;
+                            entity.g(
+                                    -MathHelper.sin(this.yaw * 3.1415927F / 180.0F) * (float) i * knockbackConfig.extraHorizontal,
+                                    knockbackConfig.extraVertical,
+                                    MathHelper.cos(this.yaw * 3.1415927F / 180.0F) * (float) i * knockbackConfig.extraHorizontal);
+                            // PandaSpigot end    this.motX *= 0.6D;
                             this.motZ *= 0.6D;
                             this.setSprinting(false);
                         }
 
                         if (entity instanceof EntityPlayer && entity.velocityChanged) {
-                            // CraftBukkit start - Add Velocity Event
-                            boolean cancelled = false;
-                            Player player = (Player) entity.getBukkitEntity();
-                            org.bukkit.util.Vector velocity = new Vector( d0, d1, d2 );
-
-                            PlayerVelocityEvent event = new PlayerVelocityEvent(player, velocity.clone());
-                            world.getServer().getPluginManager().callEvent(event);
-
-                            if (event.isCancelled()) {
-                                cancelled = true;
-                            } else if (!velocity.equals(event.getVelocity())) {
-                                player.setVelocity(velocity);
+                            // PandaSpigot start - Configurable knockback
+                            // If the attack caused knockback, send the new velocity to the victim's client immediately,
+                            // and undo the change. Otherwise, if movement packets from the victim are processed before
+                            // the end of the tick, then friction may reduce the velocity considerably before it's sent
+                            // to the client, particularly if the victim was standing on the ground when those packets
+                            // were generated. And because this glitch is also likely to make server-side velocity very
+                            // inconsistent, we simply reverse the knockback after sending it so that KB, like most other
+                            // things, doesn't affect server velocity at all.
+                            
+                            EntityPlayer attackedPlayer = (EntityPlayer) entity;
+                            PlayerVelocityEvent event = new PlayerVelocityEvent(attackedPlayer.getBukkitEntity(),
+                                    attackedPlayer.getBukkitEntity().getVelocity());
+                            
+                            this.world.getServer().getPluginManager().callEvent(event);
+                            if (!event.isCancelled()) {
+                                attackedPlayer.getBukkitEntity().setVelocityDirect(event.getVelocity());
+                                attackedPlayer.playerConnection.sendPacket(new PacketPlayOutEntityVelocity(attackedPlayer));
                             }
 
-                            if (!cancelled) {
-                                ( (EntityPlayer) entity ).playerConnection.sendPacket( new PacketPlayOutEntityVelocity( entity ) );
-                                entity.velocityChanged = false;
-                                entity.motX = d0;
-                                entity.motY = d1;
-                                entity.motZ = d2;
-                            }
-                            // CraftBukkit end
+                            attackedPlayer.velocityChanged = false;
+                            attackedPlayer.motX = d0;
+                            attackedPlayer.motY = d1;
+                            attackedPlayer.motZ = d2;
+                            // PandaSpigot end
                         }
 
                         if (flag) {

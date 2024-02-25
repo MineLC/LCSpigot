@@ -608,8 +608,8 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
         this.methodProfiler.a("cleaning");
 
-        if (i > LCConfig.getConfig().getTickNextTickCap()) {
-            i = LCConfig.getConfig().getTickNextTickCap();
+        if (i > LCConfig.getConfig().tickNextTickCap) {
+            i = LCConfig.getConfig().tickNextTickCap;
         }
 
         NextTickListEntry nextticklistentry;

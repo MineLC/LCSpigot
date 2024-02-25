@@ -60,7 +60,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public boolean keepLevel = false;
     public double maxHealthCache;
     public boolean joining = true;
-    private int containerUpdateDelay = LCConfig.getConfig().getContainerUpdateDelay();
+    private int containerUpdateDelay = LCConfig.getConfig().containerUpdateDelay;
     // CraftBukkit end
     // Spigot start
     public boolean collidesWithEntities = true;
@@ -198,7 +198,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
         if (--containerUpdateDelay <= 0) {
             this.activeContainer.b();
-            containerUpdateDelay = LCConfig.getConfig().getContainerUpdateDelay();
+            containerUpdateDelay = LCConfig.getConfig().containerUpdateDelay;
         }
 
         if (!this.world.isClientSide && !this.activeContainer.a((EntityHuman) this)) {
