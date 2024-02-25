@@ -30,7 +30,7 @@ public final class StartLCConfiguration {
             Color.parse(config.get("unknown-command")),
             getInt(config, "tick-time", 20),
             getInt(config, "container-update-delay", 1),
-            getInt(config, "", 10000),
+            getInt(config, "tick-next-tick-cap", 10000),
             getKnockback(config)
         );
 

@@ -44,7 +44,7 @@ final class KnockbackCommand implements Command {
             default:
                 break;
         }
-        send(sender, "Value: §e " + args[1] + "§f changed to §e" + value);
+        send(sender, "Value: §e " + args[0] + "§f changed to §e" + value);
     }
 
     @Override
