@@ -59,7 +59,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     public EntityPlayer player;
     private int e;
     private int f;
-    private int g;
     private boolean h;
     private int i;
     private long j;
@@ -71,6 +70,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     private double q;
     private boolean checkMovement = true;
     private boolean processedDisconnect; // CraftBukkit - added
+    private int timeFlying = 0;
 
     public PlayerConnection(MinecraftServer minecraftserver, NetworkManager networkmanager, EntityPlayer entityplayer) {
         this.minecraftServer = minecraftserver;
@@ -309,18 +309,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         double d11 = d7 - this.player.locX;
         double d12 = d8 - this.player.locY;
         double d13 = d9 - this.player.locZ;
-        double d14 = this.player.motX * this.player.motX + this.player.motY * this.player.motY + this.player.motZ * this.player.motZ;
-        double d15 = d11 * d11 + d12 * d12 + d13 * d13;
-
-        // Spigot: make "moved too quickly" limit configurable
-        if (d15 - d14 > org.spigotmc.SpigotConfig.movedTooQuicklyThreshold && this.checkMovement && (!this.minecraftServer.T() || !this.minecraftServer.S().equals(this.player.getName()))) { // CraftBukkit - Added this.checkMovement condition to solve this check being triggered by teleports
-            Logger.warn(this.player.getName() + " moved too quickly! " + d11 + "," + d12 + "," + d13 + " (" + d11 + ", " + d12 + ", " + d13 + ")");
-            this.a(this.o, this.p, this.q, this.player.yaw, this.player.pitch);
-            return;
-        }
-
-        float f4 = 0.0625F;
-        boolean flag = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink((double) f4, (double) f4, (double) f4)).isEmpty();
 
         if (this.player.onGround && !packetplayinflying.f() && d12 > 0.0D) {
             this.player.bF();
@@ -328,7 +316,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
         this.player.move(d11, d12, d13);
         this.player.onGround = packetplayinflying.f();
-        double d16 = d12;
 
         d11 = d7 - this.player.locX;
         d12 = d8 - this.player.locY;
@@ -337,40 +324,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         }
 
         d13 = d9 - this.player.locZ;
-        d15 = d11 * d11 + d12 * d12 + d13 * d13;
-        boolean flag1 = false;
-
-        // Spigot: make "moved wrongly" limit configurable
-        if (d15 > org.spigotmc.SpigotConfig.movedWronglyThreshold && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative()) {
-            flag1 = true;
-            Logger.warn(this.player.getName() + " moved wrongly!");
-        }
 
         this.player.setLocation(d7, d8, d9, f2, f3);
         this.player.checkMovement(this.player.locX - d0, this.player.locY - d1, this.player.locZ - d2);
-        if (!this.player.noclip) {
-            boolean flag2 = worldserver.getCubes(this.player, this.player.getBoundingBox().shrink((double) f4, (double) f4, (double) f4)).isEmpty();
-
-            if (flag && (flag1 || !flag2) && !this.player.isSleeping()) {
-                this.a(this.o, this.p, this.q, f2, f3);
-                return;
-            }
-        }
-
-        AxisAlignedBB axisalignedbb = this.player.getBoundingBox().grow((double) f4, (double) f4, (double) f4).a(0.0D, -0.55D, 0.0D);
-
-        if (!this.minecraftServer.getAllowFlight() && !this.player.abilities.canFly && !worldserver.c(axisalignedbb)) {
-            if (d16 >= -0.03125D) {
-                ++this.g;
-                if (this.g > 80) {
-                    Logger.warn(this.player.getName() + " was kicked for floating too long!");
-                    this.disconnect("Flying is not enabled on this server");
-                    return;
-                }
-            }
-        } else {
-            this.g = 0;
-        }
 
         this.player.onGround = packetplayinflying.f();
         this.minecraftServer.getPlayerList().d(this.player);
@@ -993,6 +949,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         }
 
         Entity entity = packetplayinuseentity.a((World) worldserver);
+        getPlayer().sendMessage("X: " + (player.locX - entity.locX));
+        getPlayer().sendMessage("Y: " + (player.locY - entity.locY));
+        getPlayer().sendMessage("Z: " + (player.locZ - entity.locZ));
         // Spigot Start
         if ( entity == player && !player.isSpectator() )
         {
@@ -1101,13 +1060,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 this.player = this.minecraftServer.getPlayerList().moveToWorld(this.player, 0, false);
             }
             break;
-
-        case 2:
-            this.player.getStatisticManager().a(this.player);
-            break;
-
-        case 3:
-            this.player.b((Statistic) AchievementList.f);
         }
 
     }

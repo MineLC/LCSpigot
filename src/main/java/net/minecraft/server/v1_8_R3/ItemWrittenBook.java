@@ -41,7 +41,6 @@ public class ItemWrittenBook extends Item {
         }
 
         entityhuman.openBook(itemstack);
-        entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
         return itemstack;
     }
 

@@ -17,7 +17,6 @@ public class ItemSnowball extends Item {
             world.addEntity(new EntitySnowball(world, entityhuman));
         }
 
-        entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
         return itemstack;
     }
 }

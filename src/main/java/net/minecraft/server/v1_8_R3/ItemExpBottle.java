@@ -15,8 +15,6 @@ public class ItemExpBottle extends Item {
         if (!world.isClientSide) {
             world.addEntity(new EntityThrownExpBottle(world, entityhuman));
         }
-
-        entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
         return itemstack;
     }
 }

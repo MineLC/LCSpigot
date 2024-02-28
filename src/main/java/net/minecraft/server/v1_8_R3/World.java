@@ -1156,8 +1156,6 @@ public abstract class World implements IBlockAccess {
         WorldBorder worldborder = this.getWorldBorder();
         boolean flag = entity.aT();
         boolean flag1 = this.a(worldborder, entity);
-        IBlockData iblockdata = Blocks.STONE.getBlockData();
-        BlockPosition.MutableBlockPosition blockposition_mutableblockposition = new BlockPosition.MutableBlockPosition();
 
         // Spigot start
         int ystart = ( ( k - 1 ) < 0 ) ? 0 : ( k - 1 );

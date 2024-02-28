@@ -16,7 +16,6 @@ public class ItemMilkBucket extends Item {
             entityhuman.removeAllEffects();
         }
 
-        entityhuman.b(StatisticList.USE_ITEM_COUNT[Item.getId(this)]);
         return itemstack.count <= 0 ? new ItemStack(Items.BUCKET) : itemstack;
     }
 

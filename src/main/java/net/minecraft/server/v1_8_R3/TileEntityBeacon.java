@@ -176,17 +176,6 @@ public class TileEntityBeacon extends TileEntityContainer implements IUpdatePlay
                 this.i = false;
             }
         }
-
-        if (!this.world.isClientSide && this.j == 4 && i < this.j) {
-            Iterator iterator = this.world.a(EntityHuman.class, (new AxisAlignedBB((double) j, (double) k, (double) l, (double) j, (double) (k - 4), (double) l)).grow(10.0D, 5.0D, 10.0D)).iterator();
-
-            while (iterator.hasNext()) {
-                EntityHuman entityhuman = (EntityHuman) iterator.next();
-
-                entityhuman.b((Statistic) AchievementList.K);
-            }
-        }
-
     }
 
     public Packet getUpdatePacket() {
