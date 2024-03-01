@@ -12,5 +12,6 @@ public final class VanillaCommandLoader {
         CommandStorage.register(new PluginsCommand(), "plugins", "pl");
         CommandStorage.register(new StopCommand(), "stop");
         CommandStorage.register(new GiveCommand(), "give");
+        CommandStorage.register(new WorldBorderCommand(), "worldborder");
     }
 }

@@ -404,6 +404,10 @@ public abstract class Entity {
         return this.world.getCubes(this, axisalignedbb).isEmpty() && !this.world.containsLiquid(axisalignedbb);
     }
 
+    public void moveNoClip(double d0, double d1, double d2) {
+        this.a(this.getBoundingBox().c(d0, d1, d2));
+        this.recalcPosition();
+    }
     public void move(double d0, double d1, double d2) {
         org.bukkit.craftbukkit.v1_8_R3.SpigotTimings.entityMoveTimer.startTiming(); // Spigot
         if (this.noclip) {

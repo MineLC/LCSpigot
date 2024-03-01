@@ -44,7 +44,7 @@ final class KnockbackCommand implements Command {
             default:
                 break;
         }
-        send(sender, "Value: §e " + args[0] + "§f changed to §e" + value);
+        send(sender, "Value: §e" + args[0] + "§f changed to §e" + value);
     }
 
     @Override
@@ -67,12 +67,12 @@ final class KnockbackCommand implements Command {
             "\n §f§lPanda§6§lSpigot §7Knockback" +
             "\n §8To save this, change lcspigot.yml" +
             "\n §6/kb §7->" +
-            "\n     §ffriction §7(decimal) - Set the weight of entity" +
-            "\n     §fhorizontal §7(decimal) - Default horizontal knockback" +
-            "\n     §fvertical §7(decimal) - Default vertical knockback" +
-            "\n     §fverticalLimit §7(decimal) - Limit of vertical knockback" +
-            "\n     §fextraHorizontal §7(decimal) - Add extra horizontal on sprint" +
-            "\n     §fextraVertical §7(decimal) - Add extra vertical on sprint" +
+            "\n     §ffriction §e(decimal) §7- Set the weight of entity" +
+            "\n     §fhorizontal §e(decimal) §7- Default horizontal knockback" +
+            "\n     §fvertical §e(decimal) §7- Default vertical knockback" +
+            "\n     §fverticalLimit §e(decimal) §7- Limit of vertical knockback" +
+            "\n     §fextraHorizontal §e(decimal) §7- Add extra horizontal on sprint" +
+            "\n     §fextraVertical §e(decimal) §7- Add extra vertical on sprint" +
             "\n ";
     }
 }

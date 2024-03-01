@@ -20,6 +20,7 @@ public final class VersionCommand implements Command {
             "\n §7- Uses TinyLog" +
             "\n §7- No patches based" +
             "\n §7- PandaSpigot features" +
-            "\n §7- Recode chat, commands and more";
+            "\n §7- Recode chat, commands and more." +
+            "\n §8Please use minestom, spigot is shit :(";
     }
 }

@@ -1,6 +1,8 @@
 package net.minecraft.server.v1_8_R3;
 
 import com.google.common.collect.Lists;
+
+import gnu.trove.map.hash.TIntShortHashMap;
 import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
@@ -59,18 +61,16 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     public EntityPlayer player;
     private int e;
     private int f;
-    private boolean h;
     private int i;
     private long j;
     private long k;
     private int m;
-    private IntHashMap<Short> n = new IntHashMap();
+    private TIntShortHashMap n = new TIntShortHashMap();
     private double o;
     private double p;
     private double q;
     private boolean checkMovement = true;
     private boolean processedDisconnect; // CraftBukkit - added
-    private int timeFlying = 0;
 
     public PlayerConnection(MinecraftServer minecraftserver, NetworkManager networkmanager, EntityPlayer entityplayer) {
         this.minecraftServer = minecraftserver;
@@ -98,7 +98,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     // CraftBukkit end
 
     public void c() {
-        this.h = false;
         ++this.e;
         this.minecraftServer.methodProfiler.a("keepAlive");
         if ((long) this.e - this.k > 40L) {
@@ -184,11 +183,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             return;
         }
 
-        this.h = true;
         if (this.player.viewingCredits) {
             return;
         }
-
         // CraftBukkit end
         WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
 
@@ -309,12 +306,21 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         double d11 = d7 - this.player.locX;
         double d12 = d8 - this.player.locY;
         double d13 = d9 - this.player.locZ;
+        double d14 = this.player.motX * this.player.motX + this.player.motY * this.player.motY + this.player.motZ * this.player.motZ;
+        double d15 = d11 * d11 + d12 * d12 + d13 * d13;
+
+        // Spigot: make "moved too quickly" limit configurable
+        if (d15 - d14 > org.spigotmc.SpigotConfig.movedTooQuicklyThreshold && this.checkMovement && (!this.minecraftServer.T() || !this.minecraftServer.S().equals(this.player.getName()))) { // CraftBukkit - Added this.checkMovement condition to solve this check being triggered by teleports
+            Logger.warn(this.player.getName() + " moved too quickly! " + d11 + "," + d12 + "," + d13 + " (" + d11 + ", " + d12 + ", " + d13 + ")");
+            this.a(this.o, this.p, this.q, this.player.yaw, this.player.pitch);
+            return;
+        }
 
         if (this.player.onGround && !packetplayinflying.f() && d12 > 0.0D) {
             this.player.bF();
         }
 
-        this.player.move(d11, d12, d13);
+        this.player.moveNoClip(d11, d12, d13);
         this.player.onGround = packetplayinflying.f();
 
         d11 = d7 - this.player.locX;
@@ -324,10 +330,24 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         }
 
         d13 = d9 - this.player.locZ;
+        d15 = d11 * d11 + d12 * d12 + d13 * d13;
+        boolean flag1 = false;
+
+        // Spigot: make "moved wrongly" limit configurable
+        if (d15 > org.spigotmc.SpigotConfig.movedWronglyThreshold && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative()) {
+            flag1 = true;
+            Logger.warn(this.player.getName() + " moved wrongly!");
+        }
 
         this.player.setLocation(d7, d8, d9, f2, f3);
         this.player.checkMovement(this.player.locX - d0, this.player.locY - d1, this.player.locZ - d2);
-
+        if (!this.player.noclip) {
+            final BlockPosition position = new BlockPosition(player.locX, player.locY, player.locZ);
+            if ((flag1 || !worldserver.getWorldBorder().a(position) || worldserver.getType(position).getBlock().u()) && !this.player.isSleeping()) {
+                this.a(this.o, this.p, this.q, f2, f3);
+                return;
+            }
+        }
         this.player.onGround = packetplayinflying.f();
         this.minecraftServer.getPlayerList().d(this.player);
         this.player.a(this.player.locY - d10, packetplayinflying.f());
@@ -634,8 +654,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         PlayerConnectionUtils.ensureMainThread(packetplayinspectate, this, this.player.u());
         if (this.player.isSpectator()) {
             Entity entity = null;
-            WorldServer[] aworldserver = this.minecraftServer.worldServer;
-            int i = aworldserver.length;
 
             // CraftBukkit - use the worlds array list
             for (WorldServer worldserver : minecraftServer.worlds) {
@@ -949,9 +967,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         }
 
         Entity entity = packetplayinuseentity.a((World) worldserver);
-        getPlayer().sendMessage("X: " + (player.locX - entity.locX));
-        getPlayer().sendMessage("Y: " + (player.locY - entity.locY));
-        getPlayer().sendMessage("Z: " + (player.locZ - entity.locZ));
         // Spigot Start
         if ( entity == player && !player.isSpectator() )
         {
@@ -1360,7 +1375,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                     this.player.broadcastCarriedItem();
                     this.player.g = false;
                 } else {
-                    this.n.a(this.player.activeContainer.windowId, Short.valueOf(packetplayinwindowclick.d()));
+                    this.n.put(this.player.activeContainer.windowId, Short.valueOf(packetplayinwindowclick.d()));
                     this.player.playerConnection.sendPacket(new PacketPlayOutTransaction(packetplayinwindowclick.a(), packetplayinwindowclick.d(), false));
                     this.player.activeContainer.a(this.player, false);
                     ArrayList arraylist1 = Lists.newArrayList();
