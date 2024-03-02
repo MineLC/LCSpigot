@@ -6,8 +6,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Color;
@@ -19,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
+import org.tinylog.Logger;
 
 /**
  * Utility class for storing and retrieving classes for {@link Configuration}.
@@ -77,13 +76,12 @@ public class ConfigurationSerialization {
             ConfigurationSerializable result = (ConfigurationSerializable) method.invoke(null, args);
 
             if (result == null) {
-                Logger.getLogger(ConfigurationSerialization.class.getName()).log(Level.SEVERE, "Could not call method '" + method.toString() + "' of " + clazz + " for deserialization: method returned null");
+                Logger.error("Could not call method '" + method.toString() + "' of " + clazz + " for deserialization: method returned null");
             } else {
                 return result;
             }
         } catch (Throwable ex) {
-            Logger.getLogger(ConfigurationSerialization.class.getName()).log(
-                    Level.SEVERE,
+            Logger.error(
                     "Could not call method '" + method.toString() + "' of " + clazz + " for deserialization",
                     ex instanceof InvocationTargetException ? ex.getCause() : ex);
         }
@@ -95,8 +93,7 @@ public class ConfigurationSerialization {
         try {
             return ctor.newInstance(args);
         } catch (Throwable ex) {
-            Logger.getLogger(ConfigurationSerialization.class.getName()).log(
-                    Level.SEVERE,
+            Logger.error(
                     "Could not call constructor '" + ctor.toString() + "' of " + clazz + " for deserialization",
                     ex instanceof InvocationTargetException ? ex.getCause() : ex);
         }

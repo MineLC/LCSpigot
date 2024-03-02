@@ -12,8 +12,6 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Server;
@@ -27,7 +25,7 @@ import org.bukkit.plugin.PluginAwareness;
 import org.bukkit.plugin.PluginBase;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginLoader;
-import org.bukkit.plugin.PluginLogger;
+import org.tinylog.Logger;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteStreams;
@@ -46,7 +44,6 @@ public abstract class JavaPlugin extends PluginBase {
     private boolean naggable = true;
     private FileConfiguration newConfig = null;
     private File configFile = null;
-    private PluginLogger logger = null;
 
     public JavaPlugin() {
         final ClassLoader classLoader = this.getClass().getClassLoader();
@@ -191,19 +188,19 @@ public abstract class JavaPlugin extends PluginBase {
             try {
                 contents = ByteStreams.toByteArray(defConfigStream);
             } catch (final IOException e) {
-                getLogger().log(Level.SEVERE, "Unexpected failure reading config.yml", e);
+                Logger.error("Unexpected failure reading config.yml", e);
                 return;
             }
 
             final String text = new String(contents, Charset.defaultCharset());
             if (!text.equals(new String(contents, Charsets.UTF_8))) {
-                getLogger().warning("Default system encoding may have misread config.yml from plugin jar");
+                Logger.warn("Default system encoding may have misread config.yml from plugin jar");
             }
 
             try {
                 defConfig.loadFromString(text);
             } catch (final InvalidConfigurationException e) {
-                getLogger().log(Level.SEVERE, "Cannot load configuration from jar", e);
+               Logger.error("Cannot load configuration from jar", e);
             }
         }
 
@@ -219,7 +216,7 @@ public abstract class JavaPlugin extends PluginBase {
         try {
             getConfig().save(configFile);
         } catch (IOException ex) {
-            logger.log(Level.SEVERE, "Could not save config to " + configFile, ex);
+            Logger.error("Could not save config to " + configFile, ex);
         }
     }
 
@@ -261,10 +258,10 @@ public abstract class JavaPlugin extends PluginBase {
                 out.close();
                 in.close();
             } else {
-                logger.log(Level.WARNING, "Could not save " + outFile.getName() + " to " + outFile + " because " + outFile.getName() + " already exists.");
+                Logger.warn("Could not save " + outFile.getName() + " to " + outFile + " because " + outFile.getName() + " already exists.");
             }
         } catch (IOException ex) {
-            logger.log(Level.SEVERE, "Could not save " + outFile.getName() + " to " + outFile, ex);
+            Logger.error("Could not save " + outFile.getName() + " to " + outFile, ex);
         }
     }
 
@@ -330,7 +327,7 @@ public abstract class JavaPlugin extends PluginBase {
         if (server.getWarningState() == WarningState.OFF) {
             return;
         }
-        getLogger().log(Level.WARNING, getClass().getName() + " is already initialized", server.getWarningState() == WarningState.DEFAULT ? null : new AuthorNagException("Explicit initialization"));
+        Logger.warn(getClass().getName() + " is already initialized", server.getWarningState() == WarningState.DEFAULT ? null : new AuthorNagException("Explicit initialization"));
     }
 
     final void init(PluginLoader loader, Server server, PluginDescriptionFile description, File dataFolder, File file, ClassLoader classLoader) {
@@ -341,8 +338,6 @@ public abstract class JavaPlugin extends PluginBase {
         this.dataFolder = dataFolder;
         this.classLoader = classLoader;
         this.configFile = new File(dataFolder, "config.yml");
-        this.logger = new PluginLogger(this);
-
     }
 
     /**
@@ -353,6 +348,7 @@ public abstract class JavaPlugin extends PluginBase {
     public List<Class<?>> getDatabaseClasses() {
         return new ArrayList<Class<?>>();
     }
+
 
     /**
      * Gets the initialization status of this plugin
@@ -365,6 +361,7 @@ public abstract class JavaPlugin extends PluginBase {
     public final boolean isInitialized() {
         return true;
     }
+
 
     @Override
     public void onLoad() {}
@@ -388,11 +385,6 @@ public abstract class JavaPlugin extends PluginBase {
     @Override
     public final void setNaggable(boolean canNag) {
         this.naggable = canNag;
-    }
-
-    @Override
-    public final Logger getLogger() {
-        return logger;
     }
 
     @Override

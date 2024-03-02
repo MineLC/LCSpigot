@@ -5,11 +5,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
+import org.tinylog.Logger;
 
 /**
  * Represents a unique permission that may be attached to a {@link
@@ -58,7 +58,6 @@ public class Permission {
         if (defaultValue != null) {
             this.defaultValue = defaultValue;
         }
-
         if (children != null) {
             this.children.putAll(children);
         }
@@ -231,7 +230,7 @@ public class Permission {
             try {
                 result.add(Permission.loadPermission(entry.getKey().toString(), (Map<?, ?>) entry.getValue(), def, result));
             } catch (Throwable ex) {
-                Bukkit.getServer().getLogger().log(Level.SEVERE, String.format(error, entry.getKey()), ex);
+                Logger.error(String.format(error, entry.getKey()), ex);
             }
         }
 

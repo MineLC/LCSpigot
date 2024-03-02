@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import org.bukkit.Warning.WarningState;
 import org.bukkit.command.ConsoleCommandSender;
@@ -433,13 +432,6 @@ public interface Server extends PluginMessageRecipient {
      */
     public void reload();
 
-    /**
-     * Returns the primary logger associated with this server instance.
-     *
-     * @return Logger associated with this server
-     */
-    public Logger getLogger();
-
 
     /**
      * Writes loaded players to disk.
@@ -584,45 +576,6 @@ public interface Server extends PluginMessageRecipient {
      * @return an offline player
      */
     public OfflinePlayer getOfflinePlayer(UUID id);
-
-    /**
-     * Gets a set containing all current IPs that are banned.
-     *
-     * @return a set containing banned IP addresses
-     */
-    public Set<String> getIPBans();
-
-    /**
-     * Bans the specified address from the server.
-     *
-     * @param address the IP address to ban
-     */
-    public void banIP(String address);
-
-    /**
-     * Unbans the specified address from the server.
-     *
-     * @param address the IP address to unban
-     */
-    public void unbanIP(String address);
-
-    /**
-     * Gets a set containing all banned players.
-     *
-     * @return a set containing banned players
-     */
-    public Set<OfflinePlayer> getBannedPlayers();
-
-    /**
-     * Gets a ban list for the supplied type.
-     * <p>
-     * Bans by name are no longer supported and this method will return
-     * null when trying to request them. The replacement is bans by UUID.
-     *
-     * @param type the type of list to fetch, cannot be null
-     * @return a ban list of the specified type
-     */
-    public BanList getBanList(BanList.Type type);
 
     /**
      * Gets a set containing all player operators.

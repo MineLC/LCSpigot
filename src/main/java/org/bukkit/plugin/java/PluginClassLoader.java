@@ -4,13 +4,13 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.Validate;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.tinylog.Logger;
 
 /**
  * A ClassLoader for plugins, to allow shared classes across multiple plugins
@@ -37,14 +37,15 @@ final class PluginClassLoader extends URLClassLoader {
                 method.setAccessible( true );
                 method.invoke( null );
                 method.setAccessible( oldAccessible );
-                org.bukkit.Bukkit.getLogger().log( java.util.logging.Level.INFO, "Set PluginClassLoader as parallel capable" );
+                Logger.info("Set PluginClassLoader as parallel capable");
             }
         } catch ( NoSuchMethodException ex )
         {
             // Ignore
         } catch ( Exception ex )
         {
-            org.bukkit.Bukkit.getLogger().log( java.util.logging.Level.WARNING, "Error setting PluginClassLoader as parallel capable", ex );
+            Logger.warn("Error setting PluginClassLoader as parallel capable");
+            Logger.warn(ex);
         }
     }
     // Spigot End

@@ -7,7 +7,7 @@
 
     <name>LCSpigot</name>
     <description>Spigot for MineLC</description>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -73,7 +73,7 @@
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>2.2</version>
+            <version>1.14</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.tinylog.Logger;
 
 /**
  * Standard implementation to {@link Messenger}
@@ -427,7 +428,8 @@ public class StandardMessenger implements Messenger {
                 registration.getListener().onPluginMessageReceived( channel, source, message );
             } catch ( Throwable t )
             {
-                org.bukkit.Bukkit.getLogger().log( java.util.logging.Level.WARNING, "Could not pass incoming plugin message to " + registration.getPlugin(), t );
+                Logger.warn("Could not pass incoming plugin message to " + registration.getPlugin());
+                Logger.warn(t);
             }
             // Spigot End
         }

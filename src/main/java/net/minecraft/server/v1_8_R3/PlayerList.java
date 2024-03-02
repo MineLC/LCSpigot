@@ -63,8 +63,7 @@ public abstract class PlayerList {
         this.whitelist = new WhiteList(PlayerList.d);
         this.server = minecraftserver;
         this.maxPlayers = 8;
-        new CraftServer(minecraftserver, this);
-        this.cserver = minecraftserver.server;
+        this.cserver = new CraftServer(minecraftserver, this);
     }
 
     public void a(NetworkManager networkmanager, EntityPlayer entityplayer) {

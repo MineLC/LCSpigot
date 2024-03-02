@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.Validate;
@@ -40,6 +39,7 @@ import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.TimedRegisteredListener;
 import org.bukkit.plugin.UnknownDependencyException;
 import org.spigotmc.CustomTimingsHandler; // Spigot
+import org.tinylog.Logger;
 import org.yaml.snakeyaml.error.YAMLException;
 
 /**
@@ -86,7 +86,7 @@ public final class JavaPluginLoader implements PluginLoader {
         if (dataFolder.equals(oldDataFolder)) {
             // They are equal -- nothing needs to be done!
         } else if (dataFolder.isDirectory() && oldDataFolder.isDirectory()) {
-            server.getLogger().warning(String.format(
+            Logger.warn(String.format(
                 "While loading %s (%s) found old-data folder: `%s' next to the new one `%s'",
                 description.getFullName(),
                 file,
@@ -97,7 +97,7 @@ public final class JavaPluginLoader implements PluginLoader {
             if (!oldDataFolder.renameTo(dataFolder)) {
                 throw new InvalidPluginException("Unable to rename old data folder: `" + oldDataFolder + "' to: `" + dataFolder + "'");
             }
-            server.getLogger().log(Level.INFO, String.format(
+            Logger.warn(String.format(
                 "While loading %s (%s) renamed data folder: `%s' to `%s'",
                 description.getFullName(),
                 file,
@@ -244,7 +244,8 @@ public final class JavaPluginLoader implements PluginLoader {
                 methods.add(method);
             }
         } catch (NoClassDefFoundError e) {
-            plugin.getLogger().severe("Plugin " + plugin.getDescription().getFullName() + " has failed to register events for " + listener.getClass() + " because " + e.getMessage() + " does not exist.");
+            Logger.error("Plugin " + plugin.getDescription().getFullName() + " has failed to register events for " + listener.getClass() + " because " + e.getMessage() + " does not exist.");
+            Logger.error(e);
             return ret;
         }
 
@@ -258,7 +259,7 @@ public final class JavaPluginLoader implements PluginLoader {
             }
             final Class<?> checkClass;
             if (method.getParameterTypes().length != 1 || !Event.class.isAssignableFrom(checkClass = method.getParameterTypes()[0])) {
-                plugin.getLogger().severe(plugin.getDescription().getFullName() + " attempted to register an invalid EventHandler method signature \"" + method.toGenericString() + "\" in " + listener.getClass());
+                Logger.error(plugin.getDescription().getFullName() + " attempted to register an invalid EventHandler method signature \"" + method.toGenericString() + "\" in " + listener.getClass());
                 continue;
             }
             final Class<? extends Event> eventClass = checkClass.asSubclass(Event.class);
@@ -277,8 +278,7 @@ public final class JavaPluginLoader implements PluginLoader {
                     if (!warningState.printFor(warning)) {
                         break;
                     }
-                    plugin.getLogger().log(
-                            Level.WARNING,
+                    Logger.warn(
                             String.format(
                                     "\"%s\" has registered a listener for %s on method \"%s\", but the event is Deprecated." +
                                     " \"%s\"; please notify the authors %s.",
@@ -322,7 +322,7 @@ public final class JavaPluginLoader implements PluginLoader {
         Validate.isTrue(plugin instanceof JavaPlugin, "Plugin is not associated with this PluginLoader");
 
         if (!plugin.isEnabled()) {
-            plugin.getLogger().info("Enabling " + plugin.getDescription().getFullName());
+            Logger.info("Enabling " + plugin.getDescription().getFullName());
 
             JavaPlugin jPlugin = (JavaPlugin) plugin;
 
@@ -335,7 +335,7 @@ public final class JavaPluginLoader implements PluginLoader {
             try {
                 jPlugin.setEnabled(true);
             } catch (Throwable ex) {
-                server.getLogger().log(Level.SEVERE, "Error occurred while enabling " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
+                Logger.error("Error occurred while enabling " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
             }
 
             // Perhaps abort here, rather than continue going, but as it stands,
@@ -349,7 +349,7 @@ public final class JavaPluginLoader implements PluginLoader {
 
         if (plugin.isEnabled()) {
             String message = String.format("Disabling %s", plugin.getDescription().getFullName());
-            plugin.getLogger().info(message);
+            Logger.info(message);
 
             server.getPluginManager().callEvent(new PluginDisableEvent(plugin));
 
@@ -359,7 +359,7 @@ public final class JavaPluginLoader implements PluginLoader {
             try {
                 jPlugin.setEnabled(false);
             } catch (Throwable ex) {
-                server.getLogger().log(Level.SEVERE, "Error occurred while disabling " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
+                Logger.error("Error occurred while disabling " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
             }
 
             loaders.remove(jPlugin.getDescription().getName());

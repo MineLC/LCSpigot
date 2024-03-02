@@ -6,13 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.apache.commons.lang3.Validate;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.tinylog.Logger;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
@@ -180,9 +179,11 @@ public class YamlConfiguration extends FileConfiguration {
             config.load(file);
         } catch (FileNotFoundException ex) {
         } catch (IOException ex) {
-            Bukkit.getLogger().log(Level.SEVERE, "Cannot load " + file, ex);
+            Logger.error("Cannot load " + file);
+            Logger.error(ex);
         } catch (InvalidConfigurationException ex) {
-            Bukkit.getLogger().log(Level.SEVERE, "Cannot load " + file , ex);
+            Logger.error("Cannot load " + file);
+            Logger.error(ex);
         }
 
         return config;
@@ -211,9 +212,11 @@ public class YamlConfiguration extends FileConfiguration {
         try {
             config.load(stream);
         } catch (IOException ex) {
-            Bukkit.getLogger().log(Level.SEVERE, "Cannot load configuration from stream", ex);
+            Logger.error("Cannot load configuration from stream");
+            Logger.error(ex);
         } catch (InvalidConfigurationException ex) {
-            Bukkit.getLogger().log(Level.SEVERE, "Cannot load configuration from stream", ex);
+            Logger.error("Cannot load configuration from stream");
+            Logger.error(ex);
         }
 
         return config;
@@ -239,9 +242,11 @@ public class YamlConfiguration extends FileConfiguration {
         try {
             config.load(reader);
         } catch (IOException ex) {
-            Bukkit.getLogger().log(Level.SEVERE, "Cannot load configuration from stream", ex);
+            Logger.error("Cannot load configuration from stream");
+            Logger.error(ex);
         } catch (InvalidConfigurationException ex) {
-            Bukkit.getLogger().log(Level.SEVERE, "Cannot load configuration from stream", ex);
+            Logger.error("Cannot load configuration from stream");
+            Logger.error(ex);
         }
 
         return config;

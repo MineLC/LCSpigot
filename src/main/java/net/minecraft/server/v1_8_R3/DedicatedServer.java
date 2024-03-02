@@ -17,6 +17,7 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
+import org.bukkit.Bukkit;
 import org.spigotmc.SpigotConfig;
 import org.tinylog.Logger;
 // CraftBukkit end

@@ -2,12 +2,10 @@ package org.bukkit.plugin;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.logging.Logger;
 
 import org.bukkit.Server;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.generator.ChunkGenerator;
-
 
 /**
  * Represents a Plugin
@@ -148,14 +146,6 @@ public interface Plugin {
      */
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id);
 
-    /**
-     * Returns the plugin logger associated with this server's logger. The
-     * returned logger automatically tags all log messages with the plugin's
-     * name.
-     *
-     * @return Logger associated with this plugin
-     */
-    public Logger getLogger();
 
     /**
      * Returns the name of the plugin.

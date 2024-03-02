@@ -1,6 +1,7 @@
 package org.bukkit.conversations;
 
 import org.bukkit.plugin.Plugin;
+import org.tinylog.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -232,7 +233,8 @@ public class Conversation {
         // Spigot Start
         } catch ( Throwable t )
         {
-            org.bukkit.Bukkit.getLogger().log( java.util.logging.Level.SEVERE, "Error handling conversation prompt", t );
+            Logger.error("Error handling conversation prompt");
+            Logger.error(t);
         }
         // Spigot End
     }
