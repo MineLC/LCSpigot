@@ -488,6 +488,8 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     public void run() {
         try {
             if (this.init()) {
+                System.gc();
+    
                 this.ab = az();
 
                 this.r.setMOTD(new ChatComponentText(this.motd));
@@ -500,7 +502,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
                 long start = System.nanoTime(), curTime, tickSection = start;
                 lastTick = start - TICK_TIME;
                 // PandaSpigot end
-
+                
                 while (this.isRunning) {
                     long i = ((curTime = System.nanoTime()) / 1_000_000L) - this.nextTickTime; // Paper
                     if (i > 5000L && this.nextTickTime - this.lastOverloadWarning >= 30000L && ticks > 500) { // CraftBukkit
