@@ -172,7 +172,29 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
     public void a(PacketPlayInFlying packetplayinflying) {
         PlayerConnectionUtils.ensureMainThread(packetplayinflying, this, this.player.u());
-        // CraftBukkit start - Check for NaN
+        final boolean moveCord = !(packetplayinflying.x == 0 && packetplayinflying.y == 0 && packetplayinflying.z == 0);
+        final boolean moveHead = !(packetplayinflying.pitch == 0 && packetplayinflying.yaw == 0);
+
+        if ((!moveCord && !moveHead) || this.player.viewingCredits) {
+            return;
+        }
+        if (!moveCord && moveHead) {
+            if (!NumberConversions.isFinite(packetplayinflying.yaw)
+                || !NumberConversions.isFinite(packetplayinflying.pitch)) {
+                Logger.warn(player.getName() + " was caught trying to crash the server with an invalid position.");
+                getPlayer().kickPlayer("NaN in position (Hacking?)"); //Spigot "Nope" -> Descriptive reason
+                return;
+            }
+            float f2 = player.yaw;
+            float f3 = player.pitch;
+            if (packetplayinflying.h()) {
+                f2 = packetplayinflying.d();
+                f3 = packetplayinflying.e();
+            }
+            this.player.moveHead(f2, f3);
+            return;
+        }
+
         if (!NumberConversions.isFinite(packetplayinflying.x) 
                 || !NumberConversions.isFinite(packetplayinflying.y)
                 || !NumberConversions.isFinite(packetplayinflying.z)
@@ -182,12 +204,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             getPlayer().kickPlayer("NaN in position (Hacking?)"); //Spigot "Nope" -> Descriptive reason
             return;
         }
-
-        if (this.player.viewingCredits) {
-            return;
-        }
         // CraftBukkit end
-        WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
 
         double d0 = this.player.locX;
         double d1 = this.player.locY;
@@ -203,7 +220,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 this.checkMovement = true;
             }
         }
-    
         if (!this.checkMovement || this.player.dead) {
             if (this.e - this.f > 20) {
                 this.a(this.o, this.p, this.q, this.player.yaw, this.player.pitch);
@@ -255,7 +271,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
                 this.p = this.player.locY;
                 this.q = this.player.locZ;
             }
-
+            WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
             worldserver.g(this.player);
             return;
         }
@@ -263,6 +279,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         if (this.player.isSleeping()) {
             this.player.l();
             this.player.setLocation(this.o, this.p, this.q, this.player.yaw, this.player.pitch);
+            WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
             worldserver.g(this.player);
             return;
         }
@@ -306,15 +323,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         double d11 = d7 - this.player.locX;
         double d12 = d8 - this.player.locY;
         double d13 = d9 - this.player.locZ;
-        double d14 = this.player.motX * this.player.motX + this.player.motY * this.player.motY + this.player.motZ * this.player.motZ;
-        double d15 = d11 * d11 + d12 * d12 + d13 * d13;
-
-        // Spigot: make "moved too quickly" limit configurable
-        if (d15 - d14 > org.spigotmc.SpigotConfig.movedTooQuicklyThreshold && this.checkMovement && (!this.minecraftServer.T() || !this.minecraftServer.S().equals(this.player.getName()))) { // CraftBukkit - Added this.checkMovement condition to solve this check being triggered by teleports
-            Logger.warn(this.player.getName() + " moved too quickly! " + d11 + "," + d12 + "," + d13 + " (" + d11 + ", " + d12 + ", " + d13 + ")");
-            this.a(this.o, this.p, this.q, this.player.yaw, this.player.pitch);
-            return;
-        }
 
         if (this.player.onGround && !packetplayinflying.f() && d12 > 0.0D) {
             this.player.bF();
@@ -323,26 +331,13 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         this.player.moveNoClip(d11, d12, d13);
         this.player.onGround = packetplayinflying.f();
 
-        d11 = d7 - this.player.locX;
-        d12 = d8 - this.player.locY;
-        if (d12 > -0.5D || d12 < 0.5D) {
-            d12 = 0.0D;
-        }
-
-        d13 = d9 - this.player.locZ;
-        d15 = d11 * d11 + d12 * d12 + d13 * d13;
         boolean flag1 = false;
-
-        // Spigot: make "moved wrongly" limit configurable
-        if (d15 > org.spigotmc.SpigotConfig.movedWronglyThreshold && !this.player.isSleeping() && !this.player.playerInteractManager.isCreative()) {
-            flag1 = true;
-            Logger.warn(this.player.getName() + " moved wrongly!");
-        }
 
         this.player.setLocation(d7, d8, d9, f2, f3);
         this.player.checkMovement(this.player.locX - d0, this.player.locY - d1, this.player.locZ - d2);
         if (!this.player.noclip) {
             final BlockPosition position = new BlockPosition(player.locX, player.locY, player.locZ);
+            final WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
             if ((flag1 || !worldserver.getWorldBorder().a(position) || worldserver.getType(position).getBlock().u()) && !this.player.isSleeping()) {
                 this.a(this.o, this.p, this.q, f2, f3);
                 return;

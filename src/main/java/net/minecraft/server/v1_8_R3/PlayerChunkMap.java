@@ -188,7 +188,6 @@ public class PlayerChunkMap {
                 entityplayer.chunkCoordIntPairQueue.add(chunkcoordintpair);
             }
         }
-
     }
 
     public void removePlayer(EntityPlayer entityplayer) {
@@ -384,7 +383,11 @@ public class PlayerChunkMap {
                     return;
                 }
                 // CraftBukkit end
-                Chunk chunk = PlayerChunkMap.this.world.getChunkAt(this.location.x, this.location.z);
+                Chunk chunk = PlayerChunkMap.this.world.getChunkIfLoaded(this.location.x, this.location.z);
+
+                if (chunk == null) {
+                    chunk = PlayerChunkMap.this.world.getChunkAt(this.location.x, this.location.z);
+                }
 
                 if (chunk.isReady()) {
                     entityplayer.playerConnection.sendPacket(new PacketPlayOutMapChunk(chunk, true, 0));
@@ -405,7 +408,6 @@ public class PlayerChunkMap {
 
                     PlayerChunkMap.this.a().chunkProviderServer.queueUnload(this.location.x, this.location.z);
                 }
-
             }
         }
 

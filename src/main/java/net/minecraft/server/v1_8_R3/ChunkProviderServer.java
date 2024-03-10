@@ -1,13 +1,8 @@
 package net.minecraft.server.v1_8_R3;
 
-import com.google.common.collect.Lists;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 // CraftBukkit start
 import java.util.Random;
@@ -17,10 +12,11 @@ import org.bukkit.Server;
 import org.bukkit.craftbukkit.v1_8_R3.chunkio.ChunkIOExecutor;
 import org.bukkit.craftbukkit.v1_8_R3.util.LongHash;
 import org.bukkit.craftbukkit.v1_8_R3.util.LongHashSet;
-import org.bukkit.craftbukkit.v1_8_R3.util.LongObjectHashMap;
 import org.bukkit.event.world.ChunkUnloadEvent;
 // CraftBukkit end
 import org.tinylog.Logger;
+
+import io.netty.util.collection.LongObjectHashMap;
 
 public class ChunkProviderServer implements IChunkProvider {
 

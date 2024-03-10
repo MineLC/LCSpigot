@@ -28,31 +28,19 @@ import org.tinylog.Logger;
 
 public class ServerConnection {
 
-    public static final LazyInitVar<NioEventLoopGroup> a = new LazyInitVar() {
-        protected NioEventLoopGroup a() {
+    public static final LazyInitVar<NioEventLoopGroup> a = new LazyInitVar<NioEventLoopGroup>() {
+        protected NioEventLoopGroup init() {
             return new NioEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Server IO #%d").setDaemon(true).build());
         }
-
-        protected Object init() {
-            return this.a();
-        }
     };
-    public static final LazyInitVar<EpollEventLoopGroup> b = new LazyInitVar() {
-        protected EpollEventLoopGroup a() {
+    public static final LazyInitVar<EpollEventLoopGroup> b = new LazyInitVar<EpollEventLoopGroup>() {
+        protected EpollEventLoopGroup init() {
             return new EpollEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Epoll Server IO #%d").setDaemon(true).build());
         }
-
-        protected Object init() {
-            return this.a();
-        }
     };
-    public static final LazyInitVar<LocalEventLoopGroup> c = new LazyInitVar() {
-        protected LocalEventLoopGroup a() {
+    public static final LazyInitVar<LocalEventLoopGroup> c = new LazyInitVar<LocalEventLoopGroup>() {
+        protected LocalEventLoopGroup init() {
             return new LocalEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Local Server IO #%d").setDaemon(true).build());
-        }
-
-        protected Object init() {
-            return this.a();
         }
     };
     private final MinecraftServer f;
@@ -66,37 +54,34 @@ public class ServerConnection {
     }
 
     public void a(InetAddress inetaddress, int i) throws IOException {
-        List list = this.g;
-
         synchronized (this.g) {
-            Class oclass;
             LazyInitVar lazyinitvar;
+            ServerBootstrap bootstrap = new ServerBootstrap();
 
             if (Epoll.isAvailable() && this.f.ai()) {
-                oclass = EpollServerSocketChannel.class;
+                bootstrap = bootstrap.channel(EpollServerSocketChannel.class);
                 lazyinitvar = ServerConnection.b;
                 Logger.info("Using epoll channel type");
             } else {
-                oclass = NioServerSocketChannel.class;
+                bootstrap = bootstrap.channel(NioServerSocketChannel.class);
                 lazyinitvar = ServerConnection.a;
                 Logger.info("Using default channel type");
             }
 
-            this.g.add(((ServerBootstrap) ((ServerBootstrap) (new ServerBootstrap()).channel(oclass)).childHandler(new ChannelInitializer() {
+            this.g.add((bootstrap.childHandler(new ChannelInitializer<Channel>() {
                 protected void initChannel(Channel channel) throws Exception {
                     try {
-                        channel.config().setOption(ChannelOption.TCP_NODELAY, Boolean.valueOf(true));
+                        channel.config().setOption(ChannelOption.TCP_NODELAY, true);
                     } catch (ChannelException channelexception) {
-                        ;
                     }
-            
+    
                     channel.pipeline().addFirst(new io.netty.handler.flush.FlushConsolidationHandler()); // PandaSpigot
                     channel.pipeline().addLast("timeout", new ReadTimeoutHandler(30)).addLast("legacy_query", new LegacyPingHandler(ServerConnection.this)).addLast("splitter", new PacketSplitter()).addLast("decoder", new PacketDecoder(EnumProtocolDirection.SERVERBOUND)).addLast("prepender", new PacketPrepender()).addLast("encoder", new PacketEncoder(EnumProtocolDirection.CLIENTBOUND));
-                    NetworkManager networkmanager = new NetworkManager(EnumProtocolDirection.SERVERBOUND);
+                    NetworkManager networkmanager = new NetworkManager();
 
                     ServerConnection.this.h.add(networkmanager);
                     channel.pipeline().addLast("packet_handler", networkmanager);
-                    networkmanager.a((PacketListener) (new HandshakeListener(ServerConnection.this.f, networkmanager)));
+                    networkmanager.a(new HandshakeListener(ServerConnection.this.f, networkmanager));
                 }
             }).group((EventLoopGroup) lazyinitvar.c()).localAddress(inetaddress, i)).bind().syncUninterruptibly());
         }
@@ -119,8 +104,6 @@ public class ServerConnection {
     }
 
     public void c() {
-        List list = this.h;
-
         synchronized (this.h) {
             // Spigot Start
             // This prevents players from 'gaming' the server, and strategically relogging to increase their position in the tick order
@@ -150,13 +133,9 @@ public class ServerConnection {
                                 CrashReport crashreport = CrashReport.a(exception, "Ticking memory connection");
                                 CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Ticking connection");
 
-                                crashreportsystemdetails.a("Connection", new Callable() {
-                                    public String a() throws Exception {
+                                crashreportsystemdetails.a("Connection", new Callable<String>() {
+                                    public String call() throws Exception {
                                         return networkmanager.toString();
-                                    }
-
-                                    public Object call() throws Exception {
-                                        return this.a();
                                     }
                                 });
                                 throw new ReportedException(crashreport);

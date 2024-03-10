@@ -19,7 +19,6 @@ import io.netty.util.concurrent.GenericFutureListener;
 import java.net.SocketAddress;
 import java.util.Iterator;
 import java.util.Queue;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.crypto.SecretKey;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
@@ -88,7 +87,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
             return this.a();
         }
     };
-    private final EnumProtocolDirection h;
     private final Queue<NetworkManager.QueuedPacket> i = Queues.newConcurrentLinkedQueue();
     public Channel channel;  // CraftBukkit - public
     // Spigot Start
@@ -99,7 +97,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     // Spigot End
     private PacketListener m;
     private IChatBaseComponent n;
-    private boolean o;
     private boolean p;
 
     // PandaSpigot start - Optimize network
@@ -107,10 +104,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     public boolean queueImmunity = false;
     public EnumProtocol protocol;
     // PandaSpigot end
-
-    public NetworkManager(EnumProtocolDirection enumprotocoldirection) {
-        this.h = enumprotocoldirection;
-    }
 
     public void channelActive(ChannelHandlerContext channelhandlercontext) throws Exception {
         super.channelActive(channelhandlercontext);
@@ -156,10 +149,8 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
             try {
                 packet.a(this.m);
             } catch (CancelledPacketHandleException cancelledpackethandleexception) {
-                ;
             }
         }
-
     }
 
     public void a(PacketListener packetlistener) {
@@ -381,7 +372,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     }
 
     public void a(SecretKey secretkey) {
-        this.o = true;
         this.channel.pipeline().addBefore("splitter", "decrypt", new PacketDecrypter(MinecraftEncryption.a(2, secretkey)));
         this.channel.pipeline().addBefore("prepender", "encrypt", new PacketEncrypter(MinecraftEncryption.a(1, secretkey)));
     }
@@ -448,8 +438,13 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
         }
     }
 
-    protected void channelRead0(ChannelHandlerContext channelhandlercontext, Packet object) throws Exception { // CraftBukkit - fix decompile error
-        this.a(channelhandlercontext, (Packet) object);
+    protected void channelRead0(ChannelHandlerContext channelhandlercontext, Packet packet) throws Exception { // CraftBukkit - fix decompile error
+        if (this.channel.isOpen()) {
+            try {
+                packet.a(this.m);
+            } catch (CancelledPacketHandleException cancelledpackethandleexception) {
+            }
+        }
     }
 
     static class QueuedPacket {
@@ -488,7 +483,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
             java.util.List<Packet> ret = new java.util.ArrayList<>(1 + extra.size());
             buildExtraPackets0(extra, ret);
             return ret;
-            }
+        }
     
         private static void buildExtraPackets0(java.util.List<Packet> extraPackets, java.util.List<Packet> into) {
             for (Packet extra : extraPackets) {

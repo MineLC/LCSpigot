@@ -9,11 +9,11 @@ final class WorldBorderCommand implements Command {
 
     @Override
     public void handle(CommandSender sender, String[] args) {
-        if (sender instanceof Player) {
+        if (!(sender instanceof Player)) {
             send(sender, "You need be player to execute this command");
             return;
         }
-        if (checkPermission(sender, "lcspigot.worldborder")) {
+        if (!checkPermission(sender, "lcspigot.worldborder")) {
             return;
         }
         if (args.length != 1) {

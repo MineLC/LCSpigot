@@ -1338,18 +1338,7 @@ public abstract class EntityHuman extends EntityLiving {
     public void checkMovement(double d0, double d1, double d2) {
         if (this.vehicle == null) {
             int i;
-
-            if (this.a(Material.WATER)) {
-                i = Math.round(MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2) * 100.0F);
-                if (i > 0) {
-                    this.applyExhaustion(0.015F * (float) i * 0.01F);
-                }
-            } else if (this.V()) {
-                i = Math.round(MathHelper.sqrt(d0 * d0 + d2 * d2) * 100.0F);
-                if (i > 0) {
-                    this.applyExhaustion(0.015F * (float) i * 0.01F);
-                }
-            } else if (this.onGround) {
+            if (this.onGround) {
                 i = Math.round(MathHelper.sqrt(d0 * d0 + d2 * d2) * 100.0F);
                 if (i > 0) {
                     if (this.isSprinting()) {
@@ -1357,6 +1346,13 @@ public abstract class EntityHuman extends EntityLiving {
                     } else {
                         this.applyExhaustion(0.01F * (float) i * 0.01F);
                     }
+                }
+                return;
+            }
+            if (this.V() || this.a(Material.WATER)) {
+                i = Math.round(MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2) * 100.0F);
+                if (i > 0) {
+                    this.applyExhaustion(0.015F * (float) i * 0.01F);
                 }
             }
         }

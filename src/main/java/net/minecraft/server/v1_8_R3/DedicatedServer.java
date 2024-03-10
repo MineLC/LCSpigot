@@ -1,7 +1,5 @@
 package net.minecraft.server.v1_8_R3;
 
-import com.google.common.collect.Lists;
-
 import lc.lcspigot.commands.CommandStorage;
 import lc.lcspigot.commands.custom.CustomCommandLoader;
 import lc.lcspigot.commands.vanilla.VanillaCommandLoader;
@@ -11,13 +9,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Proxy;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import org.bukkit.Bukkit;
 import org.spigotmc.SpigotConfig;
 import org.tinylog.Logger;
 // CraftBukkit end
@@ -28,6 +23,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     private boolean generateStructures;
     private WorldSettings.EnumGamemode r;
     private boolean s;
+    private boolean nativeTransport = false;
 
     public DedicatedServer(joptsimple.OptionSet options) {
         super(options, Proxy.NO_PROXY, DedicatedServer.a);
@@ -96,7 +92,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         } else if (this.propertyManager.getInt("difficulty", 1) > 3) {
             this.propertyManager.setProperty("difficulty", Integer.valueOf(3));
         }
-
+        nativeTransport = this.propertyManager.getBoolean("use-native-transport", true);
         this.generateStructures = this.propertyManager.getBoolean("generate-structures", true);
         int i = this.propertyManager.getInt("gamemode", WorldSettings.EnumGamemode.SURVIVAL.getId());
 
@@ -303,7 +299,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     }
 
     public boolean getSnooperEnabled() {
-        return this.propertyManager.getBoolean("snooper-enabled", true);
+        return false;
     }
 
     public boolean ae() {
@@ -311,7 +307,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     }
 
     public boolean ai() {
-        return this.propertyManager.getBoolean("use-native-transport", true);
+        return nativeTransport;
     }
 
     public DedicatedPlayerList aP() {

@@ -1011,6 +1011,22 @@ public abstract class Entity {
         this.setYawPitch(f, f1);
     }
 
+    public void moveHead(float f, float f1) {
+        this.lastYaw = this.yaw = f;
+        this.lastPitch = this.pitch = f1;
+        double d3 = (double) (this.lastYaw - f);
+
+        if (d3 < -180.0D) {
+            this.lastYaw += 360.0F;
+        }
+
+        if (d3 >= 180.0D) {
+            this.lastYaw -= 360.0F;
+        }
+
+        this.setYawPitch(f, f1);
+    }
+
     public void setPositionRotation(BlockPosition blockposition, float f, float f1) {
         this.setPositionRotation((double) blockposition.getX() + 0.5D, (double) blockposition.getY(), (double) blockposition.getZ() + 0.5D, f, f1);
     }
