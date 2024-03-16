@@ -29,4 +29,8 @@ public class PacketPlayOutKeepAlive implements Packet<PacketListenerPlayOut> {
         return 0;
     }
 
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

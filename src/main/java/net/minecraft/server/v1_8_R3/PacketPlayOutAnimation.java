@@ -32,4 +32,9 @@ public class PacketPlayOutAnimation implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 11;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

@@ -31,4 +31,9 @@ public class PacketPlayOutStatistic implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 55;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

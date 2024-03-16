@@ -33,4 +33,9 @@ public class PacketPlayOutBed implements Packet<PacketListenerPlayOut> {
         return 10;
     }
 
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
+
 }

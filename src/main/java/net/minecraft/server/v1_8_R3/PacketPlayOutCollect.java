@@ -32,4 +32,9 @@ public class PacketPlayOutCollect implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 13;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

@@ -1,23 +1,17 @@
 package net.minecraft.server.v1_8_R3;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import com.google.common.collect.Maps;
-
-import io.netty.util.collection.IntObjectHashMap;
-
-import java.util.Iterator;
-import java.util.Map;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import org.tinylog.Logger;
 
 public enum EnumProtocol {
 
-    HANDSHAKING(-1) {;
+    HANDSHAKING(0, 1, -1) {;
         {
             this.a(EnumProtocolDirection.SERVERBOUND, PacketHandshakingInSetProtocol.class);
         }
-    }, PLAY(0) {;
+    }, PLAY(74, 26, 0) {;
     {
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutKeepAlive.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketPlayOutLogin.class);
@@ -120,14 +114,14 @@ public enum EnumProtocol {
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInSpectate.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketPlayInResourcePackStatus.class);
     }
-}, STATUS(1) {;
+}, STATUS(2, 2, 1) {;
     {
         this.a(EnumProtocolDirection.SERVERBOUND, PacketStatusInStart.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketStatusOutServerInfo.class);
         this.a(EnumProtocolDirection.SERVERBOUND, PacketStatusInPing.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketStatusOutPong.class);
     }
-}, LOGIN(2) {;
+}, LOGIN(4, 2, 2) {;
     {
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketLoginOutDisconnect.class);
         this.a(EnumProtocolDirection.CLIENTBOUND, PacketLoginOutEncryptionBegin.class);
@@ -141,43 +135,43 @@ public enum EnumProtocol {
     private static int e = -1;
     private static int f = 2;
     private static final EnumProtocol[] g = new EnumProtocol[EnumProtocol.f - EnumProtocol.e + 1];
-    private static final Map<Class<? extends Packet>, EnumProtocol> h = Maps.newHashMap();
     private final int i;
-    private final Map<EnumProtocolDirection, BiMap<Integer, Class<? extends Packet>>> j;
-    private final IntObjectHashMap<Class<? extends Packet>>[] classPerDirection;
+    private final DirectionStorage serverPackets, clientPackets;
 
-    private EnumProtocol(int i) {
-        this.j = Maps.newEnumMap(EnumProtocolDirection.class);
-        this.classPerDirection = new IntObjectHashMap[2];
+    private int serverIndex = 0, clientIndex = 0;
+
+    private EnumProtocol(int clientPackets, int serverPackets, int i) {
         this.i = i;
+        this.serverPackets = new DirectionStorage(serverPackets);
+        this.clientPackets = new DirectionStorage(clientPackets);
     }
 
     protected EnumProtocol a(EnumProtocolDirection enumprotocoldirection, Class<? extends Packet> oclass) {
-        Object object = (BiMap) this.j.get(enumprotocoldirection);
-        IntObjectHashMap<Class<? extends Packet>> classes = classPerDirection[enumprotocoldirection.ordinal()];
-
-        if (object == null) {
-            object = HashBiMap.create();
-            classes = new IntObjectHashMap<>();
-            this.j.put(enumprotocoldirection, (BiMap<Integer, Class<? extends Packet>>) object);
-            this.classPerDirection[enumprotocoldirection.ordinal()] = classes;
+        try {
+            final Constructor<Packet> constructor = (Constructor<Packet>) oclass.getConstructor();
+            if (enumprotocoldirection == EnumProtocolDirection.CLIENTBOUND) {
+                clientPackets.packetsConstructors[clientIndex++] = constructor;
+            } else {
+                serverPackets.packetsConstructors[serverIndex++] = constructor;
+            }
+        } catch (NoSuchMethodException | SecurityException e) {
+            Logger.error(e);
         }
-
-        if (((BiMap) object).containsValue(oclass)) {
-            String s = enumprotocoldirection + " packet " + oclass + " is already known to ID " + ((BiMap) object).inverse().get(oclass);
-
-            Logger.error(s);
-            throw new IllegalArgumentException(s);
-        } else {
-            ((BiMap) object).put(Integer.valueOf(((BiMap) object).size()), oclass);
-            classes.put(classes.size(), oclass);
-            return this;
-        }
+        return this;
     }
 
-    public Packet a(EnumProtocolDirection enumprotocoldirection, int i) throws IllegalAccessException, InstantiationException {
-        Class oclass = this.classPerDirection[enumprotocoldirection.ordinal()].get(i);
-        return oclass == null ? null : (Packet) oclass.newInstance();
+    public Packet a(EnumProtocolDirection enumprotocoldirection, int i) {
+        final Constructor<Packet> constructor = (enumprotocoldirection == EnumProtocolDirection.CLIENTBOUND
+            ? clientPackets
+            : serverPackets
+        ).packetsConstructors[i];
+
+        try {
+            return constructor == null ? null : constructor.newInstance();
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
+            Logger.error(e);
+            return null;
+        }
     }
 
     public int a() {
@@ -188,12 +182,11 @@ public enum EnumProtocol {
         return i >= EnumProtocol.e && i <= EnumProtocol.f ? EnumProtocol.g[i - EnumProtocol.e] : null;
     }
 
-    public static EnumProtocol a(Packet packet) {
-        return (EnumProtocol) EnumProtocol.h.get(packet.getClass());
-    }
-
-    EnumProtocol(int i, Object object) {
-        this(i);
+    private static final class DirectionStorage {
+        private final Constructor<Packet>[] packetsConstructors;
+        private DirectionStorage(int amountPackets) {
+            this.packetsConstructors = new Constructor[amountPackets];
+        }
     }
 
     static {
@@ -209,27 +202,6 @@ public enum EnumProtocol {
             }
 
             EnumProtocol.g[k - EnumProtocol.e] = enumprotocol;
-            Iterator iterator = enumprotocol.j.keySet().iterator();
-
-            while (iterator.hasNext()) {
-                EnumProtocolDirection enumprotocoldirection = (EnumProtocolDirection) iterator.next();
-
-                Class oclass;
-
-                for (Iterator iterator1 = ((BiMap) enumprotocol.j.get(enumprotocoldirection)).values().iterator(); iterator1.hasNext(); EnumProtocol.h.put(oclass, enumprotocol)) {
-                    oclass = (Class) iterator1.next();
-                    if (EnumProtocol.h.containsKey(oclass) && EnumProtocol.h.get(oclass) != enumprotocol) {
-                        throw new Error("Packet " + oclass + " is already assigned to protocol " + EnumProtocol.h.get(oclass) + " - can\'t reassign to " + enumprotocol);
-                    }
-
-                    try {
-                        oclass.newInstance();
-                    } catch (Throwable throwable) {
-                        throw new Error("Packet " + oclass + " fails instantiation checks! " + oclass);
-                    }
-                }
-            }
         }
-
     }
 }

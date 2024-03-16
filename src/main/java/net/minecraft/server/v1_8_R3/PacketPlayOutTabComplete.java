@@ -42,4 +42,9 @@ public class PacketPlayOutTabComplete implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 58;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

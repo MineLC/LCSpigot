@@ -30,4 +30,9 @@ public class PacketStatusOutServerInfo implements Packet<PacketStatusOutListener
     public int id() {
         return 0;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.STATUS;
+    }
 }

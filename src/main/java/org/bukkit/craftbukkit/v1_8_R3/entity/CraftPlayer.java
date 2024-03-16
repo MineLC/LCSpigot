@@ -44,7 +44,6 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftOfflinePlayer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftSound;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
@@ -1164,7 +1163,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     public void updateScaledHealth() {
         AttributeMapServer attributemapserver = (AttributeMapServer) getHandle().getAttributeMap();
-        Set set = attributemapserver.getAttributes();
+        Set<AttributeInstance> set = attributemapserver.getAttributes();
 
         injectScaledMaxHealth(set, true);
 
@@ -1176,11 +1175,11 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         getHandle().maxHealthCache = getMaxHealth();
     }
 
-    public void injectScaledMaxHealth(Collection collection, boolean force) {
+    public void injectScaledMaxHealth(Collection<AttributeInstance> collection, boolean force) {
         if (!scaledHealth && !force) {
             return;
         }
-        for (Object genericInstance : collection) {
+        for (AttributeInstance genericInstance : collection) {
             IAttribute attribute = ((AttributeInstance) genericInstance).getAttribute();
             if (attribute.getName().equals("generic.maxHealth")) {
                 collection.remove(genericInstance);
@@ -1320,34 +1319,31 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         }
     };
 
-    public Player.Spigot spigot()
-    {
+    public Player.Spigot spigot() {
         return spigot;
     }
 
-    public void setTitleTimes(int fadeInTicks, int stayTicks, int fadeOutTicks) {
-        (getHandle()).playerConnection.sendPacket(new PacketPlayOutTitle(fadeInTicks, stayTicks, fadeOutTicks));
+    public void setSubtitle(final Title title, BaseComponent[] components) {
+        final PacketPlayOutTitle packet = new PacketPlayOutTitle(title.getFadeIn(),title.getStay(), title.getFadeOut());
+        packet.a = PacketPlayOutTitle.EnumTitleAction.SUBTITLE;
+        packet.components = components;
+        (getHandle()).playerConnection.sendPacket(packet);
     }
 
-    public void setSubtitle(BaseComponent[] components) {
-        final PacketPlayOutTitle title = new PacketPlayOutTitle(0,0,0);
-        title.a = PacketPlayOutTitle.EnumTitleAction.SUBTITLE;
-        title.components = components;
-        (getHandle()).playerConnection.sendPacket(title);
-    }
-
-    public void showTitle(BaseComponent[] components) {
-        final PacketPlayOutTitle title = new PacketPlayOutTitle(0,0,0);
-        title.a = PacketPlayOutTitle.EnumTitleAction.TITLE;
-        title.components = components;
-        (getHandle()).playerConnection.sendPacket(title);
+    public void showTitle(final Title title) {
+        final PacketPlayOutTitle packet = new PacketPlayOutTitle(title.getFadeIn(),title.getStay(), title.getFadeOut());
+        packet.a = PacketPlayOutTitle.EnumTitleAction.TITLE;
+        packet.components = title.getTitle();
+        (getHandle()).playerConnection.sendPacket(packet);
     }
 
     @Override
-    public void sendTitle(Title title, String subtitle) {
-        Preconditions.checkNotNull(title, "Title is null");
-        setTitleTimes(title.getFadeIn(), title.getStay(), title.getFadeOut());
-        setSubtitle((title.getSubtitle() == null) ? new BaseComponent[0] : title.getSubtitle());
-        showTitle(title.getTitle());
+    public void sendTitle(Title title) {
+        if (title != null) {
+            showTitle(title);    
+            setSubtitle(
+                title,
+                (title.getSubtitle() == null) ? new BaseComponent[0] : title.getSubtitle());
+        }
     }
 }

@@ -69,5 +69,8 @@ public class PacketPlayOutLogin implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 1;
     }
-
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

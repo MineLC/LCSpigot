@@ -27,4 +27,9 @@ public class PacketPlayOutCloseWindow implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 46;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

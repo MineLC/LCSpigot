@@ -166,4 +166,9 @@ public class PacketPlayOutWorldBorder implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 68;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

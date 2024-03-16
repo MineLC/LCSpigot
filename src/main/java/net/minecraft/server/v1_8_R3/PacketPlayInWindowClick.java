@@ -63,4 +63,9 @@ public class PacketPlayInWindowClick implements Packet<PacketListenerPlayIn> {
     public int id() {
         return 14;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

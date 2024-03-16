@@ -61,4 +61,9 @@ public class PacketPlayInUseEntity implements Packet<PacketListenerPlayIn> {
     public int id() {
         return 2;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

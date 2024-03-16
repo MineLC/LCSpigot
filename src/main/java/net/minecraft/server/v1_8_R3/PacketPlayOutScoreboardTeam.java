@@ -114,4 +114,9 @@ public class PacketPlayOutScoreboardTeam implements Packet<PacketListenerPlayOut
     public int id() {
         return 62;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

@@ -104,4 +104,9 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
         return 15;
     }
 
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
+
 }

@@ -36,4 +36,9 @@ public class PacketPlayOutUpdateHealth implements Packet<PacketListenerPlayOut> 
     public int id() {
         return 6;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

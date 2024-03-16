@@ -27,4 +27,9 @@ public class PacketPlayOutKickDisconnect implements Packet<PacketListenerPlayOut
     public int id() {
         return 64;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

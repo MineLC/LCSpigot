@@ -41,4 +41,9 @@ public class PacketPlayOutCustomPayload implements Packet<PacketListenerPlayOut>
     public int id() {
         return 63;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

@@ -47,4 +47,9 @@ public class PacketPlayOutSpawnEntityWeather implements Packet<PacketListenerPla
     public int id() {
         return 44;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

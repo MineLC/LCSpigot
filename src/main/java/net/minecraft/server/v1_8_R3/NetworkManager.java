@@ -186,9 +186,10 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
         if (!hasExtraPackets) {
             this.i.add(new NetworkManager.QueuedPacket(packet, listeners));
         } else {
-            java.util.List<NetworkManager.QueuedPacket> packets = new java.util.ArrayList<>(1 + extraPackets.size());
+            final int size = extraPackets.size();
+            java.util.List<NetworkManager.QueuedPacket> packets = new java.util.ArrayList<>(1 + size);
             packets.add(new NetworkManager.QueuedPacket(packet, (GenericFutureListener<? extends Future<? super Void>>) null)); // delay the future listener until the end of the extra packets
-            for (int i = 0, len = extraPackets.size(); i < len;) {
+            for (int i = 0, len = size; i < len;) {
                 Packet extra = extraPackets.get(i);
                 boolean end = ++i == len;
                 packets.add(new NetworkManager.QueuedPacket(extra, end ? listeners : null)); // append listener to the end
@@ -211,12 +212,9 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
         this.packetWrites.getAndIncrement(); // must be before using canFlush
         final boolean flush = flushConditional || packet instanceof PacketPlayOutKeepAlive || packet instanceof PacketPlayOutKickDisconnect; // no delay for certain packets
         // PandaSpigot end - add flush parameter
-        final EnumProtocol enumprotocol = EnumProtocol.a(packet);
+        final EnumProtocol enumprotocol = packet.getProtocol();
         final EnumProtocol enumprotocol1 = (EnumProtocol) this.channel.attr(NetworkManager.c).get();
 
-        if (enumprotocol1 != enumprotocol) {
-            this.channel.config().setAutoRead(false);
-        }
         final EntityPlayer player = getPlayer();
         if (this.channel.eventLoop().inEventLoop()) {
             if (enumprotocol != enumprotocol1) {
@@ -478,8 +476,8 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
         private static java.util.List<Packet> buildExtraPackets(Packet packet) {
             java.util.List<Packet> extra = packet.getExtraPackets();
             if (extra == null || extra.isEmpty()) {
-            return null;
-                }
+                return null;
+            }
             java.util.List<Packet> ret = new java.util.ArrayList<>(1 + extra.size());
             buildExtraPackets0(extra, ret);
             return ret;

@@ -60,4 +60,9 @@ public class PacketPlayInSteerVehicle implements Packet<PacketListenerPlayIn> {
     public int id() {
         return 12;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

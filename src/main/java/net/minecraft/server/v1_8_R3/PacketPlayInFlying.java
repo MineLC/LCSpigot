@@ -148,4 +148,9 @@ public class PacketPlayInFlying implements Packet<PacketListenerPlayIn> {
     public int id() {
         return 3;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

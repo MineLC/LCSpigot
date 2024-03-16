@@ -12,7 +12,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.Title;
 import org.bukkit.WeatherType;
-import org.bukkit.command.CommandSender;
 import org.bukkit.conversations.Conversable;
 import org.bukkit.map.MapView;
 import org.bukkit.plugin.messaging.PluginMessageRecipient;
@@ -21,7 +20,7 @@ import org.bukkit.scoreboard.Scoreboard;
 /**
  * Represents a player, connected or not
  */
-public interface Player extends HumanEntity, Conversable, CommandSender, OfflinePlayer, PluginMessageRecipient {
+public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginMessageRecipient {
 
     /**
      * Gets the "friendly" name to display of this player. This may include
@@ -765,7 +764,7 @@ public interface Player extends HumanEntity, Conversable, CommandSender, Offline
      */
     public double getHealthScale();
 
-    public void sendTitle(Title title, String subtitle);
+    public void sendTitle(Title title);
     
     // Spigot start
     public class Spigot extends Entity.Spigot

@@ -45,4 +45,9 @@ public class PacketPlayOutSpawnEntityExperienceOrb implements Packet<PacketListe
         return 17;
     }
 
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
+
 }

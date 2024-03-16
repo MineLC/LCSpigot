@@ -39,4 +39,9 @@ public class PacketPlayInClientCommand implements Packet<PacketListenerPlayIn> {
 
         private EnumClientCommand() {}
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

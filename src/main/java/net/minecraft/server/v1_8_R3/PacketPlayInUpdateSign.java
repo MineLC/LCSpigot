@@ -43,4 +43,9 @@ public class PacketPlayInUpdateSign implements Packet<PacketListenerPlayIn> {
     public int id() {
         return 18;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

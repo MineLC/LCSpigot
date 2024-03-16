@@ -36,4 +36,9 @@ public class PacketPlayOutTransaction implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 50;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

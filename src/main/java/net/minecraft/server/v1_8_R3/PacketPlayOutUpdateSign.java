@@ -42,4 +42,9 @@ public class PacketPlayOutUpdateSign implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 51;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

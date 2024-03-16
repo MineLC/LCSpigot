@@ -28,4 +28,9 @@ public class PacketPlayOutOpenSignEditor implements Packet<PacketListenerPlayOut
     public int id() {
         return 54;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

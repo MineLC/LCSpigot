@@ -134,4 +134,9 @@ public class PacketPlayOutSpawnEntity implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 14;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

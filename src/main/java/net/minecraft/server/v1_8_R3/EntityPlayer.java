@@ -951,10 +951,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public void attack(Entity entity) {
         if (this.playerInteractManager.getGameMode() == WorldSettings.EnumGamemode.SPECTATOR) {
             this.setSpectatorTarget(entity);
-        } else {
-            super.attack(entity);
+            return;
         }
-
+        super.attack(entity);
     }
 
     public long D() {

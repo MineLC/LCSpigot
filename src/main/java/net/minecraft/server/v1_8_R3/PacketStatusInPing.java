@@ -23,6 +23,10 @@ public class PacketStatusInPing implements Packet<PacketStatusInListener> {
     public int id() {
         return 1;
     }
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.STATUS;
+    }
     public long a() {
         return this.a;
     }

@@ -51,4 +51,9 @@ public class PacketPlayInSettings implements Packet<PacketListenerPlayIn> {
     public int id() {
         return 21;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

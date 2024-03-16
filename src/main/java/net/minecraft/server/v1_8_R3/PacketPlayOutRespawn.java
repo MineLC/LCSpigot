@@ -44,4 +44,9 @@ public class PacketPlayOutRespawn implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 7;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

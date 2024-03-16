@@ -41,4 +41,9 @@ public class PacketHandshakingInSetProtocol implements Packet<PacketHandshakingI
     public int id() {
         return 0;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.HANDSHAKING;
+    }
 }

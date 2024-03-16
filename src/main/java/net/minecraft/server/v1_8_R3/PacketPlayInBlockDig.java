@@ -49,4 +49,9 @@ public class PacketPlayInBlockDig implements Packet<PacketListenerPlayIn> {
 
         private EnumPlayerDigType() {}
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

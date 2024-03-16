@@ -256,4 +256,9 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 56;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

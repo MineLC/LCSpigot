@@ -87,4 +87,9 @@ public class PacketPlayOutMap implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 52;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

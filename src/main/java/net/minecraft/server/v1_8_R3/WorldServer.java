@@ -904,6 +904,9 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     public void save(boolean flag, IProgressUpdate iprogressupdate) throws ExceptionWorldConflict {
+        if (!LCConfig.getConfig().canSaveWorlds) {
+            return;
+        }
         if (this.chunkProvider.canSave()) {
             org.bukkit.Bukkit.getPluginManager().callEvent(new org.bukkit.event.world.WorldSaveEvent(getWorld())); // CraftBukkit
             if (iprogressupdate != null) {

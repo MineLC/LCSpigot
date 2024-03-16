@@ -28,4 +28,9 @@ public class PacketPlayOutSpawnPosition implements Packet<PacketListenerPlayOut>
     public int id() {
         return 5;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

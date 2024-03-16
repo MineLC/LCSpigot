@@ -37,4 +37,9 @@ public class PacketPlayOutScoreboardDisplayObjective implements Packet<PacketLis
     public int id() {
         return 61;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

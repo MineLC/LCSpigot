@@ -38,4 +38,9 @@ public class PacketPlayOutEntityDestroy implements Packet<PacketListenerPlayOut>
     public int id() {
         return 19;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

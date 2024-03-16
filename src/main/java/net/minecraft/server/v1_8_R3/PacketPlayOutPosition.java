@@ -99,4 +99,9 @@ public class PacketPlayOutPosition implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 8;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

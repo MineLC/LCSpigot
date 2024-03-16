@@ -14,6 +14,8 @@ container-update-delay: 4 # How many ticks wait to update the player inventory. 
 # Vanilla: 10000
 tick-next-tick-cap: 100
 
+can-save-worlds: true
+
 # Knockback pandaspigot:
 knockback:
   friction: 2.0

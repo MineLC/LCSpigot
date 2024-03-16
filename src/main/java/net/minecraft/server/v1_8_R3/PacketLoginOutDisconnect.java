@@ -28,4 +28,9 @@ public class PacketLoginOutDisconnect implements Packet<PacketLoginOutListener> 
     public int id() {
         return 0;
     }
+    
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.LOGIN;
+    }
 }

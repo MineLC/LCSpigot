@@ -41,4 +41,9 @@ public class PacketPlayOutSpawnEntityPainting implements Packet<PacketListenerPl
         return 16;
     }
 
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

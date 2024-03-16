@@ -4,10 +4,10 @@ import java.io.IOException;
 
 public class PacketPlayOutScoreboardScore implements Packet<PacketListenerPlayOut> {
 
-    private String a = "";
-    private String b = "";
-    private int c;
-    private PacketPlayOutScoreboardScore.EnumScoreboardAction d;
+    public String a = "";
+    public String b = "";
+    public int c;
+    public PacketPlayOutScoreboardScore.EnumScoreboardAction d;
 
     public PacketPlayOutScoreboardScore() {}
 
@@ -66,5 +66,10 @@ public class PacketPlayOutScoreboardScore implements Packet<PacketListenerPlayOu
     @Override
     public int id() {
         return 60;
+    }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
     }
 }

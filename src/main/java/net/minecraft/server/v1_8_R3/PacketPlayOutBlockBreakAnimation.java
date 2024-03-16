@@ -36,4 +36,9 @@ public class PacketPlayOutBlockBreakAnimation implements Packet<PacketListenerPl
     public int id() {
         return 37;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

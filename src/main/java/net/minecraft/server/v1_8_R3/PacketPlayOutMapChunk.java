@@ -120,4 +120,9 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 33;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

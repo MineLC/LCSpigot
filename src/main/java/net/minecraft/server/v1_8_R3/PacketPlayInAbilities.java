@@ -104,4 +104,9 @@ public class PacketPlayInAbilities implements Packet<PacketListenerPlayIn> {
     public int id() {
         return 19;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

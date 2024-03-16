@@ -37,4 +37,9 @@ public class PacketLoginInEncryptionBegin implements Packet<PacketLoginInListene
     public int id() {
         return 1;
     }
+    
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.LOGIN;
+    }
 }

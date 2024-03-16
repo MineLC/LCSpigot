@@ -36,4 +36,9 @@ public class PacketPlayOutAttachEntity implements Packet<PacketListenerPlayOut> 
     public int id() {
         return 27;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

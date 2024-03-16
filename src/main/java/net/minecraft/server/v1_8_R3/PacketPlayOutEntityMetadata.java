@@ -38,4 +38,9 @@ public class PacketPlayOutEntityMetadata implements Packet<PacketListenerPlayOut
     public int id() {
         return 28;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

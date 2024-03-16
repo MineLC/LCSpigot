@@ -32,4 +32,9 @@ public class PacketPlayOutPlayerListHeaderFooter implements Packet<PacketListene
     public int id() {
         return 71;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

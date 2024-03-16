@@ -35,4 +35,9 @@ public class PacketPlayOutWindowData implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 49;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

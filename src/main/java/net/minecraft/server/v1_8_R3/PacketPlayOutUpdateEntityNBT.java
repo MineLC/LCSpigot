@@ -32,4 +32,9 @@ public class PacketPlayOutUpdateEntityNBT implements Packet<PacketListenerPlayOu
     public int id() {
         return 73;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

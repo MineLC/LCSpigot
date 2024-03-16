@@ -32,4 +32,9 @@ public class PacketPlayInSpectate implements Packet<PacketListenerPlayIn> {
     public int id() {
         return 24;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

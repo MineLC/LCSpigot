@@ -11,7 +11,6 @@ import io.netty.buffer.ByteBufProcessor;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import io.netty.util.ByteProcessor;
-import io.netty.util.ReferenceCounted;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;

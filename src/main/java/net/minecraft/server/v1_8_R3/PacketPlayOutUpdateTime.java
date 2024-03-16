@@ -39,4 +39,9 @@ public class PacketPlayOutUpdateTime implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 3;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

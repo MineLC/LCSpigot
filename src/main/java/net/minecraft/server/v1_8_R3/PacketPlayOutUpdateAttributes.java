@@ -105,4 +105,9 @@ public class PacketPlayOutUpdateAttributes implements Packet<PacketListenerPlayO
     public int id() {
         return 32;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

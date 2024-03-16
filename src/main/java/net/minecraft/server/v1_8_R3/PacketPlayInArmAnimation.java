@@ -20,4 +20,9 @@ public class PacketPlayInArmAnimation implements Packet<PacketListenerPlayIn> {
     public void a(PacketListenerPlayIn packetlistenerplayin) {
         packetlistenerplayin.a(this);
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

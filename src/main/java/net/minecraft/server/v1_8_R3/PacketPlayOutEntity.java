@@ -70,6 +70,11 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
         }
     }
 
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
+
     public static class PacketPlayOutRelEntityMove extends PacketPlayOutEntity {
 
         public PacketPlayOutRelEntityMove() {}

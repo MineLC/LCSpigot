@@ -27,4 +27,9 @@ public class PacketLoginOutSetCompression implements Packet<PacketLoginOutListen
     public int id() {
         return 3;
     }
+    
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.LOGIN;
+    }
 }

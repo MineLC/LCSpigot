@@ -44,4 +44,6 @@ public interface Packet<T extends PacketListener> {
     default int id() {
         return -1;
     }
+    
+    EnumProtocol getProtocol();
 }

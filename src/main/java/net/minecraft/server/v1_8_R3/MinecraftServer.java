@@ -648,7 +648,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
             this.r.b().a(agameprofile);
         }
 
-        if (autosavePeriod > 0 && this.ticks % autosavePeriod == 0) { // CraftBukkit
+        if (LCConfig.getConfig().canSaveWorlds && autosavePeriod > 0 && this.ticks % autosavePeriod == 0) { // CraftBukkit
             SpigotTimings.worldSaveTimer.startTiming(); // Spigot
             this.methodProfiler.a("save");
             this.v.savePlayers();

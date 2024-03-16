@@ -49,4 +49,9 @@ public class PacketPlayOutEntityEffect implements Packet<PacketListenerPlayOut> 
     public int id() {
         return 29;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

@@ -44,4 +44,9 @@ public class PacketPlayInEntityAction implements Packet<PacketListenerPlayIn> {
 
         private EnumPlayerAction() {}
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

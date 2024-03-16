@@ -36,4 +36,9 @@ public class PacketLoginOutEncryptionBegin implements Packet<PacketLoginOutListe
     public int id() {
         return 1;
     }
+    
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.LOGIN;
+    }
 }

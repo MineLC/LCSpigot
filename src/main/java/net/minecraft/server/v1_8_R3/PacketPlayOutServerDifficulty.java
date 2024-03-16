@@ -29,4 +29,9 @@ public class PacketPlayOutServerDifficulty implements Packet<PacketListenerPlayO
     public int id() {
         return 65;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

@@ -40,4 +40,9 @@ public class PacketPlayOutWorldEvent implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 40;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

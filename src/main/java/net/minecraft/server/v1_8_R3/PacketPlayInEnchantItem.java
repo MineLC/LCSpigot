@@ -34,4 +34,9 @@ public class PacketPlayInEnchantItem implements Packet<PacketListenerPlayIn> {
     public int id() {
         return 17;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

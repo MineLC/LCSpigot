@@ -25,4 +25,9 @@ public class PacketPlayOutSetCompression implements Packet<PacketListenerPlayOut
         return 70;
     }
 
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
+
 }

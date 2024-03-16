@@ -17,4 +17,9 @@ public class PacketStatusInStart implements Packet<PacketStatusInListener> {
     public int id() {
         return 0;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.STATUS;
+    }
 }

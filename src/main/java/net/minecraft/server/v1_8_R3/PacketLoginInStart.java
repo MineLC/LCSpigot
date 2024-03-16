@@ -33,4 +33,9 @@ public class PacketLoginInStart implements Packet<PacketLoginInListener> {
     public int id() {
         return 0;
     }
+    
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.LOGIN;
+    }
 }

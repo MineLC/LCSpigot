@@ -27,4 +27,9 @@ public class PacketPlayOutCamera implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 67;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

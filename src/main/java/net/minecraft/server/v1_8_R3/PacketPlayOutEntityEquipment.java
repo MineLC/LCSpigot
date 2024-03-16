@@ -37,4 +37,9 @@ public class PacketPlayOutEntityEquipment implements Packet<PacketListenerPlayOu
         return 4;
     }
 
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

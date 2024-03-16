@@ -82,4 +82,9 @@ public class PacketPlayOutMultiBlockChange implements Packet<PacketListenerPlayO
     public int id() {
         return 34;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

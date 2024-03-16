@@ -66,4 +66,9 @@ public class PacketPlayOutNamedEntitySpawn implements Packet<PacketListenerPlayO
         return 12;
     }
 
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
+
 }

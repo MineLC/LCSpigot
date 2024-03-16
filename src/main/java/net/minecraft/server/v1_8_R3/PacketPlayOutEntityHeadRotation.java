@@ -32,4 +32,9 @@ public class PacketPlayOutEntityHeadRotation implements Packet<PacketListenerPla
     public int id() {
         return 25;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

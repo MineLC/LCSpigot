@@ -35,4 +35,9 @@ public class PacketPlayOutResourcePackSend implements Packet<PacketListenerPlayO
         return 72;
     }
 
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
+
 }

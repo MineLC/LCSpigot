@@ -34,4 +34,9 @@ public class PacketPlayInResourcePackStatus implements Packet<PacketListenerPlay
 
         private EnumResourcePackStatus() {}
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

@@ -37,4 +37,9 @@ public class PacketLoginOutSuccess implements Packet<PacketLoginOutListener> {
     public int id() {
         return 2;
     }
+    
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.LOGIN;
+    }
 }

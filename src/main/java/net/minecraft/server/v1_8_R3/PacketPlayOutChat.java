@@ -49,4 +49,8 @@ public class PacketPlayOutChat implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 2;
     }
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

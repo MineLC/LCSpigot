@@ -33,4 +33,9 @@ public class PacketPlayOutGameStateChange implements Packet<PacketListenerPlayOu
     public int id() {
         return 43;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

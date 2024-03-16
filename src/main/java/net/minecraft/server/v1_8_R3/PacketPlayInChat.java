@@ -52,4 +52,9 @@ public class PacketPlayInChat implements Packet<PacketListenerPlayIn> {
     public int id() {
         return 1;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

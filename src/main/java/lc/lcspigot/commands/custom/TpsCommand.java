@@ -10,9 +10,9 @@ final class TpsCommand implements Command {
 
     @Override
     public void handle(CommandSender sender, String[] args) {
-        final StringBuilder sb = new StringBuilder(ChatColor.GOLD + "TPS from last 1m, 5m, 15m: " );
-        for (double tps : MinecraftServer.getServer().recentTps) {
-            sb.append( format( tps ) );
+        final StringBuilder sb = new StringBuilder(ChatColor.GOLD + "LCSpigot: TPS from last 1m, 5m, 15m: " );
+        for (final double tps : MinecraftServer.getServer().recentTps) {
+            sb.append(format(tps));
             sb.append( ", " );
         }
         send(sender, sb.substring( 0, sb.length() - 2 ) );

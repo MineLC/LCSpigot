@@ -110,4 +110,9 @@ public class PacketPlayOutTitle implements Packet<PacketListenerPlayOut> {
     public int id() {
         return 69;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

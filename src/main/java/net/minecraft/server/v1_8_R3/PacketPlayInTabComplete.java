@@ -55,4 +55,9 @@ public class PacketPlayInTabComplete implements Packet<PacketListenerPlayIn> {
     public int id() {
         return 20;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

@@ -32,4 +32,9 @@ public class PacketPlayOutRemoveEntityEffect implements Packet<PacketListenerPla
     public int id() {
         return 30;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

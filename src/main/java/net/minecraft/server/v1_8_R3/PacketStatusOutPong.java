@@ -27,4 +27,9 @@ public class PacketStatusOutPong implements Packet<PacketStatusOutListener> {
     public int id() {
         return 1;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.STATUS;
+    }
 }

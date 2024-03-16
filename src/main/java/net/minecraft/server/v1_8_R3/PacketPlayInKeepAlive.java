@@ -28,4 +28,9 @@ public class PacketPlayInKeepAlive implements Packet<PacketListenerPlayIn> {
     public int id() {
         return 0;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }

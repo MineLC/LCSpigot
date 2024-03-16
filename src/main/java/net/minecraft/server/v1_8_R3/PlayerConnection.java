@@ -963,88 +963,90 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
         Entity entity = packetplayinuseentity.a((World) worldserver);
         // Spigot Start
-        if ( entity == player && !player.isSpectator() )
-        {
-            disconnect( "Cannot interact with self!" );
+        if (entity == player && !player.isSpectator()) {
+            disconnect("Cannot interact with self!");
             return;
         }
         // Spigot End
 
         this.player.resetIdleTimer();
         if (entity != null) {
-            boolean flag = this.player.hasLineOfSight(entity);
-            double d0 = 36.0D;
+            return;
+        }
+        boolean flag = this.player.hasLineOfSight(entity);
+        double d0 = 36.0D;
 
-            if (!flag) {
-                d0 = 9.0D;
-            }
-
-            if (this.player.h(entity) < d0) {
-                ItemStack itemInHand = this.player.inventory.getItemInHand(); // CraftBukkit
-
-                if (packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT
-                        || packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT_AT) {
-                    // CraftBukkit start
-                    boolean triggerLeashUpdate = itemInHand != null && itemInHand.getItem() == Items.LEAD && entity instanceof EntityInsentient;
-                    Item origItem = this.player.inventory.getItemInHand() == null ? null : this.player.inventory.getItemInHand().getItem();
-                    PlayerInteractEntityEvent interactEvent;
-                    if (packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT) {
-                        interactEvent = new PlayerInteractEntityEvent((Player) this.getPlayer(), entity.getBukkitEntity());
-                    } else {
-                        Vec3D target = packetplayinuseentity.b();
-                        interactEvent = new PlayerInteractAtEntityEvent((Player) this.getPlayer(), entity.getBukkitEntity(), new org.bukkit.util.Vector(target.a, target.b, target.c));
-                    }
-                    this.server.getPluginManager().callEvent(interactEvent);
-
-                    if (triggerLeashUpdate && (interactEvent.isCancelled() || this.player.inventory.getItemInHand() == null || this.player.inventory.getItemInHand().getItem() != Items.LEAD)) {
-                        // Refresh the current leash state
-                        this.sendPacket(new PacketPlayOutAttachEntity(1, entity, ((EntityInsentient) entity).getLeashHolder()));
-                    }
-
-                    if (interactEvent.isCancelled() || this.player.inventory.getItemInHand() == null || this.player.inventory.getItemInHand().getItem() != origItem) {
-                        // Refresh the current entity metadata
-                        this.sendPacket(new PacketPlayOutEntityMetadata(entity.getId(), entity.datawatcher, true));
-                    }
-
-                    if (interactEvent.isCancelled()) {
-                        return;
-                    }
-                    // CraftBukkit end
-                }
-                if (packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT) {
-                    this.player.u(entity);
-
-                    // CraftBukkit start
-                    if (itemInHand != null && itemInHand.count <= -1) {
-                        this.player.updateInventory(this.player.activeContainer);
-                    }
-                    // CraftBukkit end
-                } else if (packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT_AT) {
-                    entity.a((EntityHuman) this.player, packetplayinuseentity.b());
-
-                    // CraftBukkit start
-                    if (itemInHand != null && itemInHand.count <= -1) {
-                        this.player.updateInventory(this.player.activeContainer);
-                    }
-                    // CraftBukkit end
-                } else if (packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.ATTACK) {
-                    if (entity instanceof EntityItem || entity instanceof EntityExperienceOrb || entity instanceof EntityArrow || (entity == this.player && !player.isSpectator())) { // CraftBukkit
-                        this.disconnect("Attempting to attack an invalid entity");
-                        this.minecraftServer.warning("Player " + this.player.getName() + " tried to attack an invalid entity");
-                        return;
-                    }
-
-                    this.player.attack(entity);
-
-                    // CraftBukkit start
-                    if (itemInHand != null && itemInHand.count <= -1) {
-                        this.player.updateInventory(this.player.activeContainer);
-                    }
-                    // CraftBukkit end
-                }
-            }
+        if (!flag) {
+            d0 = 9.0D;
         }
 
+        if (this.player.h(entity) >= d0) {
+            return;
+        }
+        ItemStack itemInHand = this.player.inventory.getItemInHand(); // CraftBukkit
+
+        if (packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT
+            || packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT_AT
+        ) {
+            // CraftBukkit start
+            boolean triggerLeashUpdate = itemInHand != null && itemInHand.getItem() == Items.LEAD && entity instanceof EntityInsentient;
+            Item origItem = this.player.inventory.getItemInHand() == null ? null : this.player.inventory.getItemInHand().getItem();
+            PlayerInteractEntityEvent interactEvent;
+            if (packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT) {
+                interactEvent = new PlayerInteractEntityEvent((Player) this.getPlayer(), entity.getBukkitEntity());
+            } else {
+                Vec3D target = packetplayinuseentity.b();
+                interactEvent = new PlayerInteractAtEntityEvent((Player) this.getPlayer(), entity.getBukkitEntity(), new org.bukkit.util.Vector(target.a, target.b, target.c));
+            }
+            this.server.getPluginManager().callEvent(interactEvent);
+
+            if (triggerLeashUpdate && (interactEvent.isCancelled() || this.player.inventory.getItemInHand() == null || this.player.inventory.getItemInHand().getItem() != Items.LEAD)) {
+                // Refresh the current leash state
+                this.sendPacket(new PacketPlayOutAttachEntity(1, entity, ((EntityInsentient) entity).getLeashHolder()));
+            }
+
+            if (interactEvent.isCancelled() || this.player.inventory.getItemInHand() == null || this.player.inventory.getItemInHand().getItem() != origItem) {
+                // Refresh the current entity metadata
+                this.sendPacket(new PacketPlayOutEntityMetadata(entity.getId(), entity.datawatcher, true));
+            }
+
+            if (interactEvent.isCancelled()) {
+                return;
+                }
+            // CraftBukkit end
+        }
+
+        if (packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT) {
+            this.player.u(entity);
+
+            // CraftBukkit start
+            if (itemInHand != null && itemInHand.count <= -1) {
+                this.player.updateInventory(this.player.activeContainer);
+            }
+            // CraftBukkit end
+        } else if (packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.INTERACT_AT) {
+            entity.a((EntityHuman) this.player, packetplayinuseentity.b());
+
+            // CraftBukkit start
+            if (itemInHand != null && itemInHand.count <= -1) {
+                this.player.updateInventory(this.player.activeContainer);
+            }
+            // CraftBukkit end
+        } else if (packetplayinuseentity.a() == PacketPlayInUseEntity.EnumEntityUseAction.ATTACK) {
+            if (entity instanceof EntityItem || entity instanceof EntityExperienceOrb || entity instanceof EntityArrow || (entity == this.player && !player.isSpectator())) { // CraftBukkit
+                this.disconnect("Attempting to attack an invalid entity");
+                this.minecraftServer.warning("Player " + this.player.getName() + " tried to attack an invalid entity");
+                return;
+            }
+
+            this.player.attack(entity);
+
+            // CraftBukkit start
+            if (itemInHand != null && itemInHand.count <= -1) {
+                this.player.updateInventory(this.player.activeContainer);
+            }
+            // CraftBukkit end
+        }
     }
 
     public void a(PacketPlayInClientCommand packetplayinclientcommand) {

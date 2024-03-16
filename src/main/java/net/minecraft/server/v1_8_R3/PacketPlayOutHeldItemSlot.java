@@ -28,4 +28,9 @@ public class PacketPlayOutHeldItemSlot implements Packet<PacketListenerPlayOut> 
     public int id() {
         return 9;
     }
+
+    @Override
+    public EnumProtocol getProtocol() {
+        return EnumProtocol.PLAY;
+    }
 }
