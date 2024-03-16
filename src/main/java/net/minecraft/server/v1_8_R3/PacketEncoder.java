@@ -7,25 +7,22 @@ import java.io.IOException;
 import org.tinylog.Logger;
 
 public class PacketEncoder extends MessageToByteEncoder<Packet> {
-
-    private final EnumProtocolDirection c;
-
-    public PacketEncoder(EnumProtocolDirection enumprotocoldirection) {
-        this.c = enumprotocoldirection;
-    }
+    private final PacketDataSerializer serializer = new PacketDataSerializer();
 
     protected void encode(final ChannelHandlerContext channelhandlercontext, final Packet packet, final ByteBuf bytebuf) throws Exception {
         if (packet.id() == -1) {
             throw new IOException("Can\'t serialize unregistered packet");
         }
 
-        final PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf);
-        packetdataserializer.b(packet.id());
+        serializer.setBuffer(bytebuf);
+        serializer.b(packet.id());
 
         try {
-            packet.b(packetdataserializer);
-         } catch (Throwable throwable) {
+            packet.b(serializer);
+        } catch (Throwable throwable) {
             Logger.error(throwable);
+        } finally {
+            serializer.setBuffer(null);
         }
     }
 }

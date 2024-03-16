@@ -76,10 +76,17 @@ public class ServerConnection {
                     }
     
                     channel.pipeline().addFirst(new io.netty.handler.flush.FlushConsolidationHandler()); // PandaSpigot
-                    channel.pipeline().addLast("timeout", new ReadTimeoutHandler(30)).addLast("legacy_query", new LegacyPingHandler(ServerConnection.this)).addLast("splitter", new PacketSplitter()).addLast("decoder", new PacketDecoder(EnumProtocolDirection.SERVERBOUND)).addLast("prepender", new PacketPrepender()).addLast("encoder", new PacketEncoder(EnumProtocolDirection.CLIENTBOUND));
-                    NetworkManager networkmanager = new NetworkManager();
+                    channel.pipeline()
+                        .addLast("timeout", new ReadTimeoutHandler(30))
+                        .addLast("legacy_query", new LegacyPingHandler(ServerConnection.this))
+                        .addLast("splitter", new PacketSplitter())
+                        .addLast("decoder", new PacketDecoder(EnumProtocolDirection.SERVERBOUND))
+                        .addLast("prepender", new PacketPrepender())
+                        .addLast("encoder", new PacketEncoder());
 
+                    NetworkManager networkmanager = new NetworkManager();
                     ServerConnection.this.h.add(networkmanager);
+
                     channel.pipeline().addLast("packet_handler", networkmanager);
                     networkmanager.a(new HandshakeListener(ServerConnection.this.f, networkmanager));
                 }

@@ -384,7 +384,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     }
 
     protected void saveChunks(boolean flag) throws ExceptionWorldConflict { // CraftBukkit - added throws
-        if (!this.N) {
+        if (!this.N && LCConfig.getConfig().canSaveWorlds) {
             // CraftBukkit start
             for (int j = 0; j < worlds.size(); ++j) {
                 WorldServer worldserver = worlds.get(j);

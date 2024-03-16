@@ -8,6 +8,7 @@ import java.util.Map;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
+import org.tinylog.Logger;
 
 import lc.lcspigot.listeners.EventListener;
 import lc.lcspigot.listeners.ListenerData;
@@ -22,14 +23,17 @@ public final class EventsExecutor {
         if (listeners == null) {
             return;
         }
-
-        if (execute(event, EventPriority.LOWEST, listeners)
-            || execute(event, EventPriority.LOW, listeners)
-            || execute(event, EventPriority.NORMAL, listeners)
-            || execute(event, EventPriority.HIGH, listeners)
-            || execute(event, EventPriority.HIGHEST, listeners)
-            || execute(event, EventPriority.MONITOR, listeners)) {
-            return;
+        try {
+            if (execute(event, EventPriority.LOWEST, listeners)
+                || execute(event, EventPriority.LOW, listeners)
+                || execute(event, EventPriority.NORMAL, listeners)
+                || execute(event, EventPriority.HIGH, listeners)
+                || execute(event, EventPriority.HIGHEST, listeners)
+                || execute(event, EventPriority.MONITOR, listeners)) {
+                return;
+            }   
+        } catch (Exception e) {
+            Logger.error(e);
         }
     }
 

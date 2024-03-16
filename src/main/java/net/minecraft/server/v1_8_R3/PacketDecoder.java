@@ -6,9 +6,10 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import java.io.IOException;
 import java.util.List;
 
-public class PacketDecoder extends ByteToMessageDecoder {
+public final class PacketDecoder extends ByteToMessageDecoder {
 
     private final EnumProtocolDirection c;
+    private final PacketDataSerializer serializer = new PacketDataSerializer();
 
     public PacketDecoder(EnumProtocolDirection enumprotocoldirection) {
         this.c = enumprotocoldirection;
@@ -18,17 +19,22 @@ public class PacketDecoder extends ByteToMessageDecoder {
         if (bytebuf.readableBytes() == 0) {
             return;
         }
-        final PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf);
-        final int i = packetdataserializer.e();
-        final Packet<?> packet = ((EnumProtocol) channelhandlercontext.channel().attr(NetworkManager.c).get()).a(this.c, i);
+        serializer.setBuffer(bytebuf);
 
+        final int i = serializer.e();
+        final Packet<?> packet = ((EnumProtocol) channelhandlercontext.channel().attr(NetworkManager.c).get()).a(this.c, i);
         if (packet == null) {
+            serializer.setBuffer(null);
             throw new IOException("Bad packet id " + i);
         }
-        packet.a(packetdataserializer);
-        if (packetdataserializer.readableBytes() > 0) {
-            throw new IOException("Packet " + ((EnumProtocol) channelhandlercontext.channel().attr(NetworkManager.c).get()).a() + "/" + i + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + packetdataserializer.readableBytes() + " bytes extra whilst reading packet " + i);
+        packet.a(serializer);
+
+        if (serializer.readableBytes() > 0) {
+            final int bytes = serializer.readableBytes();
+            serializer.setBuffer(null);
+            throw new IOException("Packet " + ((EnumProtocol) channelhandlercontext.channel().attr(NetworkManager.c).get()).a() + "/" + i + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + bytes + " bytes extra whilst reading packet " + i);
         }
         list.add(packet);
+        serializer.setBuffer(null);
     }
 }

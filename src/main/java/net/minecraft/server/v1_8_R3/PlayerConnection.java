@@ -955,13 +955,16 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         if (vec3d != null) {
             final PreInteractEntityEvent event = new PreInteractEntityEvent(getPlayer(), packetplayinuseentity.getID(), vec3d.a, vec3d.b, vec3d.c, worldserver.getWorld());
             EventsExecutor.execute(event);
-    
+        
             if (event.isCancelled()) {
                 return;
             }
         }
 
         Entity entity = packetplayinuseentity.a((World) worldserver);
+        if (entity == null) {
+            return;
+        }
         // Spigot Start
         if (entity == player && !player.isSpectator()) {
             disconnect("Cannot interact with self!");
@@ -970,9 +973,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         // Spigot End
 
         this.player.resetIdleTimer();
-        if (entity != null) {
-            return;
-        }
         boolean flag = this.player.hasLineOfSight(entity);
         double d0 = 36.0D;
 

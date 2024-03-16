@@ -1755,7 +1755,7 @@ public abstract class EntityLiving extends Entity {
     }
 
     public boolean hasLineOfSight(Entity entity) {
-        return this.world.rayTrace(new Vec3D(this.locX, this.locY + (double) this.getHeadHeight(), this.locZ), new Vec3D(entity.locX, entity.locY + (double) entity.getHeadHeight(), entity.locZ)) == null;
+        return (entity == null) ? false : this.world.rayTrace(new Vec3D(this.locX, this.locY + (double) this.getHeadHeight(), this.locZ), new Vec3D(entity.locX, entity.locY + (double) entity.getHeadHeight(), entity.locZ)) == null;
     }
 
     public Vec3D ap() {

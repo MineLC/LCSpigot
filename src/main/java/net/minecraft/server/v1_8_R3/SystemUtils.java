@@ -18,10 +18,9 @@ public class SystemUtils {
         try {
             futuretask.run();
             return futuretask.get();
-        } catch (ExecutionException executionexception) {
-            Logger.error("Error executing task", executionexception);
-        } catch (InterruptedException interruptedexception) {
-            Logger.error("Error executing task", interruptedexception);
+        } catch (ExecutionException | InterruptedException e) {
+            Logger.error("Error executing task");
+            Logger.error(e);
         }
 
         return null;

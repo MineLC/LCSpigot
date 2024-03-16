@@ -9,6 +9,7 @@ public class PacketCompressor extends MessageToByteEncoder<ByteBuf> {
 
     private final byte[] a = new byte[8192];
     private final Deflater b;
+    private final PacketDataSerializer serializer = new PacketDataSerializer();
     private int c;
 
     public PacketCompressor(int i) {
@@ -18,28 +19,28 @@ public class PacketCompressor extends MessageToByteEncoder<ByteBuf> {
 
     protected void a(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, ByteBuf bytebuf1) throws Exception {
         int i = bytebuf.readableBytes();
-        PacketDataSerializer packetdataserializer = new PacketDataSerializer(bytebuf1);
+        serializer.setBuffer(bytebuf1);
 
         if (i < this.c) {
-            packetdataserializer.b(0);
-            packetdataserializer.writeBytes(bytebuf);
+            serializer.b(0);
+            serializer.writeBytes(bytebuf);
         } else {
             byte[] abyte = new byte[i];
 
             bytebuf.readBytes(abyte);
-            packetdataserializer.b(abyte.length);
+            serializer.b(abyte.length);
             this.b.setInput(abyte, 0, i);
             this.b.finish();
 
             while (!this.b.finished()) {
                 int j = this.b.deflate(this.a);
 
-                packetdataserializer.writeBytes(this.a, 0, j);
+                serializer.writeBytes(this.a, 0, j);
             }
 
             this.b.reset();
         }
-
+        serializer.setBuffer(null);
     }
 
     public void a(int i) {

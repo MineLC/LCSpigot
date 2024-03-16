@@ -28,10 +28,18 @@ import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack; // CraftBukkit
 
 public class PacketDataSerializer extends ByteBuf {
 
-    private final ByteBuf a;
+    private ByteBuf a;
 
-    public PacketDataSerializer(ByteBuf bytebuf) {
-        this.a = bytebuf;
+    public PacketDataSerializer() {
+        this.a = null;
+    }
+
+    public PacketDataSerializer(ByteBuf buffer) {
+        this.a = buffer;
+    }
+
+    public void setBuffer(ByteBuf buffer) {
+        this.a = buffer;
     }
 
     public static int a(int i) {
