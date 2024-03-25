@@ -32,10 +32,14 @@ public final class CommandStorage {
             try {
                 executor.handle(sender, args);
             } catch (Exception e) {
-                Logger.error("Error executing the command: " + command + ". Args: " + Arrays.toString(args));
+                Logger.error("Error executing the command: " + sender.getName() + " executed: " +  command);
                 Logger.error(e);
             }
         });
+
+        if (LCConfig.getConfig().logCommands) {
+            Logger.info(sender.getName() + " executed: " + command);
+        }
     }
 
     public static String[] tab(final CommandSender sender, final String command) {

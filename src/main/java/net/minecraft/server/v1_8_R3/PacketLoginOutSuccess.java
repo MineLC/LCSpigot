@@ -42,4 +42,9 @@ public class PacketLoginOutSuccess implements Packet<PacketLoginOutListener> {
     public EnumProtocol getProtocol() {
         return EnumProtocol.LOGIN;
     }
+
+    @Override
+    public Packet<PacketLoginOutListener> emptyCopy() {
+        return new PacketLoginOutSuccess();
+    }
 }

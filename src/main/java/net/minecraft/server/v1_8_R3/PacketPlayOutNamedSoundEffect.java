@@ -56,4 +56,8 @@ public class PacketPlayOutNamedSoundEffect implements Packet<PacketListenerPlayO
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
     }
+    @Override
+    public Packet<PacketListenerPlayOut> emptyCopy() {
+        return new PacketPlayOutNamedSoundEffect();
+    }
 }

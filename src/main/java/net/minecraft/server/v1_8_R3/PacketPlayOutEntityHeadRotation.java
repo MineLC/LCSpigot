@@ -37,4 +37,8 @@ public class PacketPlayOutEntityHeadRotation implements Packet<PacketListenerPla
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
     }
+    @Override
+    public Packet<PacketListenerPlayOut> emptyCopy() {
+        return new PacketPlayOutEntityHeadRotation();
+    }
 }

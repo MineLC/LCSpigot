@@ -44,7 +44,7 @@ public class PacketPlayOutCombatEvent implements Packet<PacketListenerPlayOut> {
     }
 
     public void b(PacketDataSerializer packetdataserializer) throws IOException {
-        packetdataserializer.a((Enum) this.a);
+        packetdataserializer.a(this.a);
         if (this.a == PacketPlayOutCombatEvent.EnumCombatEventType.END_COMBAT) {
             packetdataserializer.b(this.d);
             packetdataserializer.writeInt(this.c);
@@ -96,5 +96,9 @@ public class PacketPlayOutCombatEvent implements Packet<PacketListenerPlayOut> {
     @Override
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
+    }
+    @Override
+    public Packet<PacketListenerPlayOut> emptyCopy() {
+        return new PacketPlayOutCombatEvent();
     }
 }

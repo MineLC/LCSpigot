@@ -37,4 +37,8 @@ public class PacketPlayOutUpdateEntityNBT implements Packet<PacketListenerPlayOu
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
     }
+    @Override
+    public Packet<PacketListenerPlayOut> emptyCopy() {
+        return new PacketPlayOutUpdateEntityNBT();
+    }
 }

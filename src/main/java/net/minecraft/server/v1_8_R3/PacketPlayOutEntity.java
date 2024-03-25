@@ -68,6 +68,10 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
         public int id() {
             return 22;
         }
+        @Override
+        public Packet<PacketListenerPlayOut> emptyCopy() {
+            return new PacketPlayOutEntityLook();
+        }
     }
 
     @Override
@@ -106,6 +110,10 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
         @Override
         public int id() {
             return 21;
+        }
+        @Override
+        public Packet<PacketListenerPlayOut> emptyCopy() {
+            return new PacketPlayOutRelEntityMove();
         }
     }
 
@@ -149,10 +157,18 @@ public class PacketPlayOutEntity implements Packet<PacketListenerPlayOut> {
         public int id() {
             return 23;
         }
+        @Override
+        public Packet<PacketListenerPlayOut> emptyCopy() {
+            return new PacketPlayOutRelEntityMoveLook();
+        }
     }
 
     @Override
     public int id() {
         return 20;
+    }
+    @Override
+    public Packet<PacketListenerPlayOut> emptyCopy() {
+        return new PacketPlayOutEntity();
     }
 }

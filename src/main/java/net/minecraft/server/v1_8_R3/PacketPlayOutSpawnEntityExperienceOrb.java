@@ -49,5 +49,8 @@ public class PacketPlayOutSpawnEntityExperienceOrb implements Packet<PacketListe
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
     }
-
+    @Override
+    public Packet<PacketListenerPlayOut> emptyCopy() {
+        return new PacketPlayOutSpawnEntityExperienceOrb();
+    }
 }

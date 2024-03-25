@@ -40,4 +40,9 @@ public class PacketPlayInSetCreativeSlot implements Packet<PacketListenerPlayIn>
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
     }
+
+    @Override
+    public Packet<PacketListenerPlayIn> emptyCopy() {
+        return new PacketPlayInSetCreativeSlot();
+    }
 }

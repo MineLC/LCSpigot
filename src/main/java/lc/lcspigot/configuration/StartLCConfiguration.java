@@ -32,7 +32,8 @@ public final class StartLCConfiguration {
             getInt(config, "container-update-delay", 1),
             getInt(config, "tick-next-tick-cap", 10000),
             config.getBoolean("can-save-worlds"),
-            getKnockback(config)
+            getKnockback(config),
+            config.getBoolean("commands.log")
         );
 
         LCConfig.setInstance(lcConfig);

@@ -87,4 +87,8 @@ public class PacketPlayOutMapChunkBulk implements Packet<PacketListenerPlayOut> 
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
     }
+    @Override
+    public Packet<PacketListenerPlayOut> emptyCopy() {
+        return new PacketPlayOutMapChunkBulk();
+    }
 }

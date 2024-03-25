@@ -42,4 +42,9 @@ public class PacketLoginInEncryptionBegin implements Packet<PacketLoginInListene
     public EnumProtocol getProtocol() {
         return EnumProtocol.LOGIN;
     }
+
+    @Override
+    public Packet<PacketLoginInListener> emptyCopy() {
+        return new PacketLoginInEncryptionBegin();
+    }
 }

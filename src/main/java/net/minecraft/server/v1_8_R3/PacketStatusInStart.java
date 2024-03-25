@@ -22,4 +22,8 @@ public class PacketStatusInStart implements Packet<PacketStatusInListener> {
     public EnumProtocol getProtocol() {
         return EnumProtocol.STATUS;
     }
+    @Override
+    public Packet<PacketStatusInListener> emptyCopy() {
+        return new PacketStatusInStart();
+    }
 }

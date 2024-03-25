@@ -108,5 +108,8 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
     }
-
+    @Override
+    public Packet<PacketListenerPlayOut> emptyCopy() {
+        return new PacketPlayOutSpawnEntityLiving();
+    }
 }

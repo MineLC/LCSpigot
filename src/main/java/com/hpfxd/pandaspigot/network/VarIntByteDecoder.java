@@ -9,7 +9,7 @@ public class VarIntByteDecoder implements ByteProcessor {
     
     private DecodeResult result = DecodeResult.TOO_SHORT;
     
-    public boolean process(byte k) {
+    public boolean process(final byte k) {
         if (k == 0 && this.bytesRead == 0) {
             this.result = DecodeResult.RUN_OF_ZEROES;
             return true;

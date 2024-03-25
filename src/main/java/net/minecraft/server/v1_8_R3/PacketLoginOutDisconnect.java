@@ -33,4 +33,9 @@ public class PacketLoginOutDisconnect implements Packet<PacketLoginOutListener> 
     public EnumProtocol getProtocol() {
         return EnumProtocol.LOGIN;
     }
+
+    @Override
+    public Packet<PacketLoginOutListener> emptyCopy() {
+        return new PacketLoginOutDisconnect();
+    }
 }

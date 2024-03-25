@@ -84,4 +84,9 @@ public class PacketPlayInBlockPlace implements Packet<PacketListenerPlayIn> {
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
     }
+
+    @Override
+    public Packet<PacketListenerPlayIn> emptyCopy() {
+        return new PacketPlayInBlockPlace();
+    }
 }

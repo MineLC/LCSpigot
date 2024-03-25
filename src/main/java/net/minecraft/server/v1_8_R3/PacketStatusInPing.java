@@ -30,4 +30,8 @@ public class PacketStatusInPing implements Packet<PacketStatusInListener> {
     public long a() {
         return this.a;
     }
+    @Override
+    public Packet<PacketStatusInListener> emptyCopy() {
+        return new PacketStatusInPing();
+    }
 }

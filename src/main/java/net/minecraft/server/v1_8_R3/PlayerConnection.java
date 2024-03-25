@@ -1091,6 +1091,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         this.player.resetIdleTimer();
         if (this.player.activeContainer.windowId == packetplayinwindowclick.a() && this.player.activeContainer.c(this.player)) {
             boolean cancelled = this.player.isSpectator(); // CraftBukkit - see below if
+            if (packetplayinwindowclick.b() >= 54) {
+                return;
+            }
             if (false) { // this.player.isSpectator()) {
                 ArrayList arraylist = Lists.newArrayList();
 

@@ -7,12 +7,12 @@
 
     <name>LCSpigot</name>
     <description>Spigot for MineLC</description>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
     </properties>
 
     <repositories>

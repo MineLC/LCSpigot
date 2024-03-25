@@ -38,4 +38,9 @@ public class PacketLoginInStart implements Packet<PacketLoginInListener> {
     public EnumProtocol getProtocol() {
         return EnumProtocol.LOGIN;
     }
+
+    @Override
+    public Packet<PacketLoginInListener> emptyCopy() {
+        return new PacketLoginInStart();
+    }
 }

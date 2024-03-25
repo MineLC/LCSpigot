@@ -42,4 +42,8 @@ public class PacketPlayOutScoreboardDisplayObjective implements Packet<PacketLis
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
     }
+    @Override
+    public Packet<PacketListenerPlayOut> emptyCopy() {
+        return new PacketPlayOutScoreboardDisplayObjective();
+    }
 }

@@ -10,9 +10,11 @@ public final class PacketDecoder extends ByteToMessageDecoder {
 
     private final EnumProtocolDirection c;
     private final PacketDataSerializer serializer = new PacketDataSerializer();
+    private final NetworkManager manager;
 
-    public PacketDecoder(EnumProtocolDirection enumprotocoldirection) {
+    public PacketDecoder(EnumProtocolDirection enumprotocoldirection, NetworkManager manager) {
         this.c = enumprotocoldirection;
+        this.manager = manager;
     }
 
     protected void decode(ChannelHandlerContext channelhandlercontext, ByteBuf bytebuf, List<Object> list) throws Exception {
@@ -22,7 +24,7 @@ public final class PacketDecoder extends ByteToMessageDecoder {
         serializer.setBuffer(bytebuf);
 
         final int i = serializer.e();
-        final Packet<?> packet = ((EnumProtocol) channelhandlercontext.channel().attr(NetworkManager.c).get()).a(this.c, i);
+        final Packet<?> packet = manager.protocol.createEmptyPacket(this.c, i);
         if (packet == null) {
             serializer.setBuffer(null);
             throw new IOException("Bad packet id " + i);
@@ -32,7 +34,7 @@ public final class PacketDecoder extends ByteToMessageDecoder {
         if (serializer.readableBytes() > 0) {
             final int bytes = serializer.readableBytes();
             serializer.setBuffer(null);
-            throw new IOException("Packet " + ((EnumProtocol) channelhandlercontext.channel().attr(NetworkManager.c).get()).a() + "/" + i + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + bytes + " bytes extra whilst reading packet " + i);
+            throw new IOException("Packet " + manager.protocol.a() + "/" + i + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + bytes + " bytes extra whilst reading packet " + i);
         }
         list.add(packet);
         serializer.setBuffer(null);

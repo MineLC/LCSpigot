@@ -86,6 +86,10 @@ public class PacketPlayInFlying implements Packet<PacketListenerPlayIn> {
         public int id() {
             return 5;
         }
+        @Override
+        public Packet<PacketListenerPlayIn> emptyCopy() {
+            return new PacketPlayInLook();
+        }
     }
 
     public static class PacketPlayInPosition extends PacketPlayInFlying {
@@ -111,7 +115,10 @@ public class PacketPlayInFlying implements Packet<PacketListenerPlayIn> {
         public int id() {
             return 4;
         }
-
+        @Override
+        public Packet<PacketListenerPlayIn> emptyCopy() {
+            return new PacketPlayInPosition();
+        }
     }
 
     public static class PacketPlayInPositionLook extends PacketPlayInFlying {
@@ -142,6 +149,10 @@ public class PacketPlayInFlying implements Packet<PacketListenerPlayIn> {
         public int id() {
             return 6;
         }
+        @Override
+        public Packet<PacketListenerPlayIn> emptyCopy() {
+            return new PacketPlayInPositionLook();
+        }
     }
 
     @Override
@@ -152,5 +163,10 @@ public class PacketPlayInFlying implements Packet<PacketListenerPlayIn> {
     @Override
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
+    }
+
+    @Override
+    public Packet<PacketListenerPlayIn> emptyCopy() {
+        return new PacketPlayInFlying();
     }
 }

@@ -46,4 +46,9 @@ public class PacketHandshakingInSetProtocol implements Packet<PacketHandshakingI
     public EnumProtocol getProtocol() {
         return EnumProtocol.HANDSHAKING;
     }
+
+    @Override
+    public Packet<PacketHandshakingInListener> emptyCopy() {
+        return new PacketHandshakingInSetProtocol();
+    }
 }

@@ -12,16 +12,16 @@ public class VarIntUtil {
         VARINT_EXACT_BYTE_LENGTHS[32] = 1;
     }
     
-    public static int readVarInt(ByteBuf buf) {
-        int read = readVarIntSafely(buf);
+    public static int readVarInt(final ByteBuf buf) {
+        final int read = readVarIntSafely(buf);
         if (read == Integer.MIN_VALUE)
             throw new CorruptedFrameException("Bad VarInt decoded"); 
         return read;
     }
     
-    public static int readVarIntSafely(ByteBuf buf) {
+    public static int readVarIntSafely(final ByteBuf buf) {
         int i = 0;
-        int maxRead = Math.min(5, buf.readableBytes());
+        final int maxRead = Math.min(5, buf.readableBytes());
         for (int j = 0; j < maxRead; j++) {
             int k = buf.readByte();
             i |= (k & 0x7F) << j * 7;
@@ -31,11 +31,11 @@ public class VarIntUtil {
         return Integer.MIN_VALUE;
     }
     
-    public static int varIntBytes(int value) {
+    public static int varIntBytes(final int value) {
         return VARINT_EXACT_BYTE_LENGTHS[Integer.numberOfLeadingZeros(value)];
     }
     
-    public static void writeVarInt(ByteBuf buf, int value) {
+    public static void writeVarInt(final ByteBuf buf, final int value) {
         if ((value & 0xFFFFFF80) == 0) {
             buf.writeByte(value);
         } else if ((value & 0xFFFFC000) == 0) {
@@ -46,27 +46,22 @@ public class VarIntUtil {
         } 
     }
     
-    private static void writeVarIntFull(ByteBuf buf, int value) {
+    private static void writeVarIntFull(final ByteBuf buf, final int value) {
         if ((value & 0xFFFFFF80) == 0) {
             buf.writeByte(value);
         } else if ((value & 0xFFFFC000) == 0) {
-            int w = (value & 0x7F | 0x80) << 8 | value >>> 7;
-            buf.writeShort(w);
+            buf.writeShort((value & 0x7F | 0x80) << 8 | value >>> 7);
         } else if ((value & 0xFFE00000) == 0) {
-            int w = (value & 0x7F | 0x80) << 16 | (value >>> 7 & 0x7F | 0x80) << 8 | value >>> 14;
-            buf.writeMedium(w);
+            buf.writeMedium((value & 0x7F | 0x80) << 16 | (value >>> 7 & 0x7F | 0x80) << 8 | value >>> 14);
         } else if ((value & 0xF0000000) == 0) {
-            int w = (value & 0x7F | 0x80) << 24 | (value >>> 7 & 0x7F | 0x80) << 16 | (value >>> 14 & 0x7F | 0x80) << 8 | value >>> 21;
-            buf.writeInt(w);
+            buf.writeInt((value & 0x7F | 0x80) << 24 | (value >>> 7 & 0x7F | 0x80) << 16 | (value >>> 14 & 0x7F | 0x80) << 8 | value >>> 21);
         } else {
-            int w = (value & 0x7F | 0x80) << 24 | (value >>> 7 & 0x7F | 0x80) << 16 | (value >>> 14 & 0x7F | 0x80) << 8 | value >>> 21 & 0x7F | 0x80;
-            buf.writeInt(w);
+            buf.writeInt((value & 0x7F | 0x80) << 24 | (value >>> 7 & 0x7F | 0x80) << 16 | (value >>> 14 & 0x7F | 0x80) << 8 | value >>> 21 & 0x7F | 0x80);
             buf.writeByte(value >>> 28);
         } 
     }
     
-    public static void write21BitVarInt(ByteBuf buf, int value) {
-        int w = (value & 0x7F | 0x80) << 16 | (value >>> 7 & 0x7F | 0x80) << 8 | value >>> 14;
-        buf.writeMedium(w);
+    public static void write21BitVarInt(final ByteBuf buf, final int value) {
+        buf.writeMedium((value & 0x7F | 0x80) << 16 | (value >>> 7 & 0x7F | 0x80) << 8 | value >>> 14);
     }
 }

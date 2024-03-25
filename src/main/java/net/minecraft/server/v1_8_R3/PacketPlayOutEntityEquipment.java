@@ -42,4 +42,8 @@ public class PacketPlayOutEntityEquipment implements Packet<PacketListenerPlayOu
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
     }
+    @Override
+    public Packet<PacketListenerPlayOut> emptyCopy() {
+        return new PacketPlayOutEntityEquipment();
+    }
 }

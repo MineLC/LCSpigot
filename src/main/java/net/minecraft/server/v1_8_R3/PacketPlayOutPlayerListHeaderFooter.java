@@ -37,4 +37,8 @@ public class PacketPlayOutPlayerListHeaderFooter implements Packet<PacketListene
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
     }
+    @Override
+    public Packet<PacketListenerPlayOut> emptyCopy() {
+        return new PacketPlayOutPlayerListHeaderFooter();
+    }
 }

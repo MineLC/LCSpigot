@@ -38,4 +38,8 @@ public class PacketPlayOutGameStateChange implements Packet<PacketListenerPlayOu
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
     }
+    @Override
+    public Packet<PacketListenerPlayOut> emptyCopy() {
+        return new PacketPlayOutGameStateChange();
+    }
 }

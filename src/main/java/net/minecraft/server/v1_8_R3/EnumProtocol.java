@@ -1,6 +1,5 @@
 package net.minecraft.server.v1_8_R3;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import org.tinylog.Logger;
@@ -148,30 +147,28 @@ public enum EnumProtocol {
 
     protected EnumProtocol a(EnumProtocolDirection enumprotocoldirection, Class<? extends Packet> oclass) {
         try {
-            final Constructor<Packet> constructor = (Constructor<Packet>) oclass.getConstructor();
+            final Packet constructor = oclass.getConstructor().newInstance();
             if (enumprotocoldirection == EnumProtocolDirection.CLIENTBOUND) {
                 clientPackets.packetsConstructors[clientIndex++] = constructor;
             } else {
                 serverPackets.packetsConstructors[serverIndex++] = constructor;
             }
-        } catch (NoSuchMethodException | SecurityException e) {
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
+                | IllegalArgumentException | InvocationTargetException e) {
             Logger.error(e);
         }
         return this;
     }
 
-    public Packet a(EnumProtocolDirection enumprotocoldirection, int i) {
-        final Constructor<Packet> constructor = (enumprotocoldirection == EnumProtocolDirection.CLIENTBOUND
+    public Packet createEmptyPacket(EnumProtocolDirection enumprotocoldirection, int i) {
+        final DirectionStorage storage = (enumprotocoldirection == EnumProtocolDirection.CLIENTBOUND
             ? clientPackets
             : serverPackets
-        ).packetsConstructors[i];
-
-        try {
-            return constructor == null ? null : constructor.newInstance();
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
-            Logger.error(e);
+        );
+        if (storage.packetsConstructors.length < i || i > storage.packetsConstructors.length) {
             return null;
         }
+        return storage.packetsConstructors[i].emptyCopy();
     }
 
     public int a() {
@@ -183,9 +180,9 @@ public enum EnumProtocol {
     }
 
     private static final class DirectionStorage {
-        private final Constructor<Packet>[] packetsConstructors;
+        private final Packet[] packetsConstructors;
         private DirectionStorage(int amountPackets) {
-            this.packetsConstructors = new Constructor[amountPackets];
+            this.packetsConstructors = new Packet[amountPackets];
         }
     }
 

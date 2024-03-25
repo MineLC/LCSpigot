@@ -74,17 +74,18 @@ public class ServerConnection {
                         channel.config().setOption(ChannelOption.TCP_NODELAY, true);
                     } catch (ChannelException channelexception) {
                     }
+
+                    final NetworkManager networkmanager = new NetworkManager();
     
                     channel.pipeline().addFirst(new io.netty.handler.flush.FlushConsolidationHandler()); // PandaSpigot
                     channel.pipeline()
                         .addLast("timeout", new ReadTimeoutHandler(30))
                         .addLast("legacy_query", new LegacyPingHandler(ServerConnection.this))
                         .addLast("splitter", new PacketSplitter())
-                        .addLast("decoder", new PacketDecoder(EnumProtocolDirection.SERVERBOUND))
+                        .addLast("decoder", new PacketDecoder(EnumProtocolDirection.SERVERBOUND, networkmanager))
                         .addLast("prepender", new PacketPrepender())
                         .addLast("encoder", new PacketEncoder());
 
-                    NetworkManager networkmanager = new NetworkManager();
                     ServerConnection.this.h.add(networkmanager);
 
                     channel.pipeline().addLast("packet_handler", networkmanager);

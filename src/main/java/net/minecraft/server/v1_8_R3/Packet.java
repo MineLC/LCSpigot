@@ -46,4 +46,5 @@ public interface Packet<T extends PacketListener> {
     }
     
     EnumProtocol getProtocol();
+    Packet<T> emptyCopy();
 }

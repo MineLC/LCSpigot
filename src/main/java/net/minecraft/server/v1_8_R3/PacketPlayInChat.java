@@ -24,11 +24,10 @@ public class PacketPlayInChat implements Packet<PacketListenerPlayIn> {
         packetdataserializer.a(this.a);
     }
 
-    // Spigot Start
     private static final java.util.concurrent.ExecutorService executors = java.util.concurrent.Executors.newCachedThreadPool(
             new com.google.common.util.concurrent.ThreadFactoryBuilder().setDaemon( true ).setNameFormat( "Async Chat Thread - #%d" ).build() );
     public void a(final PacketListenerPlayIn packetlistenerplayin) {
-        if ( !a.startsWith("/") )
+        if (a.charAt(0) != '/' )
         {
             executors.submit( new Runnable()
             {
@@ -56,5 +55,10 @@ public class PacketPlayInChat implements Packet<PacketListenerPlayIn> {
     @Override
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
+    }
+
+    @Override
+    public Packet<PacketListenerPlayIn> emptyCopy() {
+        return new PacketPlayInChat();
     }
 }

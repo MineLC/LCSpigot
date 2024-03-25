@@ -48,4 +48,8 @@ public class PacketPlayInUpdateSign implements Packet<PacketListenerPlayIn> {
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
     }
+    @Override
+    public Packet<PacketListenerPlayIn> emptyCopy() {
+        return new PacketPlayInUpdateSign();
+    }
 }

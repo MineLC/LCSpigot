@@ -59,7 +59,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
     }
     // PandaSpigot end
 
-    public static final AttributeKey<EnumProtocol> c = AttributeKey.valueOf("protocol");
     public static final LazyInitVar<NioEventLoopGroup> d = new LazyInitVar<NioEventLoopGroup>() {
         protected NioEventLoopGroup a() {
             return new NioEventLoopGroup(0, (new ThreadFactoryBuilder()).setNameFormat("Netty Client IO #%d").setDaemon(true).build());
@@ -123,7 +122,6 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
 
     public void a(EnumProtocol enumprotocol) {
         this.protocol = enumprotocol;
-        this.channel.attr(NetworkManager.c).set(enumprotocol);
         this.channel.config().setAutoRead(true);
     }
 
@@ -213,7 +211,7 @@ public class NetworkManager extends SimpleChannelInboundHandler<Packet> {
         final boolean flush = flushConditional || packet instanceof PacketPlayOutKeepAlive || packet instanceof PacketPlayOutKickDisconnect; // no delay for certain packets
         // PandaSpigot end - add flush parameter
         final EnumProtocol enumprotocol = packet.getProtocol();
-        final EnumProtocol enumprotocol1 = (EnumProtocol) this.channel.attr(NetworkManager.c).get();
+        final EnumProtocol enumprotocol1 = protocol;
 
         final EntityPlayer player = getPlayer();
         if (this.channel.eventLoop().inEventLoop()) {

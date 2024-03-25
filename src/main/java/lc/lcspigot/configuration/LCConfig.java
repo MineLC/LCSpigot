@@ -11,14 +11,16 @@ public final class LCConfig {
     public final int tickNextTickCap;
     public final ConfigKnockback knockback;
     public final boolean canSaveWorlds;
+    public final boolean logCommands;
 
-    LCConfig(String unknownCommand, int tickTime, int containerUpdateDelay, int tickNextTickCap, boolean canSaveWorlds, ConfigKnockback knockback) {
+    LCConfig(String unknownCommand, int tickTime, int containerUpdateDelay, int tickNextTickCap, boolean canSaveWorlds, ConfigKnockback knockback, final boolean logCommands) {
         this.unknownCommand = unknownCommand;
         this.tickTime = tickTime;
         this.containerUpdateDelay = containerUpdateDelay;
         this.tickNextTickCap = tickNextTickCap;
         this.canSaveWorlds = canSaveWorlds;
         this.knockback = knockback;
+        this.logCommands = logCommands;
     }
 
     public static LCConfig getConfig() {

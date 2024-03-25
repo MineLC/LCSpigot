@@ -41,4 +41,8 @@ public class PacketPlayOutBlockBreakAnimation implements Packet<PacketListenerPl
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
     }
+    @Override
+    public Packet<PacketListenerPlayOut> emptyCopy() {
+        return new PacketPlayOutBlockBreakAnimation();
+    }
 }

@@ -51,4 +51,8 @@ public class PacketPlayOutScoreboardObjective implements Packet<PacketListenerPl
     public EnumProtocol getProtocol() {
         return EnumProtocol.PLAY;
     }
+    @Override
+    public Packet<PacketListenerPlayOut> emptyCopy() {
+        return new PacketPlayOutScoreboardObjective();
+    }
 }
