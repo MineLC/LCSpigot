@@ -2,6 +2,9 @@ package net.minecraft.server.v1_8_R3;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import io.netty.util.collection.IntObjectHashMap;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,10 +17,10 @@ public class EntityTypes {
 
     private static final Map<String, Class<? extends Entity>> c = Maps.newHashMap();
     private static final Map<Class<? extends Entity>, String> d = Maps.newHashMap();
-    private static final Map<Integer, Class<? extends Entity>> e = Maps.newHashMap();
+    private static final IntObjectHashMap<Class<? extends Entity>> e = new IntObjectHashMap<>();
     private static final Map<Class<? extends Entity>, Integer> f = Maps.newHashMap();
     private static final Map<String, Integer> g = Maps.newHashMap();
-    public static final Map<Integer, EntityTypes.MonsterEggInfo> eggInfo = Maps.newLinkedHashMap();
+    public static final IntObjectHashMap<EntityTypes.MonsterEggInfo> eggInfo = new IntObjectHashMap<>();
 
     private static void a(Class<? extends Entity> oclass, String s, int i) {
         if (EntityTypes.c.containsKey(s)) {
@@ -39,7 +42,7 @@ public class EntityTypes {
 
     private static void a(Class<? extends Entity> oclass, String s, int i, int j, int k) {
         a(oclass, s, i);
-        EntityTypes.eggInfo.put(Integer.valueOf(i), new EntityTypes.MonsterEggInfo(i, j, k));
+        EntityTypes.eggInfo.put(i, new EntityTypes.MonsterEggInfo(i, j, k));
     }
 
     public static Entity createEntityByName(String s, World world) {
@@ -56,6 +59,10 @@ public class EntityTypes {
         }
 
         return entity;
+    }
+
+    public static int getEntityByName(String s) {
+        return g.get(s);
     }
 
     public static Entity a(NBTTagCompound nbttagcompound, World world) {
