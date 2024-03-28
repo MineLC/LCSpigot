@@ -17,31 +17,6 @@ public class BlockReed extends Block {
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        if (world.getType(blockposition.down()).getBlock() == Blocks.REEDS || this.e(world, blockposition, iblockdata)) {
-            if (world.isEmpty(blockposition.up())) {
-                int i;
-
-                for (i = 1; world.getType(blockposition.down(i)).getBlock() == this; ++i) {
-                    ;
-                }
-
-                if (i < 3) {
-                    int j = ((Integer) iblockdata.get(BlockReed.AGE)).intValue();
-
-                    if (j >= (byte) range(3, (world.growthOdds / world.spigotConfig.caneModifier * 15) + 0.5F, 15)) { // Spigot
-                        // CraftBukkit start
-                        // world.setTypeUpdate(blockposition.up(), this.getBlockData()); // CraftBukkit
-                        BlockPosition upPos = blockposition.up();
-                        org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory.handleBlockGrowEvent(world, upPos.getX(), upPos.getY(), upPos.getZ(), this, 0);
-                        world.setTypeAndData(blockposition, iblockdata.set(BlockReed.AGE, Integer.valueOf(0)), 4);
-                        // CraftBukkit end
-                    } else {
-                        world.setTypeAndData(blockposition, iblockdata.set(BlockReed.AGE, Integer.valueOf(j + 1)), 4);
-                    }
-                }
-            }
-
-        }
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {

@@ -25,15 +25,6 @@ public class BlockNetherWart extends BlockPlant {
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        int i = ((Integer) iblockdata.get(BlockNetherWart.AGE)).intValue();
-
-        if (i < 3 && random.nextInt(10) == 0) {
-            iblockdata = iblockdata.set(BlockNetherWart.AGE, Integer.valueOf(i + 1));
-            // world.setTypeAndData(blockposition, iblockdata, 2); // CraftBukkit
-            org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory.handleBlockGrowEvent(world, blockposition.getX(), blockposition.getY(), blockposition.getZ(), this, toLegacyData(iblockdata)); // CraftBukkit
-        }
-
-        super.b(world, blockposition, iblockdata, random);
     }
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {

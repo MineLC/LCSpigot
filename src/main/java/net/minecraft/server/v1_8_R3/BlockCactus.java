@@ -17,31 +17,7 @@ public class BlockCactus extends Block {
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        BlockPosition blockposition1 = blockposition.up();
 
-        if (world.isEmpty(blockposition1)) {
-            int i;
-
-            for (i = 1; world.getType(blockposition.down(i)).getBlock() == this; ++i) {
-                ;
-            }
-
-            if (i < 3) {
-                int j = ((Integer) iblockdata.get(BlockCactus.AGE)).intValue();
-
-                if (j >= (byte) range(3, (world.growthOdds / world.spigotConfig.cactusModifier * 15) + 0.5F, 15)) { // Spigot
-                    // world.setTypeUpdate(blockposition1, this.getBlockData()); // CraftBukkit
-                    IBlockData iblockdata1 = iblockdata.set(BlockCactus.AGE, Integer.valueOf(0));
-
-                    CraftEventFactory.handleBlockGrowEvent(world, blockposition1.getX(), blockposition1.getY(), blockposition1.getZ(), this, 0); // CraftBukkit
-                    world.setTypeAndData(blockposition, iblockdata1, 4);
-                    this.doPhysics(world, blockposition1, iblockdata1, this);
-                } else {
-                    world.setTypeAndData(blockposition, iblockdata.set(BlockCactus.AGE, Integer.valueOf(j + 1)), 4);
-                }
-
-            }
-        }
     }
 
     public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {

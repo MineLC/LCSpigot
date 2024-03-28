@@ -47,18 +47,6 @@ public class EntityEgg extends EntityProjectile {
             hatchingType = event.getHatchingType();
         }
 
-        if (hatching) {
-            for (int k = 0; k < numHatching; k++) {
-                org.bukkit.entity.Entity entity = world.getWorld().spawn(new org.bukkit.Location(world.getWorld(), this.locX, this.locY, this.locZ, this.yaw, 0.0F), hatchingType.getEntityClass(), org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.EGG);
-                if (entity instanceof Ageable) {
-                    ((Ageable) entity).setBaby();
-                }
-             }
-        }
-        // CraftBukkit end
-
-        double d0 = 0.08D;
-
         for (int j = 0; j < 8; ++j) {
             this.world.addParticle(EnumParticle.ITEM_CRACK, this.locX, this.locY, this.locZ, ((double) RANDOM.nextFloat() - 0.5D) * 0.08D, ((double) RANDOM.nextFloat() - 0.5D) * 0.08D, ((double) RANDOM.nextFloat() - 0.5D) * 0.08D, new int[] { Item.getId(Items.EGG)});
         }

@@ -2,12 +2,6 @@ package net.minecraft.server.v1_8_R3;
 
 import com.google.common.base.Predicate;
 
-// CraftBukkit start
-import org.bukkit.craftbukkit.v1_8_R3.util.BlockStateListPopulator;
-import org.bukkit.event.block.BlockRedstoneEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-// CraftBukkit end
-
 public class BlockPumpkin extends BlockDirectional {
 
     private ShapeDetector snowGolemPart;

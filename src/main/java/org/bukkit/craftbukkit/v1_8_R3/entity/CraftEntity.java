@@ -60,10 +60,6 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
             if (entity instanceof EntityWaterAnimal) {
                 return new CraftWaterMob(server, (EntityWaterAnimal) entity);
             }
-            else if (entity instanceof EntityCreature) {
-                return new CraftCreature(server, (EntityCreature) entity);
-            }
-  
             if (entity instanceof EntityArmorStand) { return new CraftArmorStand(server, (EntityArmorStand) entity); }
             return new CraftLivingEntity(server, (EntityLiving) entity);
         } else if (entity instanceof EntityExperienceOrb) { return new CraftExperienceOrb(server, (EntityExperienceOrb) entity); }

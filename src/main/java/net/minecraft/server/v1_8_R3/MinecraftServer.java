@@ -658,10 +658,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
             this.methodProfiler.b();
             SpigotTimings.worldSaveTimer.stopTiming(); // Spigot
         }
-
-        // PandaSpigot start - Modern tick loop
-        long endTime = System.nanoTime();
-        long remaining = (TICK_TIME - (endTime - lastTick)) - catchupTime;
         // PandaSpigot end
 
         this.methodProfiler.a("tallying");
@@ -730,12 +726,8 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
         }
         SpigotTimings.timeUpdateTimer.stopTiming(); // Spigot
 
-        int i;
-
-        for (i = 0; i < this.worlds.size(); ++i) {
+        for (final WorldServer worldserver : worlds) {
             // if (i == 0 || this.getAllowNether()) {
-                WorldServer worldserver = this.worlds.get(i);
-
                 this.methodProfiler.a(worldserver.getWorldData().getName());
                 /* Drop global time updates
                 if (this.ticks % 20 == 0) {
@@ -823,8 +815,8 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
         this.methodProfiler.c("tickables");
 
         SpigotTimings.tickablesTimer.startTiming(); // Spigot
-        for (i = 0; i < this.p.size(); ++i) {
-            ((IUpdatePlayerListBox) this.p.get(i)).c();
+        for (IUpdatePlayerListBox list : p) {
+            list.c();
         }
         SpigotTimings.tickablesTimer.stopTiming(); // Spigot
 

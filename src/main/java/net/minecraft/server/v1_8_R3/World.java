@@ -30,8 +30,6 @@ import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
 import org.bukkit.event.block.BlockCanBuildEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.event.weather.ThunderChangeEvent;
 // CraftBukkit end
 
 public abstract class World implements IBlockAccess {
@@ -1001,9 +999,7 @@ public abstract class World implements IBlockAccess {
 
         // CraftBukkit start
         org.bukkit.event.Cancellable event = null;
-        if (entity instanceof EntityLiving && !(entity instanceof EntityPlayer)) {
-            event = CraftEventFactory.callCreatureSpawnEvent((EntityLiving) entity, spawnReason);
-        } else if (entity instanceof EntityItem) {
+        if (entity instanceof EntityItem) {
             event = CraftEventFactory.callItemSpawnEvent((EntityItem) entity);
         } else if (entity.getBukkitEntity() instanceof org.bukkit.entity.Projectile) {
             // Not all projectiles extend EntityProjectile, so check for Bukkit interface instead
@@ -1327,17 +1323,10 @@ public abstract class World implements IBlockAccess {
 
     public void b(BlockPosition blockposition, Block block, int i, int j) {}
 
-    public void tickEntities() {
-        this.methodProfiler.a("entities");
-        this.methodProfiler.a("global");
-
-        int i;
-        Entity entity;
-        CrashReport crashreport;
-        CrashReportSystemDetails crashreportsystemdetails;
-
-        for (i = 0; i < this.k.size(); ++i) {
-            entity = (Entity) this.k.get(i);
+    private void tickKEntities() {
+        final int size = k.size();
+        for (int i = 0; i < size; ++i) {
+            final Entity entity = (Entity) this.k.get(i);
             // CraftBukkit start - Fixed an NPE
             if (entity == null) {
                 continue;
@@ -1348,37 +1337,29 @@ public abstract class World implements IBlockAccess {
                 ++entity.ticksLived;
                 entity.t_();
             } catch (Throwable throwable) {
-                crashreport = CrashReport.a(throwable, "Ticking entity");
-                crashreportsystemdetails = crashreport.a("Entity being ticked");
-                entity.appendEntityCrashDetails(crashreportsystemdetails);
-
-                throw new ReportedException(crashreport);
+                final CrashReport report = CrashReport.a(throwable, "Ticking entity");
+                entity.appendEntityCrashDetails(report.a("Entity being ticked"));
+                throw new ReportedException(report);
             }
 
             if (entity.dead) {
                 this.k.remove(i--);
             }
         }
+    }
+
+    public void tickEntities() {
+        this.methodProfiler.a("entities");
+        this.methodProfiler.a("global");
 
         this.methodProfiler.c("remove");
         this.entityList.removeAll(this.g);
 
-        int j;
-        int k;
+        tickKEntities();
 
-        for (i = 0; i < this.g.size(); ++i) {
-            entity = (Entity) this.g.get(i);
-            j = entity.ae;
-            k = entity.ag;
-            if (entity.ad && this.isChunkLoaded(j, k, true)) {
-                this.getChunkAt(j, k).b(entity);
-            }
+        for (final Entity entity : this.g) {
+            this.b(entity);
         }
-
-        for (i = 0; i < this.g.size(); ++i) {
-            this.b((Entity) this.g.get(i));
-        }
-
         this.g.clear();
         this.methodProfiler.c("regular");
 
@@ -1392,7 +1373,7 @@ public abstract class World implements IBlockAccess {
                 entitiesThisCycle < entityList.size() && (entitiesThisCycle % 10 == 0 || entityLimiter.shouldContinue());
                 tickPosition++, entitiesThisCycle++) {
             tickPosition = (tickPosition < entityList.size()) ? tickPosition : 0;
-            entity = (Entity) this.entityList.get(this.tickPosition);
+            final Entity entity = (Entity) this.entityList.get(this.tickPosition);
             // CraftBukkit end
             if (entity.vehicle != null) {
                 if (!entity.vehicle.dead && entity.vehicle.passenger == entity) {
@@ -1410,9 +1391,8 @@ public abstract class World implements IBlockAccess {
                     this.g(entity);
                     SpigotTimings.tickEntityTimer.stopTiming(); // Spigot
                 } catch (Throwable throwable1) {
-                    crashreport = CrashReport.a(throwable1, "Ticking entity");
-                    crashreportsystemdetails = crashreport.a("Entity being ticked");
-                    entity.appendEntityCrashDetails(crashreportsystemdetails);
+                    CrashReport crashreport = CrashReport.a(throwable1, "Ticking entity");
+                    entity.appendEntityCrashDetails(crashreport.a("Entity being ticked"));
                     throw new ReportedException(crashreport);
                 }
             }
@@ -1420,8 +1400,8 @@ public abstract class World implements IBlockAccess {
             this.methodProfiler.b();
             this.methodProfiler.a("remove");
             if (entity.dead) {
-                j = entity.ae;
-                k = entity.ag;
+                int j = entity.ae;
+                int  k = entity.ag;
                 if (entity.ad && this.isChunkLoaded(j, k, true)) {
                     this.getChunkAt(j, k).b(entity);
                 }

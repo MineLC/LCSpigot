@@ -1,7 +1,6 @@
 package net.minecraft.server.v1_8_R3;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,7 +15,7 @@ public class DataWatcher {
     private final Entity a;
     private boolean b = true;
     // Spigot Start
-    private static final gnu.trove.map.TObjectIntMap classToId = new gnu.trove.map.hash.TObjectIntHashMap( 10, 0.5f, -1 );
+    private static final gnu.trove.map.TObjectIntMap classToId = new gnu.trove.map.hash.TObjectIntHashMap<>( 10, 0.5f, -1 );
     private final gnu.trove.map.TIntObjectMap dataValues = new gnu.trove.map.hash.TIntObjectHashMap( 10, 0.5f, -1 );
     // These exist as an attempt at backwards compatability for (broken) NMS plugins
     private static final Map<Class<?>, Integer> c = gnu.trove.TDecorators.wrap( classToId );

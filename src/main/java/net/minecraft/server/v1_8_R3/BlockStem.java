@@ -51,46 +51,10 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        super.b(world, blockposition, iblockdata, random);
-        if (world.getLightLevel(blockposition.up()) >= 9) {
-            float f = BlockCrops.a((Block) this, world, blockposition);
 
-            if (random.nextInt((int) (world.growthOdds / (this == Blocks.PUMPKIN_STEM? world.spigotConfig.pumpkinModifier : world.spigotConfig.melonModifier) * (25.0F / f)) + 1) == 0) { // Spigot
-                int i = ((Integer) iblockdata.get(BlockStem.AGE)).intValue();
-
-                if (i < 7) {
-                    iblockdata = iblockdata.set(BlockStem.AGE, Integer.valueOf(i + 1));
-                    // world.setTypeAndData(blockposition, iblockdata, 2); // CraftBukkit
-                    CraftEventFactory.handleBlockGrowEvent(world, blockposition.getX(), blockposition.getY(), blockposition.getZ(), this, toLegacyData(iblockdata)); // CraftBukkit
-                } else {
-                    Iterator iterator = EnumDirection.EnumDirectionLimit.HORIZONTAL.iterator();
-
-                    while (iterator.hasNext()) {
-                        EnumDirection enumdirection = (EnumDirection) iterator.next();
-
-                        if (world.getType(blockposition.shift(enumdirection)).getBlock() == this.blockFruit) {
-                            return;
-                        }
-                    }
-
-                    blockposition = blockposition.shift(EnumDirection.EnumDirectionLimit.HORIZONTAL.a(random));
-                    Block block = world.getType(blockposition.down()).getBlock();
-
-                    if (world.getType(blockposition).getBlock().material == Material.AIR && (block == Blocks.FARMLAND || block == Blocks.DIRT || block == Blocks.GRASS)) {
-                        // world.setTypeUpdate(blockposition, this.blockFruit.getBlockData()); // CraftBukkit
-                        CraftEventFactory.handleBlockGrowEvent(world, blockposition.getX(), blockposition.getY(), blockposition.getZ(), this.blockFruit, 0); // CraftBukkit
-                    }
-                }
-            }
-
-        }
     }
 
     public void g(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        int i = ((Integer) iblockdata.get(BlockStem.AGE)).intValue() + MathHelper.nextInt(World.RANDOM, 2, 5);
-
-        // world.setTypeAndData(blockposition, iblockdata.set(BlockStem.AGE, Integer.valueOf(Math.min(7, i))), 2);
-        CraftEventFactory.handleBlockGrowEvent(world, blockposition.getX(), blockposition.getY(), blockposition.getZ(), this, Math.min(7, i)); // CraftBukkit
     }
 
     public void j() {

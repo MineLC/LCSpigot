@@ -120,7 +120,7 @@ public class ServerConnection {
                 Collections.shuffle( this.h );
             }
             // Spigot End
-            Iterator iterator = this.h.iterator();
+            final Iterator<NetworkManager> iterator = this.h.iterator();
 
             while (iterator.hasNext()) {
                 final NetworkManager networkmanager = (NetworkManager) iterator.next();

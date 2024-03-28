@@ -10,7 +10,6 @@ import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityAmbient;
 import net.minecraft.server.v1_8_R3.EntityArrow;
 import net.minecraft.server.v1_8_R3.EntityComplexPart;
-import net.minecraft.server.v1_8_R3.EntityCreature;
 import net.minecraft.server.v1_8_R3.EntityFireball;
 import net.minecraft.server.v1_8_R3.EntityFireworks;
 import net.minecraft.server.v1_8_R3.EntityHuman;
@@ -39,7 +38,7 @@ public class ActivationRange
      */
     public static byte initializeEntityActivationType(Entity entity)
     {
-        if ( entity instanceof EntityCreature || entity instanceof EntityAmbient )
+        if (entity instanceof EntityAmbient )
         {
             return 2; // Animal
         } else
@@ -184,10 +183,6 @@ public class ActivationRange
         {
             EntityLiving living = (EntityLiving) entity;
             if ( /*TODO: Missed mapping? living.attackTicks > 0 || */ living.hurtTicks > 0 || living.effects.size() > 0 )
-            {
-                return true;
-            }
-            if ( entity instanceof EntityCreature && ( (EntityCreature) entity ).getGoalTarget() != null )
             {
                 return true;
             }

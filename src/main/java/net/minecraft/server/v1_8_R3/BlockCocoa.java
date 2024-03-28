@@ -17,17 +17,7 @@ public class BlockCocoa extends BlockDirectional implements IBlockFragilePlantEl
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         if (!this.e(world, blockposition, iblockdata)) {
             this.f(world, blockposition, iblockdata);
-        } else if (World.RANDOM.nextInt(5) == 0) {
-            int i = ((Integer) iblockdata.get(BlockCocoa.AGE)).intValue();
-
-            if (i < 2) {
-                // CraftBukkit start
-                IBlockData data = iblockdata.set(AGE, Integer.valueOf(i + 1));
-                CraftEventFactory.handleBlockGrowEvent(world, blockposition.getX(), blockposition.getY(), blockposition.getZ(), this, toLegacyData(data));
-                // CraftBukkit end
-            }
         }
-
     }
 
     public boolean e(World world, BlockPosition blockposition, IBlockData iblockdata) {
@@ -130,10 +120,7 @@ public class BlockCocoa extends BlockDirectional implements IBlockFragilePlantEl
     }
 
     public void b(World world, Random random, BlockPosition blockposition, IBlockData iblockdata) {
-        // CraftBukkit start
-        IBlockData data = iblockdata.set(AGE, Integer.valueOf(((Integer) iblockdata.get(AGE)).intValue() + 1));
-        CraftEventFactory.handleBlockGrowEvent(world, blockposition.getX(), blockposition.getY(), blockposition.getZ(), this, toLegacyData(data));
-        // CraftBukkit end
+
     }
 
     public IBlockData fromLegacyData(int i) {

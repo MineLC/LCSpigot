@@ -2,8 +2,6 @@ package net.minecraft.server.v1_8_R3;
 
 import java.util.Random;
 
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason; // CraftBukkit
-
 public class BlockMonsterEggs extends Block {
 
     public static final BlockStateEnum<BlockMonsterEggs.EnumMonsterEggVarient> VARIANT = BlockStateEnum.of("variant", BlockMonsterEggs.EnumMonsterEggVarient.class);

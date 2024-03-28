@@ -145,9 +145,9 @@ public enum EnumProtocol {
         this.clientPackets = new DirectionStorage(clientPackets);
     }
 
-    protected EnumProtocol a(EnumProtocolDirection enumprotocoldirection, Class<? extends Packet> oclass) {
+    protected EnumProtocol a(EnumProtocolDirection enumprotocoldirection, Class<? extends Packet<?>> oclass) {
         try {
-            final Packet constructor = oclass.getConstructor().newInstance();
+            final Packet<?> constructor = oclass.getConstructor().newInstance();
             if (enumprotocoldirection == EnumProtocolDirection.CLIENTBOUND) {
                 clientPackets.packetsConstructors[clientIndex++] = constructor;
             } else {
@@ -160,7 +160,7 @@ public enum EnumProtocol {
         return this;
     }
 
-    public Packet createEmptyPacket(EnumProtocolDirection enumprotocoldirection, int i) {
+    public Packet<?> createEmptyPacket(EnumProtocolDirection enumprotocoldirection, int i) {
         final DirectionStorage storage = (enumprotocoldirection == EnumProtocolDirection.CLIENTBOUND
             ? clientPackets
             : serverPackets
@@ -180,7 +180,7 @@ public enum EnumProtocol {
     }
 
     private static final class DirectionStorage {
-        private final Packet[] packetsConstructors;
+        private final Packet<?>[] packetsConstructors;
         private DirectionStorage(int amountPackets) {
             this.packetsConstructors = new Packet[amountPackets];
         }

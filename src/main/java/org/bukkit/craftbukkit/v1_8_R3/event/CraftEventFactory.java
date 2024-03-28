@@ -17,9 +17,7 @@ import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.CreatureSpawner;
 import org.bukkit.craftbukkit.v1_8_R3.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_8_R3.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -32,17 +30,12 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creeper;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Horse;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Pig;
-import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownExpBottle;
 import org.bukkit.entity.ThrownPotion;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.*;
 import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
@@ -244,18 +237,6 @@ public class CraftEventFactory {
         BlockDamageEvent event = new BlockDamageEvent(player, blockClicked, itemInHand, instaBreak);
         craftServer.getPluginManager().callEvent(event);
 
-        return event;
-    }
-
-    /**
-     * CreatureSpawnEvent
-     */
-    public static CreatureSpawnEvent callCreatureSpawnEvent(EntityLiving entityliving, SpawnReason spawnReason) {
-        LivingEntity entity = (LivingEntity) entityliving.getBukkitEntity();
-        CraftServer craftServer = (CraftServer) entity.getServer();
-
-        CreatureSpawnEvent event = new CreatureSpawnEvent(entity, spawnReason);
-        craftServer.getPluginManager().callEvent(event);
         return event;
     }
 
@@ -583,35 +564,9 @@ public class CraftEventFactory {
         return event;
     }
 
-    public static void handleBlockGrowEvent(World world, int x, int y, int z, net.minecraft.server.v1_8_R3.Block type, int data) {
-        Block block = world.getWorld().getBlockAt(x, y, z);
-        CraftBlockState state = (CraftBlockState) block.getState();
-        state.setTypeId(net.minecraft.server.v1_8_R3.Block.getId(type));
-        state.setRawData((byte) data);
-
-        BlockGrowEvent event = new BlockGrowEvent(block, state);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (!event.isCancelled()) {
-            state.update(true);
-        }
-    }
-
     public static FoodLevelChangeEvent callFoodLevelChangeEvent(EntityHuman entity, int level) {
         FoodLevelChangeEvent event = new FoodLevelChangeEvent(entity.getBukkitEntity(), level);
         entity.getBukkitEntity().getServer().getPluginManager().callEvent(event);
-        return event;
-    }
-
-    public static PigZapEvent callPigZapEvent(Entity pig, Entity lightning, Entity pigzombie) {
-        PigZapEvent event = new PigZapEvent((Pig) pig.getBukkitEntity(), (LightningStrike) lightning.getBukkitEntity(), (PigZombie) pigzombie.getBukkitEntity());
-        pig.getBukkitEntity().getServer().getPluginManager().callEvent(event);
-        return event;
-    }
-
-    public static HorseJumpEvent callHorseJumpEvent(Entity horse, float power) {
-        HorseJumpEvent event = new HorseJumpEvent((Horse) horse.getBukkitEntity(), power);
-        horse.getBukkitEntity().getServer().getPluginManager().callEvent(event);
         return event;
     }
 

@@ -1,13 +1,7 @@
 package net.minecraft.server.v1_8_R3;
 
 import com.google.common.base.Predicate;
-import java.util.Iterator;
 import java.util.Random;
-
-// CraftBukkit start
-import org.bukkit.craftbukkit.v1_8_R3.util.BlockStateListPopulator;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-// CraftBukkit end
 
 public class BlockSkull extends BlockContainer {
 
