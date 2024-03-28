@@ -370,7 +370,6 @@ public class ChunkProviderGenerate implements IChunkProvider {
         }
 
         biomebase.a(this.m, this.h, new BlockPosition(k, 0, l));
-        SpawnerCreature.a(this.m, biomebase, k + 8, l + 8, 16, 16, this.h);
         blockposition = blockposition.a(8, 0, 8);
 
         for (k1 = 0; k1 < 16; ++k1) {

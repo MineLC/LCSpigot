@@ -15,7 +15,6 @@ import net.minecraft.server.v1_8_R3.TileEntityDispenser;
 import net.minecraft.server.v1_8_R3.TileEntityDropper;
 import net.minecraft.server.v1_8_R3.TileEntityFurnace;
 import net.minecraft.server.v1_8_R3.TileEntityHopper;
-import net.minecraft.server.v1_8_R3.TileEntityMobSpawner;
 import net.minecraft.server.v1_8_R3.TileEntityNote;
 import net.minecraft.server.v1_8_R3.TileEntitySign;
 import net.minecraft.server.v1_8_R3.TileEntitySkull;
@@ -29,7 +28,6 @@ import org.bukkit.craftbukkit.v1_8_R3.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_8_R3.block.CraftBrewingStand;
 import org.bukkit.craftbukkit.v1_8_R3.block.CraftChest;
 import org.bukkit.craftbukkit.v1_8_R3.block.CraftCommandBlock;
-import org.bukkit.craftbukkit.v1_8_R3.block.CraftCreatureSpawner;
 import org.bukkit.craftbukkit.v1_8_R3.block.CraftDispenser;
 import org.bukkit.craftbukkit.v1_8_R3.block.CraftDropper;
 import org.bukkit.craftbukkit.v1_8_R3.block.CraftFurnace;
@@ -159,8 +157,9 @@ public class CraftMetaBlockState extends CraftMetaItem implements BlockStateMeta
             case REDSTONE_COMPARATOR:
             case FLOWER_POT_ITEM:
                 return true;
+            default:
+                return false;
         }
-        return false;
     }
 
     @Override
@@ -207,11 +206,6 @@ public class CraftMetaBlockState extends CraftMetaItem implements BlockStateMeta
                 te = new TileEntityHopper();
             }
             return new CraftHopper(material, (TileEntityHopper) te);
-        case MOB_SPAWNER:
-            if (te == null) {
-                te = new TileEntityMobSpawner();
-            }
-            return new CraftCreatureSpawner(material, (TileEntityMobSpawner) te);
         case NOTE_BLOCK:
             if (te == null) {
                 te = new TileEntityNote();
@@ -283,9 +277,6 @@ public class CraftMetaBlockState extends CraftMetaItem implements BlockStateMeta
             break;
         case HOPPER:
             valid = te instanceof TileEntityHopper;
-            break;
-        case MOB_SPAWNER:
-            valid = te instanceof TileEntityMobSpawner;
             break;
         case NOTE_BLOCK:
             valid = te instanceof TileEntityNote;

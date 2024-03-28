@@ -127,22 +127,6 @@ public class CraftEventFactory {
     }
 
     /**
-     * Mob spawner event
-     */
-    public static SpawnerSpawnEvent callSpawnerSpawnEvent(Entity spawnee, int spawnerX, int spawnerY, int spawnerZ) {
-        org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity entity = spawnee.getBukkitEntity();
-        BlockState state = entity.getWorld().getBlockAt(spawnerX, spawnerY, spawnerZ).getState();
-
-        if (!(state instanceof CreatureSpawner)) {
-            state = null;
-        }
-
-        SpawnerSpawnEvent event = new SpawnerSpawnEvent(entity, (CreatureSpawner) state);
-        entity.getServer().getPluginManager().callEvent(event);
-        return event;
-    }
-
-    /**
      * Bucket methods
      */
     public static PlayerBucketEmptyEvent callPlayerBucketEmptyEvent(EntityHuman who, int clickedX, int clickedY, int clickedZ, EnumDirection clickedFace, ItemStack itemInHand) {

@@ -9,7 +9,7 @@ public class BlockMobSpawner extends BlockContainer {
     }
 
     public TileEntity a(World world, int i) {
-        return new TileEntityMobSpawner();
+        return null;
     }
 
     public Item getDropType(IBlockData iblockdata, Random random, int i) {

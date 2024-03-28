@@ -22,8 +22,12 @@ public class PacketPlayOutSpawnEntityLiving implements Packet<PacketListenerPlay
     public PacketPlayOutSpawnEntityLiving() {}
 
     public PacketPlayOutSpawnEntityLiving(EntityLiving entityliving) {
+        this(entityliving, EntityTypes.a(entityliving));
+    }
+
+    public PacketPlayOutSpawnEntityLiving(EntityLiving entityliving, int id) {
         this.a = entityliving.getId();
-        this.b = (byte) EntityTypes.a(entityliving);
+        this.b = (byte)id;
         this.c = MathHelper.floor(entityliving.locX * 32.0D);
         this.d = MathHelper.floor(entityliving.locY * 32.0D);
         this.e = MathHelper.floor(entityliving.locZ * 32.0D);

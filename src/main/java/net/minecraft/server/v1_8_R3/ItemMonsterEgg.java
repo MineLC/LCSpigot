@@ -26,24 +26,6 @@ public class ItemMonsterEgg extends Item {
             return false;
         } else {
             IBlockData iblockdata = world.getType(blockposition);
-
-            if (iblockdata.getBlock() == Blocks.MOB_SPAWNER) {
-                TileEntity tileentity = world.getTileEntity(blockposition);
-
-                if (tileentity instanceof TileEntityMobSpawner) {
-                    MobSpawnerAbstract mobspawnerabstract = ((TileEntityMobSpawner) tileentity).getSpawner();
-
-                    mobspawnerabstract.setMobName(EntityTypes.b(itemstack.getData()));
-                    tileentity.update();
-                    world.notify(blockposition);
-                    if (!entityhuman.abilities.canInstantlyBuild) {
-                        --itemstack.count;
-                    }
-
-                    return true;
-                }
-            }
-
             blockposition = blockposition.shift(enumdirection);
             double d0 = 0.0D;
 

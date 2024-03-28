@@ -266,8 +266,6 @@ public class CraftBlock implements Block {
             return new CraftDropper(this);
         case HOPPER:
             return new CraftHopper(this);
-        case MOB_SPAWNER:
-            return new CraftCreatureSpawner(this);
         case NOTE_BLOCK:
             return new CraftNoteBlock(this);
         case JUKEBOX:

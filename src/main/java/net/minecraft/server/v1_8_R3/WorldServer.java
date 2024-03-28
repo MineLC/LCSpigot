@@ -143,10 +143,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             if (!(result instanceof TileEntityNote)) {
                 result = fixTileEntity(pos, type, result);
             }
-        } else if (type == Blocks.MOB_SPAWNER) {
-            if (!(result instanceof TileEntityMobSpawner)) {
-                result = fixTileEntity(pos, type, result);
-            }
         } else if ((type == Blocks.STANDING_SIGN) || (type == Blocks.WALL_SIGN)) {
             if (!(result instanceof TileEntitySign)) {
                 result = fixTileEntity(pos, type, result);

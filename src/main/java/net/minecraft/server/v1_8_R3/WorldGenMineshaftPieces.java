@@ -534,11 +534,6 @@ public class WorldGenMineshaftPieces {
                         if (structureboundingbox.b((BaseBlockPosition) blockposition)) {
                             this.c = true;
                             world.setTypeAndData(blockposition, Blocks.MOB_SPAWNER.getBlockData(), 2);
-                            TileEntity tileentity = world.getTileEntity(blockposition);
-
-                            if (tileentity instanceof TileEntityMobSpawner) {
-                                ((TileEntityMobSpawner) tileentity).getSpawner().setMobName("CaveSpider");
-                            }
                         }
                     }
                 }

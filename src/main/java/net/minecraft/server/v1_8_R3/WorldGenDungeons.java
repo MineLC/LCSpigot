@@ -122,14 +122,6 @@ public class WorldGenDungeons extends WorldGenerator {
             }
 
             world.setTypeAndData(blockposition, Blocks.MOB_SPAWNER.getBlockData(), 2);
-            TileEntity tileentity1 = world.getTileEntity(blockposition);
-
-            if (tileentity1 instanceof TileEntityMobSpawner) {
-                ((TileEntityMobSpawner) tileentity1).getSpawner().setMobName(this.a(random));
-            } else {
-                Logger.error("Failed to fetch mob spawner entity at (" + blockposition.getX() + ", " + blockposition.getY() + ", " + blockposition.getZ() + ")");
-            }
-
             return true;
         } else {
             return false;

@@ -204,7 +204,6 @@ public abstract class TileEntity {
         a(TileEntityDispenser.class, "Trap");
         a(TileEntityDropper.class, "Dropper");
         a(TileEntitySign.class, "Sign");
-        a(TileEntityMobSpawner.class, "MobSpawner");
         a(TileEntityNote.class, "Music");
         a(TileEntityPiston.class, "Piston");
         a(TileEntityBrewingStand.class, "Cauldron");

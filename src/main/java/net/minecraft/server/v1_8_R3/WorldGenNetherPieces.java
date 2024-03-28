@@ -699,10 +699,6 @@ public class WorldGenNetherPieces {
                     this.b = true;
                     world.setTypeAndData(blockposition, Blocks.MOB_SPAWNER.getBlockData(), 2);
                     TileEntity tileentity = world.getTileEntity(blockposition);
-
-                    if (tileentity instanceof TileEntityMobSpawner) {
-                        ((TileEntityMobSpawner) tileentity).getSpawner().setMobName("Blaze");
-                    }
                 }
             }
 
