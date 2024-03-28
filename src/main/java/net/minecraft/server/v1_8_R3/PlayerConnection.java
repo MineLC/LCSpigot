@@ -925,15 +925,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             break;
 
         case 6:
-            if (this.player.vehicle instanceof EntityHorse) {
-                ((EntityHorse) this.player.vehicle).v(packetplayinentityaction.c());
-            }
             break;
 
         case 7:
-            if (this.player.vehicle instanceof EntityHorse) {
-                ((EntityHorse) this.player.vehicle).g((EntityHuman) this.player);
-            }
             break;
 
         default:

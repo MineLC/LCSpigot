@@ -1309,20 +1309,6 @@ public abstract class Entity {
                 this.setPosition(this.locX, this.locY, this.locZ);
             }
 
-            // CraftBukkit start
-            if (this instanceof EntityLiving) {
-                EntityLiving entity = (EntityLiving) this;
-
-                this.ticksLived = nbttagcompound.getInt("Spigot.ticksLived");
-
-                // Reset the persistence for tamed animals
-                if (entity instanceof EntityTameableAnimal && !isLevelAtLeast(nbttagcompound, 2) && !nbttagcompound.getBoolean("PersistenceRequired")) {
-                    EntityInsentient entityinsentient = (EntityInsentient) entity;
-                    entityinsentient.persistent = !entityinsentient.isTypeNotPersistent();
-                }
-            }
-            // CraftBukkit end
-
             // CraftBukkit start - Exempt Vehicles from notch's sanity check
             if (!(getBukkitEntity() instanceof Vehicle)) {
                 if (Math.abs(this.motX) > 10.0D) {

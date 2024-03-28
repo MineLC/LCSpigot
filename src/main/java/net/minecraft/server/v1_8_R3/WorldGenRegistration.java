@@ -100,16 +100,6 @@ public class WorldGenRegistration {
                 if (!this.e) {
                     i1 = this.a(2, 5);
                     j1 = this.d(2);
-                    int k1 = this.b(2, 5);
-
-                    if (structureboundingbox.b((BaseBlockPosition) (new BlockPosition(i1, j1, k1)))) {
-                        this.e = true;
-                        EntityWitch entitywitch = new EntityWitch(world);
-
-                        entitywitch.setPositionRotation((double) i1 + 0.5D, (double) j1, (double) k1 + 0.5D, 0.0F, 0.0F);
-                        entitywitch.prepare(world.E(new BlockPosition(i1, j1, k1)), (GroupDataEntity) null);
-                        world.addEntity(entitywitch, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.CHUNK_GEN); // CraftBukkit - add SpawnReason
-                    }
                 }
 
                 return true;

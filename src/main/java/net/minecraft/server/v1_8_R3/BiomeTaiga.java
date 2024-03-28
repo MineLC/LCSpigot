@@ -14,7 +14,6 @@ public class BiomeTaiga extends BiomeBase {
     public BiomeTaiga(int i, int j) {
         super(i);
         this.aI = j;
-        this.au.add(new BiomeBase.BiomeMeta(EntityWolf.class, 8, 4, 4));
         this.as.A = 10;
         if (j != 1 && j != 2) {
             this.as.C = 1;

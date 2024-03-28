@@ -20,11 +20,6 @@ public class BiomeJungle extends BiomeBase {
 
         this.as.C = 25;
         this.as.B = 4;
-        if (!flag) {
-            this.at.add(new BiomeBase.BiomeMeta(EntityOcelot.class, 2, 1, 1));
-        }
-
-        this.au.add(new BiomeBase.BiomeMeta(EntityChicken.class, 10, 4, 4));
     }
 
     public WorldGenTreeAbstract a(Random random) {
@@ -46,7 +41,6 @@ public class BiomeJungle extends BiomeBase {
 
         for (j = 0; j < 50; ++j) {
             k = random.nextInt(16) + 8;
-            boolean flag = true;
             int l = random.nextInt(16) + 8;
 
             worldgenvines.generate(world, random, blockposition.a(k, 128, l));

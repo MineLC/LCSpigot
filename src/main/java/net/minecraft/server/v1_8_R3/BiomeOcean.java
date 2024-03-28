@@ -6,7 +6,6 @@ public class BiomeOcean extends BiomeBase {
 
     public BiomeOcean(int i) {
         super(i);
-        this.au.clear();
     }
 
     public BiomeBase.EnumTemperature m() {

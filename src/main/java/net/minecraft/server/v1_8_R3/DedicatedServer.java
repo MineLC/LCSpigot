@@ -284,11 +284,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         super.B();
     }
 
-    public boolean getAllowNether() {
-        return this.propertyManager.getBoolean("allow-nether", true);
-    }
-
-    public boolean getSpawnMonsters() {
+      public boolean getSpawnMonsters() {
         return this.propertyManager.getBoolean("spawn-monsters", true);
     }
 

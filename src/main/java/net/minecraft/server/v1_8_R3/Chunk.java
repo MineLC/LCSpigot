@@ -13,7 +13,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.google.common.collect.Lists; // CraftBukkit
-import org.bukkit.Bukkit; // CraftBukkit
 import org.tinylog.Logger;
 
 public class Chunk {

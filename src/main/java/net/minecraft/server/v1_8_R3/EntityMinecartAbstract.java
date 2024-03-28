@@ -697,7 +697,7 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
                         return;
                     }
                     // CraftBukkit end
-                    if (entity instanceof EntityLiving && !(entity instanceof EntityHuman) && !(entity instanceof EntityIronGolem) && this.s() == EntityMinecartAbstract.EnumMinecartType.RIDEABLE && this.motX * this.motX + this.motZ * this.motZ > 0.01D && this.passenger == null && entity.vehicle == null) {
+                    if (entity instanceof EntityLiving && !(entity instanceof EntityHuman) && this.s() == EntityMinecartAbstract.EnumMinecartType.RIDEABLE && this.motX * this.motX + this.motZ * this.motZ > 0.01D && this.passenger == null && entity.vehicle == null) {
                         entity.mount(this);
                     }
 

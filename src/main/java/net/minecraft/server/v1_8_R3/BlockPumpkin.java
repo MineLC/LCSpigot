@@ -41,76 +41,7 @@ public class BlockPumpkin extends BlockDirectional {
     }
 
     private void f(World world, BlockPosition blockposition) {
-        ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection;
-        int i;
-        int j;
-
-        if ((shapedetector_shapedetectorcollection = this.getDetectorSnowGolem().a(world, blockposition)) != null) {
-            BlockStateListPopulator blockList = new BlockStateListPopulator(world.getWorld()); // CraftBukkit - Use BlockStateListPopulator
-            for (i = 0; i < this.getDetectorSnowGolem().b(); ++i) {
-                ShapeDetectorBlock shapedetectorblock = shapedetector_shapedetectorcollection.a(0, i, 0);
-
-                // CraftBukkit start
-                // world.setTypeAndData(shapedetectorblock.d(), Blocks.AIR.getBlockData(), 2);
-                BlockPosition pos = shapedetectorblock.d();
-                blockList.setTypeId(pos.getX(), pos.getY(), pos.getZ(), 0);
-                // CraftBukkit end
-            }
-
-            EntitySnowman entitysnowman = new EntitySnowman(world);
-            BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a(0, 2, 0).d();
-
-            entitysnowman.setPositionRotation((double) blockposition1.getX() + 0.5D, (double) blockposition1.getY() + 0.05D, (double) blockposition1.getZ() + 0.5D, 0.0F, 0.0F);
-            // CraftBukkit start
-            if (world.addEntity(entitysnowman, SpawnReason.BUILD_SNOWMAN)) {
-                blockList.updateList();
-
-            for (j = 0; j < 120; ++j) {
-                world.addParticle(EnumParticle.SNOW_SHOVEL, (double) blockposition1.getX() + World.RANDOM.nextDouble(), (double) blockposition1.getY() + World.RANDOM.nextDouble() * 2.5D, (double) blockposition1.getZ() + World.RANDOM.nextDouble(), 0.0D, 0.0D, 0.0D, new int[0]);
-            }
-
-            for (j = 0; j < this.getDetectorSnowGolem().b(); ++j) {
-                ShapeDetectorBlock shapedetectorblock1 = shapedetector_shapedetectorcollection.a(0, j, 0);
-
-                world.update(shapedetectorblock1.d(), Blocks.AIR);
-            }
-            } // CraftBukkit end
-        } else if ((shapedetector_shapedetectorcollection = this.getDetectorIronGolem().a(world, blockposition)) != null) {
-            BlockStateListPopulator blockList = new BlockStateListPopulator(world.getWorld()); // CraftBukkit - Use BlockStateListPopulator
-            for (i = 0; i < this.getDetectorIronGolem().c(); ++i) {
-                for (int k = 0; k < this.getDetectorIronGolem().b(); ++k) {
-                    // CraftBukkit start
-                    // world.setTypeAndData(shapedetectorcollection.a(i, k, 0).d(), Blocks.AIR.getBlockData(), 2);
-                    BlockPosition pos = shapedetector_shapedetectorcollection.a(i, k, 0).d();
-                    blockList.setTypeId(pos.getX(), pos.getY(), pos.getZ(), 0);
-                    // CraftBukkit end
-                }
-            }
-
-            BlockPosition blockposition2 = shapedetector_shapedetectorcollection.a(1, 2, 0).d();
-            EntityIronGolem entityirongolem = new EntityIronGolem(world);
-
-            entityirongolem.setPlayerCreated(true);
-            entityirongolem.setPositionRotation((double) blockposition2.getX() + 0.5D, (double) blockposition2.getY() + 0.05D, (double) blockposition2.getZ() + 0.5D, 0.0F, 0.0F);
-
-            // CraftBukkit start
-            if (world.addEntity(entityirongolem, SpawnReason.BUILD_IRONGOLEM)) {
-                blockList.updateList();
-
-            for (j = 0; j < 120; ++j) {
-                world.addParticle(EnumParticle.SNOWBALL, (double) blockposition2.getX() + World.RANDOM.nextDouble(), (double) blockposition2.getY() + World.RANDOM.nextDouble() * 3.9D, (double) blockposition2.getZ() + World.RANDOM.nextDouble(), 0.0D, 0.0D, 0.0D, new int[0]);
-            }
-
-            for (j = 0; j < this.getDetectorIronGolem().c(); ++j) {
-                for (int l = 0; l < this.getDetectorIronGolem().b(); ++l) {
-                    ShapeDetectorBlock shapedetectorblock2 = shapedetector_shapedetectorcollection.a(j, l, 0);
-
-                    world.update(shapedetectorblock2.d(), Blocks.AIR);
-                }
-            }
-            } // CraftBukkit end
-        }
-
+        
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {

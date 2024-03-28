@@ -657,25 +657,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
     }
 
-    public void openHorseInventory(EntityHorse entityhorse, IInventory iinventory) {
-        // CraftBukkit start - Inventory open hook
-        Container container = CraftEventFactory.callInventoryOpenEvent(this, new ContainerHorse(this.inventory, iinventory, entityhorse, this));
-        if (container == null) {
-            iinventory.closeContainer(this);
-            return;
-        }
-        // CraftBukkit end
-        if (this.activeContainer != this.defaultContainer) {
-            this.closeInventory();
-        }
-
-        this.nextContainerCounter();
-        this.playerConnection.sendPacket(new PacketPlayOutOpenWindow(this.containerCounter, "EntityHorse", iinventory.getScoreboardDisplayName(), iinventory.getSize(), entityhorse.getId()));
-        this.activeContainer = container;
-        this.activeContainer.windowId = this.containerCounter;
-        this.activeContainer.addSlotListener(this);
-    }
-
     public void openBook(ItemStack itemstack) {
         Item item = itemstack.getItem();
 

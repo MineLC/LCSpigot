@@ -1,26 +1,16 @@
 package net.minecraft.server.v1_8_R3;
 
-import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Random;
 
 public class WorldGenNether extends StructureGenerator {
-
-    private List<BiomeBase.BiomeMeta> d = Lists.newArrayList();
-
-    public WorldGenNether() {
-        this.d.add(new BiomeBase.BiomeMeta(EntityBlaze.class, 10, 2, 3));
-        this.d.add(new BiomeBase.BiomeMeta(EntityPigZombie.class, 5, 4, 4));
-        this.d.add(new BiomeBase.BiomeMeta(EntitySkeleton.class, 10, 4, 4));
-        this.d.add(new BiomeBase.BiomeMeta(EntityMagmaCube.class, 3, 4, 4));
-    }
 
     public String a() {
         return "Fortress";
     }
 
     public List<BiomeBase.BiomeMeta> b() {
-        return this.d;
+        return List.of();
     }
 
     protected boolean a(int i, int j) {

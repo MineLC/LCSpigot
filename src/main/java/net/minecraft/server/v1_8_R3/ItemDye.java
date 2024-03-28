@@ -86,29 +86,6 @@ public class ItemDye extends Item {
     }
 
     public boolean a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving) {
-        if (entityliving instanceof EntitySheep) {
-            EntitySheep entitysheep = (EntitySheep) entityliving;
-            EnumColor enumcolor = EnumColor.fromInvColorIndex(itemstack.getData());
-
-            if (!entitysheep.isSheared() && entitysheep.getColor() != enumcolor) {
-                // CraftBukkit start
-                byte bColor = (byte) enumcolor.getColorIndex();
-                SheepDyeWoolEvent event = new SheepDyeWoolEvent((org.bukkit.entity.Sheep) entitysheep.getBukkitEntity(), org.bukkit.DyeColor.getByData(bColor));
-                entitysheep.world.getServer().getPluginManager().callEvent(event);
-
-                if (event.isCancelled()) {
-                    return false;
-                }
-
-                enumcolor = EnumColor.fromColorIndex((byte) event.getColor().getWoolData());
-                // CraftBukkit end
-                entitysheep.setColor(enumcolor);
-                --itemstack.count;
-            }
-
-            return true;
-        } else {
-            return false;
-        }
+        return false;
     }
 }

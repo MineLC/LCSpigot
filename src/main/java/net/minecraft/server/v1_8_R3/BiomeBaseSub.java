@@ -22,10 +22,7 @@ public class BiomeBaseSub extends BiomeBase {
         this.ar = biomebase.ar;
         this.ax = biomebase.ax;
         this.ay = biomebase.ay;
-        this.au = Lists.newArrayList(biomebase.au);
-        this.at = Lists.newArrayList(biomebase.at);
         this.aw = Lists.newArrayList(biomebase.aw);
-        this.av = Lists.newArrayList(biomebase.av);
         this.temperature = biomebase.temperature;
         this.humidity = biomebase.humidity;
         this.an = biomebase.an + 0.1F;

@@ -107,12 +107,6 @@ public class DispenserRegistry {
 
                 itemstack1 = CraftItemStack.asNMSCopy(event.getItem());
 
-                Entity entity = ItemMonsterEgg.spawnCreature(isourceblock.i(), itemstack.getData(), event.getVelocity().getX(), event.getVelocity().getY(), event.getVelocity().getZ(), org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.DISPENSE_EGG);
-
-                if (entity instanceof EntityLiving && itemstack.hasName()) {
-                    ((EntityInsentient) entity).setCustomName(itemstack.getName());
-                }
-
                 // itemstack.a(1); // Handled during event processing
                 // CraftBukkit end
                 return itemstack;

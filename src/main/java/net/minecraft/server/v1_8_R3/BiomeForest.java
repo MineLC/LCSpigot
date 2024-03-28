@@ -28,10 +28,6 @@ public class BiomeForest extends BiomeBase {
             this.a(0.6F, 0.6F);
         }
 
-        if (this.aG == 0) {
-            this.au.add(new BiomeBase.BiomeMeta(EntityWolf.class, 5, 4, 4));
-        }
-
         if (this.aG == 3) {
             this.as.A = -999;
         }

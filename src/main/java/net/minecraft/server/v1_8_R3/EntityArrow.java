@@ -240,7 +240,7 @@ public class EntityArrow extends Entity implements IProjectile {
 
                     // CraftBukkit start - Moved damage call
                     if (movingobjectposition.entity.damageEntity(damagesource, (float) k)) {
-                    if (this.isBurning() && !(movingobjectposition.entity instanceof EntityEnderman) && (!(movingobjectposition.entity instanceof EntityPlayer) || !(this.shooter instanceof EntityPlayer) || this.world.pvpMode)) { // CraftBukkit - abide by pvp setting if destination is a player
+                    if (this.isBurning() && (!(movingobjectposition.entity instanceof EntityPlayer) || !(this.shooter instanceof EntityPlayer) || this.world.pvpMode)) { // CraftBukkit - abide by pvp setting if destination is a player
                         EntityCombustByEntityEvent combustEvent = new EntityCombustByEntityEvent(this.getBukkitEntity(), entity.getBukkitEntity(), 5);
                         org.bukkit.Bukkit.getPluginManager().callEvent(combustEvent);
                         if (!combustEvent.isCancelled()) {
@@ -275,9 +275,8 @@ public class EntityArrow extends Entity implements IProjectile {
                         }
 
                         this.makeSound("random.bowhit", 1.0F, 1.2F / (RANDOM.nextFloat() * 0.2F + 0.9F));
-                        if (!(movingobjectposition.entity instanceof EntityEnderman)) {
-                            this.die();
-                        }
+                        this.die();
+                        
                     } else {
                         this.motX *= -0.10000000149011612D;
                         this.motY *= -0.10000000149011612D;

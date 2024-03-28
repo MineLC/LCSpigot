@@ -1972,22 +1972,7 @@ public class WorldGenMonumentPieces {
         }
 
         protected boolean a(World world, StructureBoundingBox structureboundingbox, int i, int j, int k) {
-            int l = this.a(i, k);
-            int i1 = this.d(j);
-            int j1 = this.b(i, k);
-
-            if (structureboundingbox.b((BaseBlockPosition) (new BlockPosition(l, i1, j1)))) {
-                EntityGuardian entityguardian = new EntityGuardian(world);
-
-                entityguardian.setElder(true);
-                entityguardian.heal(entityguardian.getMaxHealth());
-                entityguardian.setPositionRotation((double) l + 0.5D, (double) i1, (double) j1 + 0.5D, 0.0F, 0.0F);
-                entityguardian.prepare(world.E(new BlockPosition(entityguardian)), (GroupDataEntity) null);
-                world.addEntity(entityguardian);
-                return true;
-            } else {
-                return false;
-            }
+            return false;
         }
     }
 }

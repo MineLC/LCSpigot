@@ -19,7 +19,6 @@ public class BiomeMesa extends BiomeBase {
         this.aJ = flag1;
         this.b();
         this.a(2.0F, 0.0F);
-        this.au.clear();
         this.ak = Blocks.SAND.getBlockData().set(BlockSand.VARIANT, BlockSand.EnumSandVariant.RED_SAND);
         this.al = Blocks.STAINED_HARDENED_CLAY.getBlockData();
         this.as.A = -999;
@@ -27,7 +26,6 @@ public class BiomeMesa extends BiomeBase {
         this.as.F = 3;
         this.as.G = 5;
         this.as.B = 0;
-        this.au.clear();
         if (flag1) {
             this.as.A = 5;
         }

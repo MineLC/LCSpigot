@@ -53,68 +53,14 @@ public class Village {
             this.j();
         }
 
-        int j = this.h / 10;
-
-        if (this.l < j && this.b.size() > 20 && World.RANDOM.nextInt(7000) == 0) {
-            Vec3D vec3d = this.a(this.d, 2, 4, 2);
-
-            if (vec3d != null) {
-                EntityIronGolem entityirongolem = new EntityIronGolem(this.a);
-
-                entityirongolem.setPosition(vec3d.a, vec3d.b, vec3d.c);
-                this.a.addEntity(entityirongolem, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.VILLAGE_DEFENSE); // CraftBukkit
-                ++this.l;
-            }
-        }
-
-    }
-
-    private Vec3D a(BlockPosition blockposition, int i, int j, int k) {
-        for (int l = 0; l < 10; ++l) {
-            BlockPosition blockposition1 = blockposition.a(World.RANDOM.nextInt(16) - 8, World.RANDOM.nextInt(6) - 3, World.RANDOM.nextInt(16) - 8);
-
-            if (this.a(blockposition1) && this.a(new BlockPosition(i, j, k), blockposition1)) {
-                return new Vec3D((double) blockposition1.getX(), (double) blockposition1.getY(), (double) blockposition1.getZ());
-            }
-        }
-
-        return null;
-    }
-
-    private boolean a(BlockPosition blockposition, BlockPosition blockposition1) {
-        if (!World.a((IBlockAccess) this.a, blockposition1.down())) {
-            return false;
-        } else {
-            int i = blockposition1.getX() - blockposition.getX() / 2;
-            int j = blockposition1.getZ() - blockposition.getZ() / 2;
-
-            for (int k = i; k < i + blockposition.getX(); ++k) {
-                for (int l = blockposition1.getY(); l < blockposition1.getY() + blockposition.getY(); ++l) {
-                    for (int i1 = j; i1 < j + blockposition.getZ(); ++i1) {
-                        if (this.a.getType(new BlockPosition(k, l, i1)).getBlock().isOccluding()) {
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            return true;
-        }
+        this.l = 0;
     }
 
     private void j() {
-        List list = this.a.a(EntityIronGolem.class, new AxisAlignedBB((double) (this.d.getX() - this.e), (double) (this.d.getY() - 4), (double) (this.d.getZ() - this.e), (double) (this.d.getX() + this.e), (double) (this.d.getY() + 4), (double) (this.d.getZ() + this.e)));
-
-        this.l = list.size();
+        this.l = 0;
     }
 
     private void k() {
-        List list = this.a.a(EntityVillager.class, new AxisAlignedBB((double) (this.d.getX() - this.e), (double) (this.d.getY() - 4), (double) (this.d.getZ() - this.e), (double) (this.d.getX() + this.e), (double) (this.d.getY() + 4), (double) (this.d.getZ() + this.e)));
-
-        this.h = list.size();
-        if (this.h == 0) {
-            this.j.clear();
-        }
 
     }
 

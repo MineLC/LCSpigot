@@ -153,68 +153,7 @@ public class BlockSkull extends BlockContainer {
     }
 
     public void a(World world, BlockPosition blockposition, TileEntitySkull tileentityskull) {
-        if (world.captureBlockStates) return; // CraftBukkit
-        if (tileentityskull.getSkullType() == 1 && blockposition.getY() >= 2 && world.getDifficulty() != EnumDifficulty.PEACEFUL && !world.isClientSide) {
-            ShapeDetector shapedetector = this.n();
-            ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = shapedetector.a(world, blockposition);
-
-            if (shapedetector_shapedetectorcollection != null) {
-                // CraftBukkit start - Use BlockStateListPopulator
-                BlockStateListPopulator blockList = new BlockStateListPopulator(world.getWorld());
-                int i;
-
-                for (i = 0; i < 3; ++i) {
-                    ShapeDetectorBlock shapedetectorblock = shapedetector_shapedetectorcollection.a(i, 0, 0);
-
-                    // CraftBukkit start
-                    // world.setTypeAndData(shapedetectorblock.d(), shapedetectorblock.a().set(BlockSkull.NODROP, Boolean.valueOf(true)), 2);
-                    BlockPosition pos = shapedetectorblock.d();
-                    IBlockData data = shapedetectorblock.a().set(BlockSkull.NODROP, Boolean.valueOf(true));
-                    blockList.setTypeAndData(pos.getX(), pos.getY(), pos.getZ(), data.getBlock(), data.getBlock().toLegacyData(data), 2);
-                    // CraftBukkit end
-                }
-
-                for (i = 0; i < shapedetector.c(); ++i) {
-                    for (int j = 0; j < shapedetector.b(); ++j) {
-                        ShapeDetectorBlock shapedetectorblock1 = shapedetector_shapedetectorcollection.a(i, j, 0);
-
-                        // CraftBukkit start
-                        // world.setTypeAndData(shapedetectorblock1.d(), Blocks.AIR.getBlockData(), 2);
-                        BlockPosition pos = shapedetectorblock1.d();
-                        blockList.setTypeAndData(pos.getX(), pos.getY(), pos.getZ(), Blocks.AIR, 0, 2);
-                        // CraftBukkit end
-                    }
-                }
-
-                BlockPosition blockposition1 = shapedetector_shapedetectorcollection.a(1, 0, 0).d();
-                EntityWither entitywither = new EntityWither(world);
-                BlockPosition blockposition2 = shapedetector_shapedetectorcollection.a(1, 2, 0).d();
-
-                entitywither.setPositionRotation((double) blockposition2.getX() + 0.5D, (double) blockposition2.getY() + 0.55D, (double) blockposition2.getZ() + 0.5D, shapedetector_shapedetectorcollection.b().k() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F, 0.0F);
-                entitywither.aI = shapedetector_shapedetectorcollection.b().k() == EnumDirection.EnumAxis.X ? 0.0F : 90.0F;
-                entitywither.n();
-
-                // CraftBukkit start
-                if (world.addEntity(entitywither, SpawnReason.BUILD_WITHER)) {
-                    blockList.updateList();
-                    
-                    int k;
-
-                    for (k = 0; k < 120; ++k) {
-                        world.addParticle(EnumParticle.SNOWBALL, (double) blockposition1.getX() + World.RANDOM.nextDouble(), (double) (blockposition1.getY() - 2) + World.RANDOM.nextDouble() * 3.9D, (double) blockposition1.getZ() + World.RANDOM.nextDouble(), 0.0D, 0.0D, 0.0D, new int[0]);
-                    }
-
-                    for (k = 0; k < shapedetector.c(); ++k) {
-                        for (int l = 0; l < shapedetector.b(); ++l) {
-                            ShapeDetectorBlock shapedetectorblock2 = shapedetector_shapedetectorcollection.a(k, l, 0);
-
-                            world.update(shapedetectorblock2.d(), Blocks.AIR);
-                        }
-                    }
-                } // CraftBukkit end
-
-            }
-        }
+        
     }
 
     public IBlockData fromLegacyData(int i) {

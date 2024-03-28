@@ -123,29 +123,8 @@ public class VillageSiege {
     }
 
     private boolean c() {
-        Vec3D vec3d = this.a(new BlockPosition(this.g, this.h, this.i));
+        return false;
 
-        if (vec3d == null) {
-            return false;
-        } else {
-            EntityZombie entityzombie;
-
-            try {
-                entityzombie = new EntityZombie(this.a);
-                entityzombie.prepare(this.a.E(new BlockPosition(entityzombie)), (GroupDataEntity) null);
-                entityzombie.setVillager(false);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                return false;
-            }
-
-            entityzombie.setPositionRotation(vec3d.a, vec3d.b, vec3d.c, World.RANDOM.nextFloat() * 360.0F, 0.0F);
-            this.a.addEntity(entityzombie, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.VILLAGE_INVASION); // CraftBukkit
-            BlockPosition blockposition = this.f.a();
-
-            entityzombie.a(blockposition, this.f.b());
-            return true;
-        }
     }
 
     private Vec3D a(BlockPosition blockposition) {

@@ -85,10 +85,6 @@ public class WorldGenMonument extends StructureGenerator {
         return WorldGenMonument.h;
     }
 
-    static {
-        WorldGenMonument.h.add(new BiomeBase.BiomeMeta(EntityGuardian.class, 1, 2, 4));
-    }
-
     public static class WorldGenMonumentStart extends StructureStart {
 
         private Set<ChunkCoordIntPair> c = Sets.newHashSet();

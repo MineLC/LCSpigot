@@ -751,15 +751,6 @@ public abstract class EntityLiving extends Entity {
                     this.hurtTicks = this.av = 10;
                 }
 
-                // CraftBukkit start
-                if(this instanceof EntityAnimal){
-                    ((EntityAnimal)this).cq();
-                    if(this instanceof EntityTameableAnimal){
-                        ((EntityTameableAnimal)this).getGoalSit().setSitting(false);
-                    }
-                }
-                // CraftBukkit end
-
                 this.aw = 0.0F;
                 Entity entity = damagesource.getEntity();
 
@@ -771,13 +762,6 @@ public abstract class EntityLiving extends Entity {
                     if (entity instanceof EntityHuman) {
                         this.lastDamageByPlayerTime = 100;
                         this.killer = (EntityHuman) entity;
-                    } else if (entity instanceof EntityWolf) {
-                        EntityWolf entitywolf = (EntityWolf) entity;
-
-                        if (entitywolf.isTamed()) {
-                            this.lastDamageByPlayerTime = 100;
-                            this.killer = null;
-                        }
                     }
                 }
 

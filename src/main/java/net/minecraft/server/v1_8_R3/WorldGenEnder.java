@@ -44,10 +44,6 @@ public class WorldGenEnder extends WorldGenerator {
                 }
             }
 
-            EntityEnderCrystal entityendercrystal = new EntityEnderCrystal(world);
-
-            entityendercrystal.setPositionRotation((double) ((float) blockposition.getX() + 0.5F), (double) (blockposition.getY() + i), (double) ((float) blockposition.getZ() + 0.5F), random.nextFloat() * 360.0F, 0.0F);
-            world.addEntity(entityendercrystal);
             world.setTypeAndData(blockposition.up(i), Blocks.BEDROCK.getBlockData(), 2);
             return true;
         } else {

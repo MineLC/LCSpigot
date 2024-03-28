@@ -11,7 +11,6 @@ import net.minecraft.server.v1_8_R3.DamageSource;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
 import net.minecraft.server.v1_8_R3.EntityArrow;
 import net.minecraft.server.v1_8_R3.EntityEgg;
-import net.minecraft.server.v1_8_R3.EntityEnderDragon;
 import net.minecraft.server.v1_8_R3.EntityEnderPearl;
 import net.minecraft.server.v1_8_R3.EntityFishingHook;
 import net.minecraft.server.v1_8_R3.EntityHuman;
@@ -24,7 +23,6 @@ import net.minecraft.server.v1_8_R3.EntityPotion;
 import net.minecraft.server.v1_8_R3.EntitySmallFireball;
 import net.minecraft.server.v1_8_R3.EntitySnowball;
 import net.minecraft.server.v1_8_R3.EntityThrownExpBottle;
-import net.minecraft.server.v1_8_R3.EntityWither;
 import net.minecraft.server.v1_8_R3.EntityWitherSkull;
 import net.minecraft.server.v1_8_R3.GenericAttributes;
 import net.minecraft.server.v1_8_R3.MobEffect;
@@ -444,7 +442,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
     }
 
     public boolean setLeashHolder(Entity holder) {
-        if ((getHandle() instanceof EntityWither) || !(getHandle() instanceof EntityInsentient)) {
+        if (!(getHandle() instanceof EntityInsentient)) {
             return false;
         }
 

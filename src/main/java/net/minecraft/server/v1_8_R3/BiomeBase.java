@@ -85,9 +85,6 @@ public abstract class BiomeBase {
     public float humidity;
     public int ar;
     public BiomeDecorator as;
-    protected List<BiomeBase.BiomeMeta> at;
-    protected List<BiomeBase.BiomeMeta> au;
-    protected List<BiomeBase.BiomeMeta> av;
     protected List<BiomeBase.BiomeMeta> aw;
     protected boolean ax;
     protected boolean ay;
@@ -105,9 +102,6 @@ public abstract class BiomeBase {
         this.temperature = 0.5F;
         this.humidity = 0.5F;
         this.ar = 16777215;
-        this.at = Lists.newArrayList();
-        this.au = Lists.newArrayList();
-        this.av = Lists.newArrayList();
         this.aw = Lists.newArrayList();
         this.ay = true;
         this.aA = new WorldGenTrees(false);
@@ -116,20 +110,6 @@ public abstract class BiomeBase {
         this.id = i;
         BiomeBase.biomes[i] = this;
         this.as = this.a();
-        this.au.add(new BiomeBase.BiomeMeta(EntitySheep.class, 12, 4, 4));
-        this.au.add(new BiomeBase.BiomeMeta(EntityRabbit.class, 10, 3, 3));
-        this.au.add(new BiomeBase.BiomeMeta(EntityPig.class, 10, 4, 4));
-        this.au.add(new BiomeBase.BiomeMeta(EntityChicken.class, 10, 4, 4));
-        this.au.add(new BiomeBase.BiomeMeta(EntityCow.class, 8, 4, 4));
-        this.at.add(new BiomeBase.BiomeMeta(EntitySpider.class, 100, 4, 4));
-        this.at.add(new BiomeBase.BiomeMeta(EntityZombie.class, 100, 4, 4));
-        this.at.add(new BiomeBase.BiomeMeta(EntitySkeleton.class, 100, 4, 4));
-        this.at.add(new BiomeBase.BiomeMeta(EntityCreeper.class, 100, 4, 4));
-        this.at.add(new BiomeBase.BiomeMeta(EntitySlime.class, 100, 4, 4));
-        this.at.add(new BiomeBase.BiomeMeta(EntityEnderman.class, 10, 1, 4));
-        this.at.add(new BiomeBase.BiomeMeta(EntityWitch.class, 5, 1, 1));
-        this.av.add(new BiomeBase.BiomeMeta(EntitySquid.class, 10, 4, 4));
-        this.aw.add(new BiomeBase.BiomeMeta(EntityBat.class, 10, 8, 8));
     }
 
     protected BiomeDecorator a() {
@@ -208,16 +188,16 @@ public abstract class BiomeBase {
     public List<BiomeBase.BiomeMeta> getMobs(EnumCreatureType enumcreaturetype) {
         switch (BiomeBase.SyntheticClass_1.switchMap[enumcreaturetype.ordinal()]) {
         case 1:
-            return this.at;
+            return List.of();
 
         case 2:
-            return this.au;
+            return List.of();
 
         case 3:
-            return this.av;
+            return List.of();
 
         case 4:
-            return this.aw;
+            return List.of();
 
         default:
             return Collections.emptyList();
@@ -422,12 +402,6 @@ public abstract class BiomeBase {
             try {
                 BiomeBase.SyntheticClass_1.switchMap[EnumCreatureType.MONSTER.ordinal()] = 1;
             } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BiomeBase.SyntheticClass_1.switchMap[EnumCreatureType.CREATURE.ordinal()] = 2;
-            } catch (NoSuchFieldError nosuchfielderror1) {
                 ;
             }
 

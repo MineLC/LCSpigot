@@ -15,7 +15,6 @@ public class BiomeIcePlains extends BiomeBase {
             this.ak = Blocks.SNOW.getBlockData();
         }
 
-        this.au.clear();
     }
 
     public void a(World world, Random random, BlockPosition blockposition) {

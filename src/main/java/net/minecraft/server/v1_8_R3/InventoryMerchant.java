@@ -3,7 +3,6 @@ package net.minecraft.server.v1_8_R3;
 // CraftBukkit start
 import java.util.List;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHumanEntity;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftVillager;
 import org.bukkit.entity.HumanEntity;
 // CraftBukkit end
 
@@ -40,7 +39,7 @@ public class InventoryMerchant implements IInventory {
     }
 
     public org.bukkit.inventory.InventoryHolder getOwner() {
-        return (CraftVillager) ((EntityVillager) this.merchant).getBukkitEntity();
+        return null;
     }
     // CraftBukkit end
 

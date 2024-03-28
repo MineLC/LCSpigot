@@ -4,7 +4,6 @@ public class BiomeStoneBeach extends BiomeBase {
 
     public BiomeStoneBeach(int i) {
         super(i);
-        this.au.clear();
         this.ak = Blocks.STONE.getBlockData();
         this.al = Blocks.STONE.getBlockData();
         this.as.A = -999;

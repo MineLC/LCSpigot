@@ -221,24 +221,6 @@ public final class Bukkit {
     }
 
     /**
-     * Gets whether this server allows the End or not.
-     *
-     * @return whether this server allows the End or not
-     */
-    public static boolean getAllowEnd() {
-        return server.getAllowEnd();
-    }
-
-    /**
-     * Gets whether this server allows the Nether or not.
-     *
-     * @return whether this server allows the Nether or not
-     */
-    public static boolean getAllowNether() {
-        return server.getAllowNether();
-    }
-
-    /**
      * Gets whether this server has a whitelist or not.
      *
      * @return whether this server has a whitelist or not

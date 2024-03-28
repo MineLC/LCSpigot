@@ -213,19 +213,11 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
             byte dimension = 0;
 
             if (j == 1) {
-                if (getAllowNether()) {
-                    dimension = -1;
-                } else {
-                    continue;
-                }
+                continue;
             }
 
             if (j == 2) {
-                if (server.getAllowEnd()) {
-                    dimension = 1;
-                } else {
-                    continue;
-                }
+                continue;
             }
 
             String worldType = org.bukkit.World.Environment.getEnvironment(dimension).toString().toLowerCase();
@@ -840,7 +832,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     }
 
     public boolean getAllowNether() {
-        return true;
+        return false;
     }
 
     public void a(IUpdatePlayerListBox iupdateplayerlistbox) {

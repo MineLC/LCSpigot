@@ -180,20 +180,6 @@ public interface Server extends PluginMessageRecipient {
     public boolean getGenerateStructures();
 
     /**
-     * Gets whether this server allows the End or not.
-     *
-     * @return whether this server allows the End or not
-     */
-    public boolean getAllowEnd();
-
-    /**
-     * Gets whether this server allows the Nether or not.
-     *
-     * @return whether this server allows the Nether or not
-     */
-    public boolean getAllowNether();
-
-    /**
      * Gets whether this server has a whitelist or not.
      *
      * @return whether this server has a whitelist or not

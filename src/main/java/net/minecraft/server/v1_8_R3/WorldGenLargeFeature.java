@@ -19,7 +19,6 @@ public class WorldGenLargeFeature extends StructureGenerator {
         this.f = Lists.newArrayList();
         this.g = 32;
         this.h = 8;
-        this.f.add(new BiomeBase.BiomeMeta(EntityWitch.class, 1, 1, 1));
     }
 
     public WorldGenLargeFeature(Map<String, String> map) {

@@ -948,90 +948,9 @@ public class CraftWorld implements World {
             }
         } else if (EnderSignal.class.isAssignableFrom(clazz)) {
             entity = new EntityEnderSignal(world, x, y, z);
-        } else if (EnderCrystal.class.isAssignableFrom(clazz)) {
-            entity = new EntityEnderCrystal(world);
-            entity.setPositionRotation(x, y, z, 0, 0);
         } else if (LivingEntity.class.isAssignableFrom(clazz)) {
-            if (Chicken.class.isAssignableFrom(clazz)) {
-                entity = new EntityChicken(world);
-            } else if (Cow.class.isAssignableFrom(clazz)) {
-                if (MushroomCow.class.isAssignableFrom(clazz)) {
-                    entity = new EntityMushroomCow(world);
-                } else {
-                    entity = new EntityCow(world);
-                }
-            } else if (Golem.class.isAssignableFrom(clazz)) {
-                if (Snowman.class.isAssignableFrom(clazz)) {
-                    entity = new EntitySnowman(world);
-                } else if (IronGolem.class.isAssignableFrom(clazz)) {
-                    entity = new EntityIronGolem(world);
-                }
-            } else if (Creeper.class.isAssignableFrom(clazz)) {
-                entity = new EntityCreeper(world);
-            } else if (Ghast.class.isAssignableFrom(clazz)) {
-                entity = new EntityGhast(world);
-            } else if (Pig.class.isAssignableFrom(clazz)) {
-                entity = new EntityPig(world);
-            } else if (Player.class.isAssignableFrom(clazz)) {
+            if (Player.class.isAssignableFrom(clazz)) {
                 // need a net server handler for this one
-            } else if (Sheep.class.isAssignableFrom(clazz)) {
-                entity = new EntitySheep(world);
-            } else if (Horse.class.isAssignableFrom(clazz)) {
-                entity = new EntityHorse(world);
-            } else if (Skeleton.class.isAssignableFrom(clazz)) {
-                entity = new EntitySkeleton(world);
-            } else if (Slime.class.isAssignableFrom(clazz)) {
-                if (MagmaCube.class.isAssignableFrom(clazz)) {
-                    entity = new EntityMagmaCube(world);
-                } else {
-                    entity = new EntitySlime(world);
-                }
-            } else if (Spider.class.isAssignableFrom(clazz)) {
-                if (CaveSpider.class.isAssignableFrom(clazz)) {
-                    entity = new EntityCaveSpider(world);
-                } else {
-                    entity = new EntitySpider(world);
-                }
-            } else if (Squid.class.isAssignableFrom(clazz)) {
-                entity = new EntitySquid(world);
-            } else if (Tameable.class.isAssignableFrom(clazz)) {
-                if (Wolf.class.isAssignableFrom(clazz)) {
-                    entity = new EntityWolf(world);
-                } else if (Ocelot.class.isAssignableFrom(clazz)) {
-                    entity = new EntityOcelot(world);
-                }
-            } else if (PigZombie.class.isAssignableFrom(clazz)) {
-                entity = new EntityPigZombie(world);
-            } else if (Zombie.class.isAssignableFrom(clazz)) {
-                entity = new EntityZombie(world);
-            } else if (Giant.class.isAssignableFrom(clazz)) {
-                entity = new EntityGiantZombie(world);
-            } else if (Silverfish.class.isAssignableFrom(clazz)) {
-                entity = new EntitySilverfish(world);
-            } else if (Enderman.class.isAssignableFrom(clazz)) {
-                entity = new EntityEnderman(world);
-            } else if (Blaze.class.isAssignableFrom(clazz)) {
-                entity = new EntityBlaze(world);
-            } else if (Villager.class.isAssignableFrom(clazz)) {
-                entity = new EntityVillager(world);
-            } else if (Witch.class.isAssignableFrom(clazz)) {
-                entity = new EntityWitch(world);
-            } else if (Wither.class.isAssignableFrom(clazz)) {
-                entity = new EntityWither(world);
-            } else if (ComplexLivingEntity.class.isAssignableFrom(clazz)) {
-                if (EnderDragon.class.isAssignableFrom(clazz)) {
-                    entity = new EntityEnderDragon(world);
-                }
-            } else if (Ambient.class.isAssignableFrom(clazz)) {
-                if (Bat.class.isAssignableFrom(clazz)) {
-                    entity = new EntityBat(world);
-                }
-            } else if (Rabbit.class.isAssignableFrom(clazz)) {
-                entity = new EntityRabbit(world);
-            } else if (Endermite.class.isAssignableFrom(clazz)) {
-                entity = new EntityEndermite(world);
-            } else if (Guardian.class.isAssignableFrom(clazz)){
-                entity = new EntityGuardian(world);
             } else if (ArmorStand.class.isAssignableFrom(clazz)) {
                 entity = new EntityArmorStand(world, x, y, z);
             }
@@ -1105,11 +1024,6 @@ public class CraftWorld implements World {
         }
 
         if (entity != null) {
-            // Spigot start
-            if (entity instanceof EntityOcelot)
-            {
-                ( (EntityOcelot) entity ).spawnBonus = false;
-            }
             // Spigot end
             if (entity instanceof EntityInsentient) {
                 ((EntityInsentient) entity).prepare(getHandle().E(new BlockPosition(entity)), (GroupDataEntity) null);

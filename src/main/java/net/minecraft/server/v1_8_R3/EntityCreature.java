@@ -71,15 +71,6 @@ public abstract class EntityCreature extends EntityInsentient {
             this.a(new BlockPosition((int) entity.locX, (int) entity.locY, (int) entity.locZ), 5);
             float f = this.g(entity);
 
-            if (this instanceof EntityTameableAnimal && ((EntityTameableAnimal) this).isSitting()) {
-                if (f > 10.0F) {
-                    this.world.getServer().getPluginManager().callEvent(new EntityUnleashEvent(this.getBukkitEntity(), EntityUnleashEvent.UnleashReason.DISTANCE)); // CraftBukkit
-                    this.unleash(true, true);
-                }
-
-                return;
-            }
-
             if (!this.bm) {
                 this.goalSelector.a(2, this.c);
                 if (this.getNavigation() instanceof Navigation) {

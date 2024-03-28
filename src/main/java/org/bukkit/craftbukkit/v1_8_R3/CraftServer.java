@@ -469,16 +469,6 @@ public final class CraftServer implements Server {
         return this.getConfigBoolean("generate-structures", true);
     }
 
-    @Override
-    public boolean getAllowEnd() {
-        return this.configuration.getBoolean("settings.allow-end");
-    }
-
-    @Override
-    public boolean getAllowNether() {
-        return this.getConfigBoolean("allow-nether", true);
-    }
-
     public boolean getWarnOnOverload() {
         return this.configuration.getBoolean("settings.warn-on-overload");
     }

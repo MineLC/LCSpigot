@@ -17,11 +17,6 @@ public class EntitySnowball extends EntityProjectile {
     protected void a(MovingObjectPosition movingobjectposition) {
         if (movingobjectposition.entity != null) {
             byte b0 = 0;
-
-            if (movingobjectposition.entity instanceof EntityBlaze) {
-                b0 = 3;
-            }
-
             movingobjectposition.entity.damageEntity(DamageSource.projectile(this, this.getShooter()), (float) b0);
         }
 

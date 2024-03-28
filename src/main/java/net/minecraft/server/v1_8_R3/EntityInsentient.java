@@ -123,7 +123,7 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     public boolean a(Class<? extends EntityLiving> oclass) {
-        return oclass != EntityGhast.class;
+        return true;
     }
 
     public void v() {}
@@ -777,35 +777,7 @@ public abstract class EntityInsentient extends EntityLiving {
             this.unleash(true, !entityhuman.abilities.canInstantlyBuild);
             return true;
         } else {
-            ItemStack itemstack = entityhuman.inventory.getItemInHand();
-
-            if (itemstack != null && itemstack.getItem() == Items.LEAD && this.cb()) {
-                if (!(this instanceof EntityTameableAnimal) || !((EntityTameableAnimal) this).isTamed()) {
-                    // CraftBukkit start - fire PlayerLeashEntityEvent
-                    if (CraftEventFactory.callPlayerLeashEntityEvent(this, entityhuman, entityhuman).isCancelled()) {
-                        ((EntityPlayer) entityhuman).playerConnection.sendPacket(new PacketPlayOutAttachEntity(1, this, this.getLeashHolder()));
-                        return false;
-                    }
-                    // CraftBukkit end
-                    this.setLeashHolder(entityhuman, true);
-                    --itemstack.count;
-                    return true;
-                }
-
-                if (((EntityTameableAnimal) this).e((EntityLiving) entityhuman)) {
-                    // CraftBukkit start - fire PlayerLeashEntityEvent
-                    if (CraftEventFactory.callPlayerLeashEntityEvent(this, entityhuman, entityhuman).isCancelled()) {
-                        ((EntityPlayer) entityhuman).playerConnection.sendPacket(new PacketPlayOutAttachEntity(1, this, this.getLeashHolder()));
-                        return false;
-                    }
-                    // CraftBukkit end
-                    this.setLeashHolder(entityhuman, true);
-                    --itemstack.count;
-                    return true;
-                }
-            }
-
-            return this.a(entityhuman) ? true : super.e(entityhuman);
+            return super.e(entityhuman);
         }
     }
 

@@ -24,12 +24,6 @@ public class EntityWitherSkull extends EntityFireball {
 
     public float a(Explosion explosion, World world, BlockPosition blockposition, IBlockData iblockdata) {
         float f = super.a(explosion, world, blockposition, iblockdata);
-        Block block = iblockdata.getBlock();
-
-        if (this.isCharged() && EntityWither.a(block)) {
-            f = Math.min(0.8F, f);
-        }
-
         return f;
     }
 

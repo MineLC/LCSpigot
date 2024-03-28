@@ -78,20 +78,7 @@ public class RecipeArmorDye extends ShapelessRecipes implements IRecipe { // Cra
                         ++j;
                     }
                 } else {
-                    if (itemstack1.getItem() != Items.DYE) {
-                        return null;
-                    }
-
-                    float[] afloat = EntitySheep.a(EnumColor.fromInvColorIndex(itemstack1.getData()));
-                    int j1 = (int) (afloat[0] * 255.0F);
-                    int k1 = (int) (afloat[1] * 255.0F);
-
-                    i1 = (int) (afloat[2] * 255.0F);
-                    i += Math.max(j1, Math.max(k1, i1));
-                    aint[0] += j1;
-                    aint[1] += k1;
-                    aint[2] += i1;
-                    ++j;
+                    return null;
                 }
             }
         }

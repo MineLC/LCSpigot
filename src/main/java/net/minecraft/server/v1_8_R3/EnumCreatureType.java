@@ -2,18 +2,18 @@ package net.minecraft.server.v1_8_R3;
 
 public enum EnumCreatureType {
 
-    MONSTER(IMonster.class, 70, Material.AIR, false, false), CREATURE(EntityAnimal.class, 10, Material.AIR, true, true), AMBIENT(EntityAmbient.class, 15, Material.AIR, true, false), WATER_CREATURE(EntityWaterAnimal.class, 5, Material.WATER, true, false);
+    MONSTER(IMonster.class, 70, false, false),
+    AMBIENT(EntityAmbient.class, 15, true, false), 
+    WATER_CREATURE(EntityWaterAnimal.class, 5, true, false);
 
     private final Class<? extends IAnimal> e;
     private final int f;
-    private final Material g;
     private final boolean h;
     private final boolean i;
 
-    private EnumCreatureType(Class<? extends IAnimal> oclass, int i, Material material, boolean flag, boolean flag1) {
+    private EnumCreatureType(Class<? extends IAnimal> oclass, int i, boolean flag, boolean flag1) {
         this.e = oclass;
         this.f = i;
-        this.g = material;
         this.h = flag;
         this.i = flag1;
     }

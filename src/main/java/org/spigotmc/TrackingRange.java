@@ -2,7 +2,6 @@ package org.spigotmc;
 
 import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityExperienceOrb;
-import net.minecraft.server.v1_8_R3.EntityGhast;
 import net.minecraft.server.v1_8_R3.EntityItem;
 import net.minecraft.server.v1_8_R3.EntityItemFrame;
 import net.minecraft.server.v1_8_R3.EntityPainting;
@@ -28,15 +27,6 @@ public class TrackingRange
         }  else if ( entity.activationType == 1 )
         {
             return config.monsterTrackingRange;
-        } else if ( entity instanceof EntityGhast )
-        {
-            if ( config.monsterTrackingRange > config.monsterActivationRange )
-            {
-                return config.monsterTrackingRange;
-            } else
-            {
-                return config.monsterActivationRange;
-            }
         } else if ( entity.activationType == 2 )
         {
             return config.animalTrackingRange;

@@ -495,11 +495,8 @@ public class EntityTrackerEntry {
                 return new PacketPlayOutSpawnEntity(this.tracker, 62);
             } else if (this.tracker instanceof EntityTNTPrimed) {
                 return new PacketPlayOutSpawnEntity(this.tracker, 50);
-            } else if (this.tracker instanceof EntityEnderCrystal) {
-                return new PacketPlayOutSpawnEntity(this.tracker, 51);
             } else if (this.tracker instanceof EntityFallingBlock) {
                 EntityFallingBlock entityfallingblock = (EntityFallingBlock) this.tracker;
-
                 return new PacketPlayOutSpawnEntity(this.tracker, 70, Block.getCombinedId(entityfallingblock.getBlock()));
             } else if (this.tracker instanceof EntityArmorStand) {
                 return new PacketPlayOutSpawnEntity(this.tracker, 78);

@@ -8,7 +8,6 @@ public class BiomeSavanna extends BiomeBase {
 
     protected BiomeSavanna(int i) {
         super(i);
-        this.au.add(new BiomeBase.BiomeMeta(EntityHorse.class, 1, 2, 6));
         this.as.A = 1;
         this.as.B = 4;
         this.as.C = 20;

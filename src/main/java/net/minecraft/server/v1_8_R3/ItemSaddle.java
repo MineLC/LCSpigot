@@ -8,19 +8,9 @@ public class ItemSaddle extends Item {
     }
 
     public boolean a(ItemStack itemstack, EntityHuman entityhuman, EntityLiving entityliving) {
-        if (entityliving instanceof EntityPig) {
-            EntityPig entitypig = (EntityPig) entityliving;
-
-            if (!entitypig.hasSaddle() && !entitypig.isBaby()) {
-                entitypig.setSaddle(true);
-                entitypig.world.makeSound(entitypig, "mob.horse.leather", 0.5F, 1.0F);
-                --itemstack.count;
-            }
-
-            return true;
-        } else {
-            return false;
-        }
+        
+        return false;
+        
     }
 
     public boolean a(ItemStack itemstack, EntityLiving entityliving, EntityLiving entityliving1) {

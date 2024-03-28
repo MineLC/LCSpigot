@@ -1,8 +1,6 @@
 package org.spigotmc;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.bukkit.craftbukkit.v1_8_R3.SpigotTimings;
 
@@ -10,25 +8,16 @@ import net.minecraft.server.v1_8_R3.AxisAlignedBB;
 import net.minecraft.server.v1_8_R3.Chunk;
 import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityAmbient;
-import net.minecraft.server.v1_8_R3.EntityAnimal;
 import net.minecraft.server.v1_8_R3.EntityArrow;
 import net.minecraft.server.v1_8_R3.EntityComplexPart;
 import net.minecraft.server.v1_8_R3.EntityCreature;
-import net.minecraft.server.v1_8_R3.EntityEnderCrystal;
-import net.minecraft.server.v1_8_R3.EntityEnderDragon;
 import net.minecraft.server.v1_8_R3.EntityFireball;
 import net.minecraft.server.v1_8_R3.EntityFireworks;
 import net.minecraft.server.v1_8_R3.EntityHuman;
 import net.minecraft.server.v1_8_R3.EntityLiving;
-import net.minecraft.server.v1_8_R3.EntityMonster;
 import net.minecraft.server.v1_8_R3.EntityProjectile;
-import net.minecraft.server.v1_8_R3.EntitySheep;
-import net.minecraft.server.v1_8_R3.EntitySlice;
-import net.minecraft.server.v1_8_R3.EntitySlime;
 import net.minecraft.server.v1_8_R3.EntityTNTPrimed;
-import net.minecraft.server.v1_8_R3.EntityVillager;
 import net.minecraft.server.v1_8_R3.EntityWeather;
-import net.minecraft.server.v1_8_R3.EntityWither;
 import net.minecraft.server.v1_8_R3.MathHelper;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.World;
@@ -50,10 +39,7 @@ public class ActivationRange
      */
     public static byte initializeEntityActivationType(Entity entity)
     {
-        if ( entity instanceof EntityMonster || entity instanceof EntitySlime )
-        {
-            return 1; // Monster
-        } else if ( entity instanceof EntityCreature || entity instanceof EntityAmbient )
+        if ( entity instanceof EntityCreature || entity instanceof EntityAmbient )
         {
             return 2; // Animal
         } else
@@ -76,13 +62,10 @@ public class ActivationRange
                 || ( entity.activationType == 1 && config.monsterActivationRange == 0 )
                 || entity instanceof EntityHuman
                 || entity instanceof EntityProjectile
-                || entity instanceof EntityEnderDragon
                 || entity instanceof EntityComplexPart
-                || entity instanceof EntityWither
                 || entity instanceof EntityFireball
                 || entity instanceof EntityWeather
                 || entity instanceof EntityTNTPrimed
-                || entity instanceof EntityEnderCrystal
                 || entity instanceof EntityFireworks )
         {
             return true;
@@ -207,22 +190,6 @@ public class ActivationRange
             if ( entity instanceof EntityCreature && ( (EntityCreature) entity ).getGoalTarget() != null )
             {
                 return true;
-            }
-            if ( entity instanceof EntityVillager && ( (EntityVillager) entity ).cm() /* Getter for first boolean */ )
-            {
-                return true;
-            }
-            if ( entity instanceof EntityAnimal )
-            {
-                EntityAnimal animal = (EntityAnimal) entity;
-                if ( animal.isBaby() || animal.isInLove() )
-                {
-                    return true;
-                }
-                if ( entity instanceof EntitySheep && ( (EntitySheep) entity ).isSheared() )
-                {
-                    return true;
-                }
             }
         }
         return false;

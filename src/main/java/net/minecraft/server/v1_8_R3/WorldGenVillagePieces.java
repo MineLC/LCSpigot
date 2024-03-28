@@ -1543,26 +1543,7 @@ public class WorldGenVillagePieces {
         }
 
         protected void a(World world, StructureBoundingBox structureboundingbox, int i, int j, int k, int l) {
-            if (this.a < l) {
-                for (int i1 = this.a; i1 < l; ++i1) {
-                    int j1 = this.a(i + i1, k);
-                    int k1 = this.d(j);
-                    int l1 = this.b(i + i1, k);
 
-                    if (!structureboundingbox.b((BaseBlockPosition) (new BlockPosition(j1, k1, l1)))) {
-                        break;
-                    }
-
-                    ++this.a;
-                    EntityVillager entityvillager = new EntityVillager(world);
-
-                    entityvillager.setPositionRotation((double) j1 + 0.5D, (double) k1, (double) l1 + 0.5D, 0.0F, 0.0F);
-                    entityvillager.prepare(world.E(new BlockPosition(entityvillager)), (GroupDataEntity) null);
-                    entityvillager.setProfession(this.c(i1, entityvillager.getProfession()));
-                    world.addEntity(entityvillager, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.CHUNK_GEN); // CraftBukkit - add SpawnReason
-                }
-
-            }
         }
 
         protected int c(int i, int j) {

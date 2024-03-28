@@ -356,12 +356,6 @@ public abstract class EntityHuman extends EntityLiving {
             this.bn = this.bo;
             this.bo = 0.0F;
             this.l(this.locX - d0, this.locY - d1, this.locZ - d2);
-            if (this.vehicle instanceof EntityPig) {
-                this.pitch = f1;
-                this.yaw = f;
-                this.aI = ((EntityPig) this.vehicle).aI;
-            }
-
         }
     }
 
@@ -845,26 +839,6 @@ public abstract class EntityHuman extends EntityLiving {
         if (true) {
             return super.d(damagesource, f);
         }
-        // CraftBukkit end
-        if (!this.isInvulnerable(damagesource)) {
-            if (!damagesource.ignoresArmor() && this.isBlocking() && f > 0.0F) {
-                f = (1.0F + f) * 0.5F;
-            }
-
-            f = this.applyArmorModifier(damagesource, f);
-            f = this.applyMagicModifier(damagesource, f);
-            float f1 = f;
-
-            f = Math.max(f - this.getAbsorptionHearts(), 0.0F);
-            this.setAbsorptionHearts(this.getAbsorptionHearts() - (f1 - f));
-            if (f != 0.0F) {
-                this.applyExhaustion(damagesource.getExhaustionCost());
-                float f2 = this.getHealth();
-
-                this.setHealth(this.getHealth() - f);
-                this.bs().a(damagesource, f2, f);
-             }
-        }
         return false; // CraftBukkit
     }
 
@@ -873,8 +847,6 @@ public abstract class EntityHuman extends EntityLiving {
     public void openTrade(IMerchant imerchant) {}
 
     public void openContainer(IInventory iinventory) {}
-
-    public void openHorseInventory(EntityHorse entityhorse, IInventory iinventory) {}
 
     public void openTileEntity(ITileEntityContainer itileentitycontainer) {}
 
@@ -1113,14 +1085,6 @@ public abstract class EntityHuman extends EntityLiving {
 
             if (Math.abs(this.locX - (double) blockposition.getX()) > 3.0D || Math.abs(this.locY - (double) blockposition.getY()) > 2.0D || Math.abs(this.locZ - (double) blockposition.getZ()) > 3.0D) {
                 return EntityHuman.EnumBedResult.TOO_FAR_AWAY;
-            }
-
-            double d0 = 8.0D;
-            double d1 = 5.0D;
-            List list = this.world.a(EntityMonster.class, new AxisAlignedBB((double) blockposition.getX() - d0, (double) blockposition.getY() - d1, (double) blockposition.getZ() - d0, (double) blockposition.getX() + d0, (double) blockposition.getY() + d1, (double) blockposition.getZ() + d0));
-
-            if (!list.isEmpty()) {
-                return EntityHuman.EnumBedResult.NOT_SAFE;
             }
         }
 
