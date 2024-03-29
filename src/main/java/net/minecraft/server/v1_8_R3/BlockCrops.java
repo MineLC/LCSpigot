@@ -2,8 +2,6 @@ package net.minecraft.server.v1_8_R3;
 
 import java.util.Random;
 
-import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory; // CraftBukkit
-
 public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement {
 
     public static final BlockStateInteger AGE = BlockStateInteger.of("age", 0, 7);
@@ -96,7 +94,7 @@ public class BlockCrops extends BlockPlant implements IBlockFragilePlantElement 
                 int k = 3 + i;
 
                 for (int l = 0; l < k; ++l) {
-                    if (World.RANDOM.nextInt(15) <= j) {
+                    if (world.random.nextInt(15) <= j) {
                         a(world, blockposition, new ItemStack(this.l(), 1, 0));
                     }
                 }

@@ -32,9 +32,9 @@ public class BlockNetherWart extends BlockPlant {
             int j = 1;
 
             if (((Integer) iblockdata.get(BlockNetherWart.AGE)).intValue() >= 3) {
-                j = 2 + World.RANDOM.nextInt(3);
+                j = 2 + world.random.nextInt(3);
                 if (i > 0) {
-                    j += World.RANDOM.nextInt(i + 1);
+                    j += world.random.nextInt(i + 1);
                 }
             }
 

@@ -189,7 +189,7 @@ public class BlockTripwireHook extends Block {
         } else if (flag && !flag2) {
             world.makeSound((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.1D, (double) blockposition.getZ() + 0.5D, "random.click", 0.4F, 0.7F);
         } else if (!flag && flag2) {
-            world.makeSound((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.1D, (double) blockposition.getZ() + 0.5D, "random.bowhit", 0.4F, 1.2F / (World.RANDOM.nextFloat() * 0.2F + 0.9F));
+            world.makeSound((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.1D, (double) blockposition.getZ() + 0.5D, "random.bowhit", 0.4F, 0.4F);
         }
 
     }
@@ -284,7 +284,7 @@ public class BlockTripwireHook extends Block {
 
     static class SyntheticClass_1 {
 
-        static final int[] a = new int[EnumDirection.values().length];
+        static final int[] a = new int[EnumDirection.n.length];
 
         static {
             try {

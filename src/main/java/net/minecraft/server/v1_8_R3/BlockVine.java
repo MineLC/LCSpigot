@@ -165,7 +165,7 @@ public class BlockVine extends Block {
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         if (!world.isClientSide) {
-            if (World.RANDOM.nextInt(4) == 0) {
+            if (world.random.nextInt(4) == 0) {
                 byte b0 = 4;
                 int i = 5;
                 boolean flag = false;
@@ -402,7 +402,7 @@ public class BlockVine extends Block {
 
     static class SyntheticClass_1 {
 
-        static final int[] a = new int[EnumDirection.values().length];
+        static final int[] a = new int[EnumDirection.n.length];
 
         static {
             try {

@@ -67,6 +67,11 @@ public class EntityArmorStand extends EntityLiving {
         this.datawatcher.a(16, EntityArmorStand.f);
     }
 
+    @Override
+    public void move(double d0, double d1, double d2) {
+        return;
+    }
+
     public ItemStack bA() {
         return this.items[0];
     }

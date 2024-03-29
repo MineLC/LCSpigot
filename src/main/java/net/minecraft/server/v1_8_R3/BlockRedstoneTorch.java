@@ -52,7 +52,7 @@ public class BlockRedstoneTorch extends BlockTorch {
 
     public void onPlace(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (this.isOn) {
-            EnumDirection[] aenumdirection = EnumDirection.values();
+            EnumDirection[] aenumdirection = EnumDirection.n;
             int i = aenumdirection.length;
 
             for (int j = 0; j < i; ++j) {
@@ -66,7 +66,7 @@ public class BlockRedstoneTorch extends BlockTorch {
 
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (this.isOn) {
-            EnumDirection[] aenumdirection = EnumDirection.values();
+            EnumDirection[] aenumdirection = EnumDirection.n;
             int i = aenumdirection.length;
 
             for (int j = 0; j < i; ++j) {
@@ -119,7 +119,7 @@ public class BlockRedstoneTorch extends BlockTorch {
                 // CraftBukkit end
                 world.setTypeAndData(blockposition, Blocks.UNLIT_REDSTONE_TORCH.getBlockData().set(BlockRedstoneTorch.FACING, iblockdata.get(BlockRedstoneTorch.FACING)), 3);
                 if (this.a(world, blockposition, true)) {
-                    world.makeSound((double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), "random.fizz", 0.5F, 2.6F + (World.RANDOM.nextFloat() - World.RANDOM.nextFloat()) * 0.8F);
+                    world.makeSound((double) ((float) blockposition.getX() + 0.5F), (double) ((float) blockposition.getY() + 0.5F), (double) ((float) blockposition.getZ() + 0.5F), "random.fizz", 0.5F, 2.6F);
 
                     for (int i = 0; i < 5; ++i) {
                         double d0 = (double) blockposition.getX() + random.nextDouble() * 0.6D + 0.2D;

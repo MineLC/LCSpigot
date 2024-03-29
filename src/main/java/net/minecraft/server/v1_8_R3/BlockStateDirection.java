@@ -17,7 +17,7 @@ public class BlockStateDirection extends BlockStateEnum<EnumDirection> {
     }
 
     public static BlockStateDirection of(String s, Predicate<EnumDirection> predicate) {
-        return a(s, Collections2.filter(Lists.newArrayList(EnumDirection.values()), predicate));
+        return a(s, Collections2.filter(Lists.newArrayList(EnumDirection.n), predicate));
     }
 
     public static BlockStateDirection a(String s, Collection<EnumDirection> collection) {

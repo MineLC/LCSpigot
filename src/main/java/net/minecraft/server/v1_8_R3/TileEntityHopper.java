@@ -567,7 +567,7 @@ public class TileEntityHopper extends TileEntityContainer implements IHopper, IU
             List list = world.a((Entity) null, new AxisAlignedBB(d0 - 0.5D, d1 - 0.5D, d2 - 0.5D, d0 + 0.5D, d1 + 0.5D, d2 + 0.5D), IEntitySelector.c);
 
             if (list.size() > 0) {
-                object = (IInventory) list.get(World.RANDOM.nextInt(list.size()));
+                object = (IInventory) list.get(world.random.nextInt(list.size()));
             }
         }
 

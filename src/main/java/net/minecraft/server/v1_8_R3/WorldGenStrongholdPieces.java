@@ -173,7 +173,7 @@ public class WorldGenStrongholdPieces {
     static class SyntheticClass_1 {
 
         static final int[] a;
-        static final int[] b = new int[EnumDirection.values().length];
+        static final int[] b = new int[EnumDirection.n.length];
 
         static {
             try {

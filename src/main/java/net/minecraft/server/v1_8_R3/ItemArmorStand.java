@@ -2,6 +2,7 @@ package net.minecraft.server.v1_8_R3;
 
 import java.util.List;
 import java.util.Random;
+import java.util.SplittableRandom;
 
 public class ItemArmorStand extends Item {
 
@@ -41,7 +42,7 @@ public class ItemArmorStand extends Item {
                             float f3 = (float) MathHelper.d((MathHelper.g(entityhuman.yaw - 180.0F) + 22.5F) / 45.0F) * 45.0F;
 
                             entityarmorstand.setPositionRotation(d0 + 0.5D, d1, d2 + 0.5D, f3, 0.0F);
-                            this.a(entityarmorstand, World.RANDOM);
+                            this.a(entityarmorstand);
                             NBTTagCompound nbttagcompound = itemstack.getTag();
 
                             if (nbttagcompound != null && nbttagcompound.hasKeyOfType("EntityTag", 10)) {
@@ -63,15 +64,15 @@ public class ItemArmorStand extends Item {
         }
     }
 
-    private void a(EntityArmorStand entityarmorstand, Random random) {
+    private void a(EntityArmorStand entityarmorstand) {
         Vector3f vector3f = entityarmorstand.t();
-        float f = random.nextFloat() * 5.0F;
-        float f1 = random.nextFloat() * 20.0F - 10.0F;
+        float f = 5.0F;
+        float f1 = 10.0F;
         Vector3f vector3f1 = new Vector3f(vector3f.getX() + f, vector3f.getY() + f1, vector3f.getZ());
 
         entityarmorstand.setHeadPose(vector3f1);
         vector3f = entityarmorstand.u();
-        f = random.nextFloat() * 10.0F - 5.0F;
+        f = 5.0F;
         vector3f1 = new Vector3f(vector3f.getX(), vector3f.getY() + f, vector3f.getZ());
         entityarmorstand.setBodyPose(vector3f1);
     }

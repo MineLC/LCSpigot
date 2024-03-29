@@ -118,7 +118,8 @@ public class ChunkProviderServer implements IChunkProvider {
     }
     public Chunk originalGetChunkAt(int i, int j) {
         this.unloadQueue.remove(i, j);
-        Chunk chunk = (Chunk) this.chunks.get(LongHash.toLong(i, j));
+        final long key = LongHash.toLong(i, j);
+        Chunk chunk = (Chunk) this.chunks.get(key);
         boolean newChunk = false;
         // CraftBukkit end
 
@@ -143,7 +144,7 @@ public class ChunkProviderServer implements IChunkProvider {
                 newChunk = true; // CraftBukkit
             }
 
-            this.chunks.put(LongHash.toLong(i, j), chunk);
+            this.chunks.put(key, chunk);
             
             chunk.addEntities();
             
@@ -382,9 +383,6 @@ public class ChunkProviderServer implements IChunkProvider {
         return "ServerChunkCache: " + this.chunks.size() + " Drop: " + this.unloadQueue.size();
     }
 
-    public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
-        return this.chunkProvider.getMobsFor(enumcreaturetype, blockposition);
-    }
 
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
         return this.chunkProvider.findNearestMapFeature(world, s, blockposition);

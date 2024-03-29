@@ -2,8 +2,6 @@ package net.minecraft.server.v1_8_R3;
 
 import java.util.Random;
 
-import org.bukkit.event.block.BlockFromToEvent; // CraftBukkit
-
 public class BlockDragonEgg extends Block {
 
     public BlockDragonEgg() {
@@ -56,47 +54,7 @@ public class BlockDragonEgg extends Block {
     }
 
     private void f(World world, BlockPosition blockposition) {
-        IBlockData iblockdata = world.getType(blockposition);
 
-        if (iblockdata.getBlock() == this) {
-            for (int i = 0; i < 1000; ++i) {
-                BlockPosition blockposition1 = blockposition.a(World.RANDOM.nextInt(16) - World.RANDOM.nextInt(16), World.RANDOM.nextInt(8) - World.RANDOM.nextInt(8), World.RANDOM.nextInt(16) - World.RANDOM.nextInt(16));
-
-                if (world.getType(blockposition1).getBlock().material == Material.AIR) {
-                    // CraftBukkit start
-                    org.bukkit.block.Block from = world.getWorld().getBlockAt(blockposition.getX(), blockposition.getY(), blockposition.getZ());
-                    org.bukkit.block.Block to = world.getWorld().getBlockAt(blockposition1.getX(), blockposition1.getY(), blockposition1.getZ());
-                    BlockFromToEvent event = new BlockFromToEvent(from, to);
-                    org.bukkit.Bukkit.getPluginManager().callEvent(event);
-
-                    if (event.isCancelled()) {
-                        return;
-                    }
-
-                    blockposition1 = new BlockPosition(event.getToBlock().getX(), event.getToBlock().getY(), event.getToBlock().getZ());
-                    // CraftBukkit end
-                    if (world.isClientSide) {
-                        for (int j = 0; j < 128; ++j) {
-                            double d0 = World.RANDOM.nextDouble();
-                            float f = (World.RANDOM.nextFloat() - 0.5F) * 0.2F;
-                            float f1 = (World.RANDOM.nextFloat() - 0.5F) * 0.2F;
-                            float f2 = (World.RANDOM.nextFloat() - 0.5F) * 0.2F;
-                            double d1 = (double) blockposition1.getX() + (double) (blockposition.getX() - blockposition1.getX()) * d0 + (World.RANDOM.nextDouble() - 0.5D) * 1.0D + 0.5D;
-                            double d2 = (double) blockposition1.getY() + (double) (blockposition.getY() - blockposition1.getY()) * d0 + World.RANDOM.nextDouble() * 1.0D - 0.5D;
-                            double d3 = (double) blockposition1.getZ() + (double) (blockposition.getZ() - blockposition1.getZ()) * d0 + (World.RANDOM.nextDouble() - 0.5D) * 1.0D + 0.5D;
-
-                            world.addParticle(EnumParticle.PORTAL, d1, d2, d3, (double) f, (double) f1, (double) f2, new int[0]);
-                        }
-                    } else {
-                        world.setTypeAndData(blockposition1, iblockdata, 2);
-                        world.setAir(blockposition);
-                    }
-
-                    return;
-                }
-            }
-
-        }
     }
 
     public int a(World world) {

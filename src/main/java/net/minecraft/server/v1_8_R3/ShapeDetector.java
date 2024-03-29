@@ -60,12 +60,12 @@ public class ShapeDetector {
 
         while (iterator.hasNext()) {
             BlockPosition blockposition1 = (BlockPosition) iterator.next();
-            EnumDirection[] aenumdirection = EnumDirection.values();
+            EnumDirection[] aenumdirection = EnumDirection.n;
             int j = aenumdirection.length;
 
             for (int k = 0; k < j; ++k) {
                 EnumDirection enumdirection = aenumdirection[k];
-                EnumDirection[] aenumdirection1 = EnumDirection.values();
+                EnumDirection[] aenumdirection1 = EnumDirection.n;
                 int l = aenumdirection1.length;
 
                 for (int i1 = 0; i1 < l; ++i1) {

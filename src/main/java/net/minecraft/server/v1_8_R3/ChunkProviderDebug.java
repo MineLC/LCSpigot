@@ -94,12 +94,6 @@ public class ChunkProviderDebug implements IChunkProvider {
         return "DebugLevelSource";
     }
 
-    public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
-        BiomeBase biomebase = this.d.getBiome(blockposition);
-
-        return biomebase.getMobs(enumcreaturetype);
-    }
-
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
         return null;
     }

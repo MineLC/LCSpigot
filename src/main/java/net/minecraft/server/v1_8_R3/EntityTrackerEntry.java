@@ -385,7 +385,7 @@ public class EntityTrackerEntry {
 
                     if (this.tracker instanceof EntityLiving) {
                         this.i = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
-                        this.broadcast(new PacketPlayOutEntityHeadRotation(this.tracker, (byte) i));
+                        entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityHeadRotation(this.tracker, (byte) this.i)); // PandaSpigot - Don't broadcast
                         
                         EntityLiving entityliving = (EntityLiving) this.tracker;
                         Iterator iterator = entityliving.getEffects().iterator();
@@ -443,9 +443,6 @@ public class EntityTrackerEntry {
             return new PacketPlayOutSpawnEntity(this.tracker, 10, entityminecartabstract.s().a());
         } else if (this.tracker instanceof EntityBoat) {
             return new PacketPlayOutSpawnEntity(this.tracker, 1);
-        } else if (this.tracker instanceof IAnimal) {
-            this.i = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
-            return new PacketPlayOutSpawnEntityLiving((EntityLiving) this.tracker);
         } else if (this.tracker instanceof EntityFishingHook) {
             EntityHuman entityhuman = ((EntityFishingHook) this.tracker).owner;
 

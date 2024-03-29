@@ -19,7 +19,6 @@ public class DispenseBehaviorItem implements IDispenseBehavior {
 
     protected ItemStack b(ISourceBlock isourceblock, ItemStack itemstack) {
         EnumDirection enumdirection = BlockDispenser.b(isourceblock.f());
-        IPosition iposition = BlockDispenser.a(isourceblock);
         ItemStack itemstack1 = itemstack.a(1);
 
         // CraftBukkit start
@@ -45,7 +44,7 @@ public class DispenseBehaviorItem implements IDispenseBehavior {
         }
 
         EntityItem entityitem = new EntityItem(world, d0, d1, d2, itemstack);
-        double d3 = World.RANDOM.nextDouble() * 0.1D + 0.2D;
+        double d3 = world.random.nextDouble() * 0.1D + 0.2D;
 
         entityitem.motX = (double) enumdirection.getAdjacentX() * d3;
         entityitem.motY = 0.20000000298023224D;

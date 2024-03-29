@@ -25,7 +25,7 @@ public class WorldGenMonumentPieces {
 
     static class SyntheticClass_1 {
 
-        static final int[] a = new int[EnumDirection.values().length];
+        static final int[] a = new int[EnumDirection.n.length];
 
         static {
             try {
@@ -1352,7 +1352,7 @@ public class WorldGenMonumentPieces {
                     for (int i2 = 0; i2 < 3; ++i2) {
                         k = b(i, i2, j);
                         if (aworldgenmonumentpieces_worldgenmonumentstatetracker[k] != null) {
-                            EnumDirection[] aenumdirection = EnumDirection.values();
+                            EnumDirection[] aenumdirection = EnumDirection.n;
 
                             l = aenumdirection.length;
 

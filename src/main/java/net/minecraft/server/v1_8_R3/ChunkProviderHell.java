@@ -359,22 +359,6 @@ public class ChunkProviderHell implements IChunkProvider {
         return "HellRandomLevelSource";
     }
 
-    public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
-        if (enumcreaturetype == EnumCreatureType.MONSTER) {
-            if (this.B.b(blockposition)) {
-                return this.B.b();
-            }
-
-            if (this.B.a(this.h, blockposition) && this.h.getType(blockposition.down()).getBlock() == Blocks.NETHER_BRICK) {
-                return this.B.b();
-            }
-        }
-
-        BiomeBase biomebase = this.h.getBiome(blockposition);
-
-        return biomebase.getMobs(enumcreaturetype);
-    }
-
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
         return null;
     }

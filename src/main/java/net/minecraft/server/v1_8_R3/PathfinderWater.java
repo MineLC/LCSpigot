@@ -22,7 +22,7 @@ public class PathfinderWater extends PathfinderAbstract {
 
     public int a(PathPoint[] apathpoint, Entity entity, PathPoint pathpoint, PathPoint pathpoint1, float f) {
         int i = 0;
-        EnumDirection[] aenumdirection = EnumDirection.values();
+        EnumDirection[] aenumdirection = EnumDirection.n;
         int j = aenumdirection.length;
 
         for (int k = 0; k < j; ++k) {

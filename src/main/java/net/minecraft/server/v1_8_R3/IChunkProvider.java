@@ -22,8 +22,6 @@ public interface IChunkProvider {
 
     String getName();
 
-    List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition);
-
     BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition);
 
     int getLoadedChunks();

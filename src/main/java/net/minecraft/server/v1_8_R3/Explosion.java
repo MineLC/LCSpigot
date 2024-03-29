@@ -49,7 +49,6 @@ public class Explosion {
         }
         // CraftBukkit end
         HashSet hashset = Sets.newHashSet();
-        boolean flag = true;
 
         int i;
         int j;
@@ -66,7 +65,7 @@ public class Explosion {
                         d0 /= d3;
                         d1 /= d3;
                         d2 /= d3;
-                        float f = this.size * (0.7F + World.RANDOM.nextFloat() * 0.6F);
+                        float f = (float) (this.size * (0.7F + world.random.nextDouble() * 0.6F));
                         double d4 = this.posX;
                         double d5 = this.posY;
                         double d6 = this.posZ;
@@ -149,7 +148,7 @@ public class Explosion {
     }
 
     public void a(boolean flag) {
-        this.world.makeSound(this.posX, this.posY, this.posZ, "random.explode", 4.0F, (1.0F + (World.RANDOM.nextFloat() - World.RANDOM.nextFloat()) * 0.2F) * 0.7F);
+        this.world.makeSound(this.posX, this.posY, this.posZ, "random.explode", 4.0F, 1.0F);
         if (this.size >= 2.0F && this.b) {
             this.world.addParticle(EnumParticle.EXPLOSION_HUGE, this.posX, this.posY, this.posZ, 1.0D, 0.0D, 0.0D, new int[0]);
         } else {
@@ -211,9 +210,9 @@ public class Explosion {
                 Block block = this.world.getType(blockposition).getBlock();
 
                 if (flag) {
-                    double d0 = (double) ((float) blockposition.getX() + World.RANDOM.nextFloat());
-                    double d1 = (double) ((float) blockposition.getY() + World.RANDOM.nextFloat());
-                    double d2 = (double) ((float) blockposition.getZ() + World.RANDOM.nextFloat());
+                    double d0 = (double) ((float) blockposition.getX() + world.random.nextDouble());
+                    double d1 = (double) ((float) blockposition.getY() + world.random.nextDouble());
+                    double d2 = (double) ((float) blockposition.getZ() + world.random.nextDouble());
                     double d3 = d0 - this.posX;
                     double d4 = d1 - this.posY;
                     double d5 = d2 - this.posZ;
@@ -224,7 +223,7 @@ public class Explosion {
                     d5 /= d6;
                     double d7 = 0.5D / (d6 / (double) this.size + 0.1D);
 
-                    d7 *= (double) (World.RANDOM.nextFloat() * World.RANDOM.nextFloat() + 0.3F);
+                    d7 *= (double) (world.random.nextDouble() * world.random.nextDouble() + 0.3F);
                     d3 *= d7;
                     d4 *= d7;
                     d5 *= d7;

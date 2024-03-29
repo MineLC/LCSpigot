@@ -408,22 +408,6 @@ public class ChunkProviderGenerate implements IChunkProvider {
         return "RandomLevelSource";
     }
 
-    public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
-        BiomeBase biomebase = this.m.getBiome(blockposition);
-
-        if (this.n) {
-            if (enumcreaturetype == EnumCreatureType.MONSTER && this.y.a(blockposition)) {
-                return this.y.b();
-            }
-
-            if (enumcreaturetype == EnumCreatureType.MONSTER && this.r.y && this.A.a(this.m, blockposition)) {
-                return this.A.b();
-            }
-        }
-
-        return biomebase.getMobs(enumcreaturetype);
-    }
-
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
         return "Stronghold".equals(s) && this.v != null ? this.v.getNearestGeneratedFeature(world, blockposition) : null;
     }

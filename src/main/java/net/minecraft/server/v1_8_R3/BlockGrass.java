@@ -23,7 +23,7 @@ public class BlockGrass extends Block implements IBlockFragilePlantElement {
     }
 
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), random, i);
+        return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), i);
     }
 
     public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {

@@ -43,7 +43,7 @@ public abstract class BlockButtonAbstract extends Block {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        EnumDirection[] aenumdirection = EnumDirection.values();
+        EnumDirection[] aenumdirection = EnumDirection.n;
         int i = aenumdirection.length;
 
         for (int j = 0; j < i; ++j) {
@@ -366,7 +366,7 @@ public abstract class BlockButtonAbstract extends Block {
 
     static class SyntheticClass_1 {
 
-        static final int[] a = new int[EnumDirection.values().length];
+        static final int[] a = new int[EnumDirection.n.length];
 
         static {
             try {

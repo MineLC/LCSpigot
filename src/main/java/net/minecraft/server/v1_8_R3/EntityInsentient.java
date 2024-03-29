@@ -807,7 +807,7 @@ public abstract class EntityInsentient extends EntityLiving {
     }
 
     public boolean cb() {
-        return !this.cc() && !(this instanceof IMonster);
+        return true;
     }
 
     public boolean cc() {

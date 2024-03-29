@@ -71,8 +71,8 @@ public class BlockMycel extends Block {
         }
     }
 
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), random, i);
+    public Item getDropType(IBlockData iblockdata, int i) {
+        return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), i);
     }
 
     public int toLegacyData(IBlockData iblockdata) {

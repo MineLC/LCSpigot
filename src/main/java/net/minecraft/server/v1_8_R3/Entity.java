@@ -116,8 +116,6 @@ public abstract class Entity {
     public org.bukkit.projectiles.ProjectileSource projectileSource; // CraftBukkit - For projectiles only
 
     // Spigot start
-    public final byte activationType = org.spigotmc.ActivationRange.initializeEntityActivationType(this);
-    public final boolean defaultActivationState;
     public long activatedTick = Integer.MIN_VALUE;
     public boolean fromMobSpawner;
     public void inactiveTick() { }
@@ -143,8 +141,6 @@ public abstract class Entity {
         this.datawatcher.a(3, (byte) 0);
         this.datawatcher.a(2, "");
         this.datawatcher.a(4, (byte) 0);
-
-        this.defaultActivationState = false;
     }
 
     public Entity(World world) {
@@ -162,9 +158,6 @@ public abstract class Entity {
         if (world != null) {
             this.dimension = world.worldProvider.getDimension();
             // Spigot start
-            this.defaultActivationState = org.spigotmc.ActivationRange.initializeEntityActivationState(this, world.spigotConfig);
-        } else {
-            this.defaultActivationState = false;
         }
         // Spigot end
 
@@ -488,7 +481,15 @@ public abstract class Entity {
                 }
             }
 
-            List list = this.world.getCubes(this, this.getBoundingBox().a(d0, d1, d2));
+            // PandaSpigot start - do axis by axis scan if the entity is travelling a large area
+            AxisAlignedBB totalArea = this.getBoundingBox().a(d0, d1, d2);
+            double xLenght = totalArea.d - totalArea.a;
+            double yLenght = totalArea.e - totalArea.b;
+            double zLenght = totalArea.f - totalArea.c;
+            boolean axisScan = xLenght * yLenght * zLenght > 10;
+            
+            List list = this.world.getCubes(this, axisScan ? this.getBoundingBox().a(0, d1, 0) : totalArea);
+            // PandaSpigot end            AxisAlignedBB axisalignedbb = this.getBoundingBox();
             AxisAlignedBB axisalignedbb = this.getBoundingBox();
 
             AxisAlignedBB axisalignedbb1;
@@ -499,6 +500,7 @@ public abstract class Entity {
 
             this.a(this.getBoundingBox().c(0.0D, d1, 0.0D));
             boolean flag1 = this.onGround || d7 != d1 && d7 < 0.0D;
+            if (axisScan) list = this.world.getCubes(this, this.getBoundingBox().a(d0, 0, 0)); // PandaSpigot - get x axis blocks
 
             AxisAlignedBB axisalignedbb2;
             Iterator iterator1;
@@ -508,6 +510,7 @@ public abstract class Entity {
             }
 
             this.a(this.getBoundingBox().c(d0, 0.0D, 0.0D));
+            if (axisScan) list = this.world.getCubes(this, this.getBoundingBox().a(0, 0, d2)); // PandaSpigot - get z axis blocks
 
             for (iterator1 = list.iterator(); iterator1.hasNext(); d2 = axisalignedbb2.c(this.getBoundingBox(), d2)) {
                 axisalignedbb2 = (AxisAlignedBB) iterator1.next();
@@ -1915,16 +1918,6 @@ public abstract class Entity {
 
             Location enter = this.getBukkitEntity().getLocation();
             Location exit = exitWorld != null ? minecraftserver.getPlayerList().calculateTarget(enter, minecraftserver.getWorldServer(i)) : null;
-            boolean useTravelAgent = exitWorld != null && !(this.dimension == 1 && exitWorld.dimension == 1); // don't use agent for custom worlds or return from THE_END
-
-            TravelAgent agent = exit != null ? (TravelAgent) ((CraftWorld) exit.getWorld()).getHandle().getTravelAgent() : org.bukkit.craftbukkit.v1_8_R3.CraftTravelAgent.DEFAULT; // return arbitrary TA to compensate for implementation dependent plugins
-            EntityPortalEvent event = new EntityPortalEvent(this.getBukkitEntity(), enter, exit, agent);
-            event.useTravelAgent(useTravelAgent);
-            event.getEntity().getServer().getPluginManager().callEvent(event);
-            if (event.isCancelled() || event.getTo() == null || event.getTo().getWorld() == null || !this.isAlive()) {
-                return;
-            }
-            exit = event.useTravelAgent() ? event.getPortalTravelAgent().findOrCreate(event.getTo()) : event.getTo();
             this.teleportTo(exit, true);
         }
     }

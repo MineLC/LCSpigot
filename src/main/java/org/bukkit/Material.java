@@ -28,7 +28,6 @@ import org.bukkit.material.Ladder;
 import org.bukkit.material.Lever;
 import org.bukkit.material.LongGrass;
 import org.bukkit.material.MaterialData;
-import org.bukkit.material.MonsterEggs;
 import org.bukkit.material.Mushroom;
 import org.bukkit.material.NetherWarts;
 import org.bukkit.material.PistonBaseMaterial;
@@ -161,7 +160,7 @@ public enum Material {
     DIODE_BLOCK_ON(94, Diode.class),
     STAINED_GLASS(95),
     TRAP_DOOR(96, TrapDoor.class),
-    MONSTER_EGGS(97, MonsterEggs.class),
+    MONSTER_EGGS(97),
     SMOOTH_BRICK(98, SmoothBrick.class),
     HUGE_MUSHROOM_1(99, Mushroom.class),
     HUGE_MUSHROOM_2(100, Mushroom.class),

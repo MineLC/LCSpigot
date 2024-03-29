@@ -61,35 +61,6 @@ public class BlockBeacon extends BlockContainer {
     }
 
     public static void f(final World world, final BlockPosition blockposition) {
-        HttpUtilities.a.submit(new Runnable() {
-            public void run() {
-                Chunk chunk = world.getChunkAtWorldCoords(blockposition);
 
-                for (int i = blockposition.getY() - 1; i >= 0; --i) {
-                    final BlockPosition blockposition1 = new BlockPosition(blockposition.getX(), i, blockposition.getZ());
-
-                    if (!chunk.d(blockposition1)) {
-                        break;
-                    }
-
-                    IBlockData iblockdata = world.getType(blockposition1);
-
-                    if (iblockdata.getBlock() == Blocks.BEACON) {
-                        ((WorldServer) world).postToMainThread(new Runnable() {
-                            public void run() {
-                                TileEntity tileentity = world.getTileEntity(blockposition);
-
-                                if (tileentity instanceof TileEntityBeacon) {
-                                    ((TileEntityBeacon) tileentity).m();
-                                    world.playBlockAction(blockposition, Blocks.BEACON, 1, 0);
-                                }
-
-                            }
-                        });
-                    }
-                }
-
-            }
-        });
     }
 }

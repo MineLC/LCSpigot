@@ -80,7 +80,7 @@ public class BlockStationary extends BlockFluids {
     }
 
     protected boolean f(World world, BlockPosition blockposition) {
-        EnumDirection[] aenumdirection = EnumDirection.values();
+        EnumDirection[] aenumdirection = EnumDirection.n;
         int i = aenumdirection.length;
 
         for (int j = 0; j < i; ++j) {

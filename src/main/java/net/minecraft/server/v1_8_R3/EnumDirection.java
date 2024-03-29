@@ -22,7 +22,7 @@ public enum EnumDirection implements INamable {
     private final String j;
     private final EnumDirection.EnumAxis k;
     private final EnumDirection.EnumAxisDirection l;
-    private static final EnumDirection[] n = new EnumDirection[6];
+    public static final EnumDirection[] n = new EnumDirection[6];
     private static final EnumDirection[] o = new EnumDirection[4];
     private static final Map<String, EnumDirection> p = Maps.newHashMap();
 

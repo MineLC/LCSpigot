@@ -186,25 +186,6 @@ public abstract class BiomeBase {
         return this;
     }
 
-    public List<BiomeBase.BiomeMeta> getMobs(EnumCreatureType enumcreaturetype) {
-        switch (BiomeBase.SyntheticClass_1.switchMap[enumcreaturetype.ordinal()]) {
-        case 1:
-            return Collections.emptyList();
-
-        case 2:
-            return Collections.emptyList();
-
-        case 3:
-            return Collections.emptyList();
-
-        case 4:
-            return Collections.emptyList();
-
-        default:
-            return Collections.emptyList();
-        }
-    }
-
     public boolean d() {
         return this.j();
     }
@@ -393,32 +374,6 @@ public abstract class BiomeBase {
         ae = new NoiseGenerator3(new Random(1234L), 1);
         af = new NoiseGenerator3(new Random(2345L), 1);
         ag = new WorldGenTallPlant();
-    }
-
-    static class SyntheticClass_1 {
-
-        static final int[] switchMap = new int[EnumCreatureType.values().length];
-
-        static {
-            try {
-                BiomeBase.SyntheticClass_1.switchMap[EnumCreatureType.MONSTER.ordinal()] = 1;
-            } catch (NoSuchFieldError nosuchfielderror) {
-                ;
-            }
-
-            try {
-                BiomeBase.SyntheticClass_1.switchMap[EnumCreatureType.WATER_CREATURE.ordinal()] = 3;
-            } catch (NoSuchFieldError nosuchfielderror2) {
-                ;
-            }
-
-            try {
-                BiomeBase.SyntheticClass_1.switchMap[EnumCreatureType.AMBIENT.ordinal()] = 4;
-            } catch (NoSuchFieldError nosuchfielderror3) {
-                ;
-            }
-
-        }
     }
 
     public static class BiomeMeta extends WeightedRandom.WeightedRandomChoice {

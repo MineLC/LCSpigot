@@ -56,7 +56,7 @@ public class BlockSoil extends Block {
     public void a(World world, BlockPosition blockposition, Entity entity, float f) {
         super.a(world, blockposition, entity, f); // CraftBukkit - moved here as game rules / events shouldn't affect fall damage.
         if (entity instanceof EntityLiving) {
-            if (!world.isClientSide && World.RANDOM.nextFloat() < f - 0.5F) {
+            if (!world.isClientSide && world.random.nextDouble() < f - 0.5F) {
                 if (!(entity instanceof EntityHuman) && !world.getGameRules().getBoolean("mobGriefing")) {
                     return;
                 }
@@ -117,7 +117,7 @@ public class BlockSoil extends Block {
     }
 
     public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), random, i);
+        return Blocks.DIRT.getDropType(Blocks.DIRT.getBlockData().set(BlockDirt.VARIANT, BlockDirt.EnumDirtVariant.DIRT), i);
     }
 
     public IBlockData fromLegacyData(int i) {

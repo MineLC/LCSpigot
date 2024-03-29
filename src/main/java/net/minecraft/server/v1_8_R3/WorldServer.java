@@ -33,7 +33,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     public boolean savingDisabled;
     private boolean O;
     private int emptyTime;
-    private final PortalTravelAgent Q;
     private final SpawnerCreature R = new SpawnerCreature();
     private WorldServer.BlockActionDataList[] S = new WorldServer.BlockActionDataList[] { new WorldServer.BlockActionDataList(null), new WorldServer.BlockActionDataList(null)};
     private int T;
@@ -55,7 +54,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         this.manager = new PlayerChunkMap(this, spigotConfig.viewDistance); // Spigot
         this.worldProvider.a(this);
         this.chunkProvider = this.k();
-        this.Q = new org.bukkit.craftbukkit.v1_8_R3.CraftTravelAgent(this); // CraftBukkit
         this.B();
         this.C();
         this.getWorldBorder().a(minecraftserver.aI());
@@ -209,22 +207,9 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         this.a(false);
         this.h();
         this.manager.flush();
-        this.Q.a(this.getTime());
         this.ak();
 
         this.getWorld().processChunkGC(); // CraftBukkit
-    }
-
-    public BiomeBase.BiomeMeta a(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
-        List list = this.N().getMobsFor(enumcreaturetype, blockposition);
-
-        return list != null && !list.isEmpty() ? (BiomeBase.BiomeMeta) WeightedRandom.a(RANDOM, list) : null;
-    }
-
-    public boolean a(EnumCreatureType enumcreaturetype, BiomeBase.BiomeMeta biomebase_biomemeta, BlockPosition blockposition) {
-        List list = this.N().getMobsFor(enumcreaturetype, blockposition);
-
-        return list != null && !list.isEmpty() ? list.contains(biomebase_biomemeta) : false;
     }
 
     public void everyoneSleeping() {
@@ -346,7 +331,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                     // ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair) iterator.next();
     
                     // CraftBukkit end
-                    this.a(chunkX << 4, chunkZ << 4, chunk);
+                    chunk.m();
                     chunk.b(false);
                 }
             }
@@ -995,10 +980,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     public PlayerChunkMap getPlayerChunkMap() {
         return this.manager;
-    }
-
-    public PortalTravelAgent getTravelAgent() {
-        return this.Q;
     }
 
     public void a(EnumParticle enumparticle, double d0, double d1, double d2, int i, double d3, double d4, double d5, double d6, int... aint) {

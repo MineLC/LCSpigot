@@ -1,7 +1,6 @@
 package net.minecraft.server.v1_8_R3;
 
 import java.util.List;
-import java.util.Random;
 
 public class BlockThin extends Block {
 
@@ -22,8 +21,8 @@ public class BlockThin extends Block {
         return iblockdata.set(BlockThin.NORTH, Boolean.valueOf(this.c(iblockaccess.getType(blockposition.north()).getBlock()))).set(BlockThin.SOUTH, Boolean.valueOf(this.c(iblockaccess.getType(blockposition.south()).getBlock()))).set(BlockThin.WEST, Boolean.valueOf(this.c(iblockaccess.getType(blockposition.west()).getBlock()))).set(BlockThin.EAST, Boolean.valueOf(this.c(iblockaccess.getType(blockposition.east()).getBlock())));
     }
 
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
-        return !this.a ? null : super.getDropType(iblockdata, random, i);
+    public Item getDropType(IBlockData iblockdata, int i) {
+        return !this.a ? null : super.getDropType(iblockdata, i);
     }
 
     public boolean c() {

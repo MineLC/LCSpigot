@@ -5,12 +5,15 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
+import lc.lcspigot.events.PlayerJoinTabInfoEvent;
+import lc.lcspigot.listeners.ListenerData;
+import lc.lcspigot.listeners.internal.EventsExecutor;
+
 import java.io.File;
 import java.net.SocketAddress;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.EventListener;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -21,13 +24,11 @@ import org.bukkit.craftbukkit.v1_8_R3.chunkio.ChunkIOExecutor;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.TravelAgent;
 import org.bukkit.craftbukkit.v1_8_R3.util.CraftChatMessage;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -280,25 +281,23 @@ public abstract class PlayerList {
 
         ChunkIOExecutor.adjustPoolSize(getPlayerCount());
         // CraftBukkit end
+        final PlayerJoinTabInfoEvent event = new PlayerJoinTabInfoEvent();
+        EventsExecutor.execute(event);
+        if (!event.isCancelled()) {
+            // CraftBukkit start - sendAll above replaced with this loop
+            PacketPlayOutPlayerInfo packet = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entityplayer);
+            final List<EntityPlayer> onlinePlayers = Lists.newArrayListWithExpectedSize(this.players.size() - 1); // PandaSpigot - use single player info update packet
 
-        // CraftBukkit start - sendAll above replaced with this loop
-        PacketPlayOutPlayerInfo packet = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entityplayer);
-
-        for (int i = 0; i < this.players.size(); ++i) {
-            EntityPlayer entityplayer1 = (EntityPlayer) this.players.get(i);
-
-            if (entityplayer1.getBukkitEntity().canSee(entityplayer.getBukkitEntity())) {
+            for (EntityPlayer entityplayer1 : onlinePlayers) {
+                if (entityplayer1 != entityplayer && !entityplayer1.getBukkitEntity().canSee(entityplayer.getBukkitEntity())) {
+                    continue;
+                }
                 entityplayer1.playerConnection.sendPacket(packet);
+                onlinePlayers.add(entityplayer1);
             }
-
-            if (!entityplayer.getBukkitEntity().canSee(entityplayer1.getBukkitEntity())) {
-                continue;
-            }
-
-            entityplayer.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, new EntityPlayer[] { entityplayer1}));
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, onlinePlayers));
+            // CraftBukkit end
         }
-        // CraftBukkit end
-
         // CraftBukkit start - Only add if the player wasn't moved in the event
         if (entityplayer.world == worldserver && !worldserver.players.contains(entityplayer)) {
             worldserver.addEntity(entityplayer);
@@ -609,21 +608,7 @@ public abstract class PlayerList {
                 useTravelAgent = true;
             }
         }
-
-        TravelAgent agent = exit != null ? (TravelAgent) ((CraftWorld) exit.getWorld()).getHandle().getTravelAgent() : org.bukkit.craftbukkit.v1_8_R3.CraftTravelAgent.DEFAULT; // return arbitrary TA to compensate for implementation dependent plugins
-        PlayerPortalEvent event = new PlayerPortalEvent(entityplayer.getBukkitEntity(), enter, exit, agent, cause);
-        event.useTravelAgent(useTravelAgent);
-        Bukkit.getServer().getPluginManager().callEvent(event);
-        if (event.isCancelled() || event.getTo() == null) {
-            return;
-        }
-
-        exit = event.useTravelAgent() ? event.getPortalTravelAgent().findOrCreate(event.getTo()) : event.getTo();
-        if (exit == null) {
-            return;
-        }
         exitWorld = ((CraftWorld) exit.getWorld()).getHandle();
-
         org.bukkit.event.player.PlayerTeleportEvent tpEvent = new org.bukkit.event.player.PlayerTeleportEvent(entityplayer.getBukkitEntity(), enter, exit, cause);
         Bukkit.getServer().getPluginManager().callEvent(tpEvent);
         if (tpEvent.isCancelled() || tpEvent.getTo() == null) {
@@ -632,8 +617,6 @@ public abstract class PlayerList {
 
         Vector velocity = entityplayer.getBukkitEntity().getVelocity();
         boolean before = exitWorld.chunkProviderServer.forceChunkLoad;
-        exitWorld.chunkProviderServer.forceChunkLoad = true;
-        exitWorld.getTravelAgent().adjustExit(entityplayer, exit, velocity);
         exitWorld.chunkProviderServer.forceChunkLoad = before;
 
         this.moveToWorld(entityplayer, exitWorld.dimension, true, exit, false); // Vanilla doesn't check for suffocation when handling portals, so neither should we
@@ -787,7 +770,6 @@ public abstract class PlayerList {
                 // worldserver1.getTravelAgent().a(entity, f);
                 if (portal) {
                     Vector velocity = entity.getBukkitEntity().getVelocity();
-                    worldserver1.getTravelAgent().adjustExit(entity, exit, velocity);
                     entity.setPositionRotation(exit.getX(), exit.getY(), exit.getZ(), exit.getYaw(), exit.getPitch());
                     if (entity.motX != velocity.getX() || entity.motY != velocity.getY() || entity.motZ != velocity.getZ()) {
                         entity.getBukkitEntity().setVelocity(velocity);

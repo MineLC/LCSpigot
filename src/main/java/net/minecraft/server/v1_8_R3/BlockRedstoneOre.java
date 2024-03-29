@@ -95,8 +95,8 @@ public class BlockRedstoneOre extends Block {
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         super.dropNaturally(world, blockposition, iblockdata, f, i);
         /* CraftBukkit start - Delegated to getExpDrop
-        if (this.getDropType(iblockdata, World.RANDOM, i) != Item.getItemOf(this)) {
-            int j = 1 + World.RANDOM.nextInt(5);
+        if (this.getDropType(iblockdata, world.random, i) != Item.getItemOf(this)) {
+            int j = 1 + world.random.nextInt(5);
 
             this.dropExperience(world, blockposition, j);
         }
@@ -105,8 +105,8 @@ public class BlockRedstoneOre extends Block {
 
     @Override
     public int getExpDrop(World world, IBlockData data, int i) {
-        if (this.getDropType(data, World.RANDOM, i) != Item.getItemOf(this)) {
-            int j = 1 + World.RANDOM.nextInt(5);
+        if (this.getDropType(data, i) != Item.getItemOf(this)) {
+            int j = 1 + world.random.nextInt(5);
 
             return j;
         }
@@ -115,43 +115,6 @@ public class BlockRedstoneOre extends Block {
     }
 
     private void f(World world, BlockPosition blockposition) {
-        Random random = World.RANDOM;
-        double d0 = 0.0625D;
-
-        for (int i = 0; i < 6; ++i) {
-            double d1 = (double) ((float) blockposition.getX() + random.nextFloat());
-            double d2 = (double) ((float) blockposition.getY() + random.nextFloat());
-            double d3 = (double) ((float) blockposition.getZ() + random.nextFloat());
-
-            if (i == 0 && !world.getType(blockposition.up()).getBlock().c()) {
-                d2 = (double) blockposition.getY() + d0 + 1.0D;
-            }
-
-            if (i == 1 && !world.getType(blockposition.down()).getBlock().c()) {
-                d2 = (double) blockposition.getY() - d0;
-            }
-
-            if (i == 2 && !world.getType(blockposition.south()).getBlock().c()) {
-                d3 = (double) blockposition.getZ() + d0 + 1.0D;
-            }
-
-            if (i == 3 && !world.getType(blockposition.north()).getBlock().c()) {
-                d3 = (double) blockposition.getZ() - d0;
-            }
-
-            if (i == 4 && !world.getType(blockposition.east()).getBlock().c()) {
-                d1 = (double) blockposition.getX() + d0 + 1.0D;
-            }
-
-            if (i == 5 && !world.getType(blockposition.west()).getBlock().c()) {
-                d1 = (double) blockposition.getX() - d0;
-            }
-
-            if (d1 < (double) blockposition.getX() || d1 > (double) (blockposition.getX() + 1) || d2 < 0.0D || d2 > (double) (blockposition.getY() + 1) || d3 < (double) blockposition.getZ() || d3 > (double) (blockposition.getZ() + 1)) {
-                world.addParticle(EnumParticle.REDSTONE, d1, d2, d3, 0.0D, 0.0D, 0.0D, new int[0]);
-            }
-        }
-
     }
 
     protected ItemStack i(IBlockData iblockdata) {

@@ -188,12 +188,6 @@ public class ChunkProviderFlat implements IChunkProvider {
         return "FlatLevelSource";
     }
 
-    public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
-        BiomeBase biomebase = this.a.getBiome(blockposition);
-
-        return biomebase.getMobs(enumcreaturetype);
-    }
-
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
         if ("Stronghold".equals(s)) {
             Iterator iterator = this.e.iterator();

@@ -280,7 +280,7 @@ public class BlockFire extends Block {
     }
 
     private boolean f(World world, BlockPosition blockposition) {
-        EnumDirection[] aenumdirection = EnumDirection.values();
+        EnumDirection[] aenumdirection = EnumDirection.n;
         int i = aenumdirection.length;
 
         for (int j = 0; j < i; ++j) {
@@ -299,7 +299,7 @@ public class BlockFire extends Block {
             return 0;
         } else {
             int i = 0;
-            EnumDirection[] aenumdirection = EnumDirection.values();
+            EnumDirection[] aenumdirection = EnumDirection.n;
             int j = aenumdirection.length;
 
             for (int k = 0; k < j; ++k) {
@@ -336,7 +336,7 @@ public class BlockFire extends Block {
             if (!World.a((IBlockAccess) world, blockposition.down()) && !this.f(world, blockposition)) {
                 fireExtinguished(world, blockposition); // CraftBukkit - fuel block broke
             } else {
-                world.a(blockposition, (Block) this, this.a(world) + World.RANDOM.nextInt(10));
+                world.a(blockposition, (Block) this, this.a(world) + world.random.nextInt(10));
             }
         }
     }

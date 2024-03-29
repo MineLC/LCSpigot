@@ -334,13 +334,9 @@ public class CraftWorld implements World {
     }
 
     public org.bukkit.entity.Item dropItemNaturally(Location loc, ItemStack item) {
-        double xs = net.minecraft.server.v1_8_R3.World.RANDOM.nextFloat() * 0.7F - 0.35D;
-        double ys = net.minecraft.server.v1_8_R3.World.RANDOM.nextFloat() * 0.7F - 0.35D;
-        double zs = net.minecraft.server.v1_8_R3.World.RANDOM.nextFloat() * 0.7F - 0.35D;
         loc = loc.clone();
         // Makes sure the new item is created within the block the location points to.
         // This prevents item spill in 1-block wide farms.
-        randomLocationWithinBlock(loc, xs, ys, zs);
         return dropItem(loc, item);
     }
 

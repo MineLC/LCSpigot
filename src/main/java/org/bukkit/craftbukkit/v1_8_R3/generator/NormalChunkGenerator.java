@@ -72,11 +72,6 @@ public class NormalChunkGenerator extends InternalChunkGenerator {
     }
 
     @Override
-    public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType ect, BlockPosition position) {
-        return provider.getMobsFor(ect, position);
-    }
-
-    @Override
     public BlockPosition findNearestMapFeature(World world, String string, BlockPosition position) {
         return provider.findNearestMapFeature(world, string, position);
     }

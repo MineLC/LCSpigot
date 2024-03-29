@@ -86,7 +86,7 @@ public class BlockPiston extends Block {
     }
 
     private boolean a(World world, BlockPosition blockposition, EnumDirection enumdirection) {
-        EnumDirection[] aenumdirection = EnumDirection.values();
+        EnumDirection[] aenumdirection = EnumDirection.n;
         int i = aenumdirection.length;
 
         int j;
@@ -103,7 +103,7 @@ public class BlockPiston extends Block {
             return true;
         } else {
             BlockPosition blockposition1 = blockposition.up();
-            EnumDirection[] aenumdirection1 = EnumDirection.values();
+            EnumDirection[] aenumdirection1 = EnumDirection.n;
 
             j = aenumdirection1.length;
 
@@ -126,7 +126,7 @@ public class BlockPiston extends Block {
             boolean flag = this.a(world, blockposition, enumdirection);
 
             if (flag && i == 1) {
-                world.setTypeAndData(blockposition, iblockdata.set(BlockPiston.EXTENDED, Boolean.valueOf(true)), 2);
+                world.setTypeAndData(blockposition, iblockdata.set(BlockPiston.EXTENDED, true), 2);
                 return false;
             }
 
@@ -141,7 +141,7 @@ public class BlockPiston extends Block {
             }
 
             world.setTypeAndData(blockposition, iblockdata.set(BlockPiston.EXTENDED, Boolean.valueOf(true)), 2);
-            world.makeSound((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, "tile.piston.out", 0.5F, World.RANDOM.nextFloat() * 0.25F + 0.6F);
+            world.makeSound((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, "tile.piston.out", 0.5F, 0.25F + 0.6F);
         } else if (i == 1) {
             TileEntity tileentity = world.getTileEntity(blockposition.shift(enumdirection));
 
@@ -176,7 +176,7 @@ public class BlockPiston extends Block {
                 world.setAir(blockposition.shift(enumdirection));
             }
 
-            world.makeSound((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, "tile.piston.in", 0.5F, World.RANDOM.nextFloat() * 0.15F + 0.6F);
+            world.makeSound((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, "tile.piston.in", 0.5F,  0.15F + 0.6F);
         }
 
         return true;
@@ -437,7 +437,7 @@ public class BlockPiston extends Block {
 
     static class SyntheticClass_1 {
 
-        static final int[] a = new int[EnumDirection.values().length];
+        static final int[] a = new int[EnumDirection.n.length];
 
         static {
             try {

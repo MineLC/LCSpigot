@@ -142,7 +142,7 @@ public class BlockRedstoneWire extends Block {
             }
 
             this.R.add(blockposition);
-            EnumDirection[] aenumdirection = EnumDirection.values();
+            EnumDirection[] aenumdirection = EnumDirection.n;
             int i1 = aenumdirection.length;
 
             for (int j1 = 0; j1 < i1; ++j1) {
@@ -158,7 +158,7 @@ public class BlockRedstoneWire extends Block {
     private void e(World world, BlockPosition blockposition) {
         if (world.getType(blockposition).getBlock() == this) {
             world.applyPhysics(blockposition, this);
-            EnumDirection[] aenumdirection = EnumDirection.values();
+            EnumDirection[] aenumdirection = EnumDirection.n;
             int i = aenumdirection.length;
 
             for (int j = 0; j < i; ++j) {
@@ -208,7 +208,7 @@ public class BlockRedstoneWire extends Block {
     public void remove(World world, BlockPosition blockposition, IBlockData iblockdata) {
         super.remove(world, blockposition, iblockdata);
         if (!world.isClientSide) {
-            EnumDirection[] aenumdirection = EnumDirection.values();
+            EnumDirection[] aenumdirection = EnumDirection.n;
             int i = aenumdirection.length;
 
             for (int j = 0; j < i; ++j) {

@@ -35,45 +35,43 @@ public class EntityTracker {
                 }
             }
         } else if (entity instanceof EntityFishingHook) {
-            this.addEntity(entity, 64, 5, true);
+            this.addEntity(entity, 32, 5, true);
         } else if (entity instanceof EntityArrow) {
-            this.addEntity(entity, 64, 20, false);
+            this.addEntity(entity, 32, 20, false);
         } else if (entity instanceof EntitySmallFireball) {
-            this.addEntity(entity, 64, 10, false);
+            this.addEntity(entity, 32, 10, false);
         } else if (entity instanceof EntityFireball) {
-            this.addEntity(entity, 64, 10, false);
+            this.addEntity(entity, 32, 10, false);
         } else if (entity instanceof EntitySnowball) {
-            this.addEntity(entity, 64, 10, true);
+            this.addEntity(entity, 32, 10, true);
         } else if (entity instanceof EntityEnderPearl) {
-            this.addEntity(entity, 64, 10, true);
+            this.addEntity(entity, 32, 10, true);
         } else if (entity instanceof EntityEnderSignal) {
-            this.addEntity(entity, 64, 4, true);
+            this.addEntity(entity, 32, 4, true);
         } else if (entity instanceof EntityEgg) {
-            this.addEntity(entity, 64, 10, true);
+            this.addEntity(entity, 32, 10, true);
         } else if (entity instanceof EntityPotion) {
-            this.addEntity(entity, 64, 10, true);
+            this.addEntity(entity, 32, 10, true);
         } else if (entity instanceof EntityThrownExpBottle) {
-            this.addEntity(entity, 64, 10, true);
+            this.addEntity(entity, 32, 10, true);
         } else if (entity instanceof EntityFireworks) {
-            this.addEntity(entity, 64, 10, true);
+            this.addEntity(entity, 32, 10, true);
         } else if (entity instanceof EntityItem) {
-            this.addEntity(entity, 64, 20, true);
+            this.addEntity(entity, 32, 20, true);
         } else if (entity instanceof EntityMinecartAbstract) {
-            this.addEntity(entity, 80, 3, true);
+            this.addEntity(entity, 32, 3, true);
         } else if (entity instanceof EntityBoat) {
-            this.addEntity(entity, 80, 3, true);
-        } else if (entity instanceof IAnimal) {
-            this.addEntity(entity, 80, 3, true);
+            this.addEntity(entity, 48, 3, true);
         } else if (entity instanceof EntityTNTPrimed) {
-            this.addEntity(entity, 160, 10, true);
+            this.addEntity(entity, 48, 10, true);
         } else if (entity instanceof EntityFallingBlock) {
-            this.addEntity(entity, 160, 20, true);
+            this.addEntity(entity, 48, 20, true);
         } else if (entity instanceof EntityHanging) {
-            this.addEntity(entity, 160, Integer.MAX_VALUE, false);
+            this.addEntity(entity, 48, Integer.MAX_VALUE, false);
         } else if (entity instanceof EntityArmorStand) {
-            this.addEntity(entity, 160, 3, true);
+            this.addEntity(entity, 48, 3, true);
         } else if (entity instanceof EntityExperienceOrb) {
-            this.addEntity(entity, 160, 20, true);
+            this.addEntity(entity, 32, 20, true);
         } 
 
     }
@@ -84,7 +82,6 @@ public class EntityTracker {
 
     public void addEntity(Entity entity, int i, final int j, boolean flag) {
         org.spigotmc.AsyncCatcher.catchOp( "entity track"); // Spigot
-        i = org.spigotmc.TrackingRange.getEntityTrackingRange(entity, i); // Spigot
         if (i > this.e) {
             i = this.e;
         }

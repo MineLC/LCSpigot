@@ -420,34 +420,31 @@ public class CraftBlock implements Block {
         if (block != Blocks.AIR) {
             byte data = getData();
             // based on nms.Block.dropNaturally
-            int count = block.getDropCount(0, net.minecraft.server.v1_8_R3.World.RANDOM);
-            for (int i = 0; i < count; ++i) {
-                Item item = block.getDropType(block.fromLegacyData(data), net.minecraft.server.v1_8_R3.World.RANDOM, 0);
-                if (item != null) {
-                    // Skulls are special, their data is based on the tile entity
-                    if (Blocks.SKULL == block) {
-                        net.minecraft.server.v1_8_R3.ItemStack nmsStack = new net.minecraft.server.v1_8_R3.ItemStack(item, 1, block.getDropData(chunk.getHandle().getWorld(), new BlockPosition(x, y, z)));
-                        TileEntitySkull tileentityskull = (TileEntitySkull) chunk.getHandle().getWorld().getTileEntity(new BlockPosition(x, y, z));
+            Item item = block.getDropType(block.fromLegacyData(data), 0);
+            if (item != null) {
+            // Skulls are special, their data is based on the tile entity
+                if (Blocks.SKULL == block) {
+                    net.minecraft.server.v1_8_R3.ItemStack nmsStack = new net.minecraft.server.v1_8_R3.ItemStack(item, 1, block.getDropData(chunk.getHandle().getWorld(), new BlockPosition(x, y, z)));
+                    TileEntitySkull tileentityskull = (TileEntitySkull) chunk.getHandle().getWorld().getTileEntity(new BlockPosition(x, y, z));
 
-                        if (tileentityskull.getSkullType() == 3 && tileentityskull.getGameProfile() != null) {
-                            nmsStack.setTag(new NBTTagCompound());
-                            NBTTagCompound nbttagcompound = new NBTTagCompound();
+                    if (tileentityskull.getSkullType() == 3 && tileentityskull.getGameProfile() != null) {
+                        nmsStack.setTag(new NBTTagCompound());
+                        NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-                            GameProfileSerializer.serialize(nbttagcompound, tileentityskull.getGameProfile());
-                            nmsStack.getTag().set("SkullOwner", nbttagcompound);
-                        }
-
-                        drops.add(CraftItemStack.asBukkitCopy(nmsStack));
-                        // We don't want to drop cocoa blocks, we want to drop cocoa beans.
-                    } else if (Blocks.COCOA == block) {
-                        int age = (Integer) block.fromLegacyData(data).get(BlockCocoa.AGE);
-                        int dropAmount = (age >= 2 ? 3 : 1);
-                        for (int j = 0; j < dropAmount; ++j) {
-                            drops.add(new ItemStack(Material.INK_SACK, 1, (short) 3));
-                        }
-                    } else {
-                        drops.add(new ItemStack(org.bukkit.craftbukkit.v1_8_R3.util.CraftMagicNumbers.getMaterial(item), 1, (short) block.getDropData(block.fromLegacyData(data))));
+                        GameProfileSerializer.serialize(nbttagcompound, tileentityskull.getGameProfile());
+                        nmsStack.getTag().set("SkullOwner", nbttagcompound);
                     }
+
+                    drops.add(CraftItemStack.asBukkitCopy(nmsStack));
+                    // We don't want to drop cocoa blocks, we want to drop cocoa beans.
+                } else if (Blocks.COCOA == block) {
+                    int age = (Integer) block.fromLegacyData(data).get(BlockCocoa.AGE);
+                    int dropAmount = (age >= 2 ? 3 : 1);
+                    for (int j = 0; j < dropAmount; ++j) {
+                        drops.add(new ItemStack(Material.INK_SACK, 1, (short) 3));
+                    }
+                } else {
+                    drops.add(new ItemStack(org.bukkit.craftbukkit.v1_8_R3.util.CraftMagicNumbers.getMaterial(item), 1, (short) block.getDropData(block.fromLegacyData(data))));
                 }
             }
         }

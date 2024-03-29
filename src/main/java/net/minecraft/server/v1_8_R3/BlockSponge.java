@@ -54,7 +54,7 @@ public class BlockSponge extends Block {
 
             blockposition1 = (BlockPosition) tuple.a();
             int j = ((Integer) tuple.b()).intValue();
-            EnumDirection[] aenumdirection = EnumDirection.values();
+            EnumDirection[] aenumdirection = EnumDirection.n;
             int k = aenumdirection.length;
 
             for (int l = 0; l < k; ++l) {

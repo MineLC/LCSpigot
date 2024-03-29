@@ -266,7 +266,7 @@ public class Chunk {
     private void a(int i, int j, int k, int l) {
         if (l > k && this.world.areChunksLoaded(new BlockPosition(i, 0, j), 16)) {
             for (int i1 = k; i1 < l; ++i1) {
-                this.world.c(EnumSkyBlock.SKY, new BlockPosition(i, i1, j));
+                this.world.updateBrightness(EnumSkyBlock.SKY, new BlockPosition(i, i1, j), this); // PaperSpigot - Asynchronous lighting updates // PandaSpigot - Optimize Light Recalculations
             }
 
             this.q = true;
@@ -675,13 +675,6 @@ public class Chunk {
                 return;
             }
         }
-        for ( EnumCreatureType creatureType : EnumCreatureType.values() )
-        {
-            if ( creatureType.a().isAssignableFrom( entity.getClass() ) )
-            {
-                this.entityCount.adjustOrPutValue( creatureType.a(), 1, 1 );
-            }
-        }
         // Spigot end
     }
 
@@ -705,13 +698,6 @@ public class Chunk {
             EntityInsentient entityinsentient = (EntityInsentient) entity;
             if (entityinsentient.isTypeNotPersistent() && entityinsentient.isPersistent()) {
                 return;
-            }
-        }
-        for ( EnumCreatureType creatureType : EnumCreatureType.values() )
-        {
-            if ( creatureType.a().isAssignableFrom( entity.getClass() ) )
-            {
-                this.entityCount.adjustValue( creatureType.a(), -1 );
             }
         }
         // Spigot end
@@ -1149,12 +1135,8 @@ public class Chunk {
                 boolean flag = i1 == 0 || i1 == 15 || k == 0 || k == 15 || l == 0 || l == 15;
 
                 if (this.sections[j] == null && flag || this.sections[j] != null && this.sections[j].b(k, i1, l).getMaterial() == Material.AIR) {
-                    EnumDirection[] aenumdirection = EnumDirection.values();
-                    int j1 = aenumdirection.length;
-
-                    for (int k1 = 0; k1 < j1; ++k1) {
-                        EnumDirection enumdirection = aenumdirection[k1];
-                        BlockPosition blockposition2 = blockposition1.shift(enumdirection);
+                    for (EnumDirection direction : EnumDirection.n) {
+                        BlockPosition blockposition2 = blockposition1.shift(direction);
 
                         if (this.world.getType(blockposition2).getBlock().r() > 0) {
                             this.world.x(blockposition2);

@@ -10,10 +10,10 @@ public final class SpawnerCreature {
 
     protected static BlockPosition getRandomPosition(World world, int i, int j) {
         Chunk chunk = world.getChunkAt(i, j);
-        int k = i * 16 + World.RANDOM.nextInt(16);
-        int l = j * 16 + World.RANDOM.nextInt(16);
+        int k = i * 16 + world.random.nextInt(16);
+        int l = j * 16 + world.random.nextInt(16);
         int i1 = MathHelper.c(chunk.f(new BlockPosition(k, 0, l)) + 1, 16);
-        int j1 = World.RANDOM.nextInt(i1 > 0 ? i1 : chunk.g() + 16 - 1);
+        int j1 = world.random.nextInt(i1 > 0 ? i1 : chunk.g() + 16 - 1);
 
         return new BlockPosition(k, j1, l);
     }

@@ -32,7 +32,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public double d;
     public double e;
     public final List<ChunkCoordIntPair> chunkCoordIntPairQueue = Lists.newLinkedList();
-    public final List<Integer> removeQueue = Lists.newLinkedList(); // CraftBukkit - public
+    public final java.util.Deque<Integer> removeQueue = new java.util.ArrayDeque<>(); // PandaSpigot
     private float bL = Float.MIN_VALUE;
     private float bM = -1.0E8F;
     private int bN = -99999999;
@@ -206,13 +206,18 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         while (!this.removeQueue.isEmpty()) {
             int i = Math.min(this.removeQueue.size(), Integer.MAX_VALUE);
             int[] aint = new int[i];
-            Iterator iterator = this.removeQueue.iterator();
             int j = 0;
 
-            while (iterator.hasNext() && j < i) {
-                aint[j++] = ((Integer) iterator.next()).intValue();
-                iterator.remove();
+            // PandaSpigot start
+            /* while (iterator.hasNext() && j < i) {
+                             aint[j++] = ((Integer) iterator.next()).intValue();
+                             iterator.remove();
+            } */
+            Integer integer;
+            while (j < i && (integer = this.removeQueue.poll()) != null) {
+                aint[j++] = integer.intValue();
             }
+            // PandaSpigot end
 
             this.playerConnection.sendPacket(new PacketPlayOutEntityDestroy(aint));
         }
@@ -778,7 +783,12 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         this.lastSentExp = -1;
         this.bM = -1.0F;
         this.bN = -1;
-        this.removeQueue.addAll(((EntityPlayer) entityhuman).removeQueue);
+        // this.removeQueue.addAll(((EntityPlayer) entityhuman).removeQueue); // PandaSpigot
+        // PandaSpigot start
+        if (this.removeQueue != ((EntityPlayer) entityhuman).removeQueue) {
+            this.removeQueue.addAll(((EntityPlayer) entityhuman).removeQueue);
+        }
+        // PandaSpigot end
     }
 
     protected void a(MobEffect mobeffect) {

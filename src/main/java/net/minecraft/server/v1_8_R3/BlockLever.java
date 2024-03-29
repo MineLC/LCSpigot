@@ -32,7 +32,7 @@ public class BlockLever extends Block {
     }
 
     public boolean canPlace(World world, BlockPosition blockposition) {
-        EnumDirection[] aenumdirection = EnumDirection.values();
+        EnumDirection[] aenumdirection = EnumDirection.n;
         int i = aenumdirection.length;
 
         for (int j = 0; j < i; ++j) {
@@ -293,7 +293,7 @@ public class BlockLever extends Block {
                 ;
             }
 
-            a = new int[EnumDirection.values().length];
+            a = new int[EnumDirection.n.length];
 
             try {
                 BlockLever.SyntheticClass_1.a[EnumDirection.DOWN.ordinal()] = 1;

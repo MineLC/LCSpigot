@@ -144,7 +144,7 @@ public class BlockCauldron extends Block {
     }
 
     public void k(World world, BlockPosition blockposition) {
-        if (World.RANDOM.nextInt(20) == 1) {
+        if (world.random.nextInt(20) == 1) {
             IBlockData iblockdata = world.getType(blockposition);
 
             if (((Integer) iblockdata.get(BlockCauldron.LEVEL)).intValue() < 3) {

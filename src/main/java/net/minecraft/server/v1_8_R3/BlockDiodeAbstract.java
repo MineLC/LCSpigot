@@ -72,7 +72,7 @@ public abstract class BlockDiodeAbstract extends BlockDirectional {
         } else {
             this.b(world, blockposition, iblockdata, 0);
             world.setAir(blockposition);
-            EnumDirection[] aenumdirection = EnumDirection.values();
+            EnumDirection[] aenumdirection = EnumDirection.n;
             int i = aenumdirection.length;
 
             for (int j = 0; j < i; ++j) {
@@ -169,7 +169,7 @@ public abstract class BlockDiodeAbstract extends BlockDirectional {
 
     public void postBreak(World world, BlockPosition blockposition, IBlockData iblockdata) {
         if (this.N) {
-            EnumDirection[] aenumdirection = EnumDirection.values();
+            EnumDirection[] aenumdirection = EnumDirection.n;
             int i = aenumdirection.length;
 
             for (int j = 0; j < i; ++j) {

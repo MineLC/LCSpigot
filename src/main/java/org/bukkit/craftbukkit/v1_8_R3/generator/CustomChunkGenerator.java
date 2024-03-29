@@ -203,13 +203,6 @@ public class CustomChunkGenerator extends InternalChunkGenerator {
     }
 
     @Override
-    public List<BiomeBase.BiomeMeta> getMobsFor(EnumCreatureType type, BlockPosition position) {
-        BiomeBase biomebase = world.getBiome(position);
-
-        return biomebase == null ? null : biomebase.getMobs(type);
-    }
-
-    @Override
     public BlockPosition findNearestMapFeature(World world, String type, BlockPosition position) {
         return "Stronghold".equals(type) && this.strongholdGen != null ? this.strongholdGen.getNearestGeneratedFeature(world, position) : null;
     }

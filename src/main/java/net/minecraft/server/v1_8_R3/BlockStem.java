@@ -79,7 +79,7 @@ public class BlockStem extends BlockPlant implements IBlockFragilePlantElement {
                 int j = ((Integer) iblockdata.get(BlockStem.AGE)).intValue();
 
                 for (int k = 0; k < 3; ++k) {
-                    if (World.RANDOM.nextInt(15) <= j) {
+                    if (world.random.nextInt(15) <= j) {
                         a(world, blockposition, new ItemStack(item));
                     }
                 }

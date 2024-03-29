@@ -84,7 +84,7 @@ public class BlockSkull extends BlockContainer {
     // CraftBukkit start - Special case dropping so we can get info from the tile entity
     @Override
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
-        if (World.RANDOM.nextFloat() < f) {
+        if (world.random.nextDouble() < f) {
             ItemStack itemstack = new ItemStack(Items.SKULL, 1, this.getDropData(world, blockposition));
             TileEntitySkull tileentityskull = (TileEntitySkull) world.getTileEntity(blockposition);
 
@@ -187,7 +187,7 @@ public class BlockSkull extends BlockContainer {
 
     static class SyntheticClass_1 {
 
-        static final int[] a = new int[EnumDirection.values().length];
+        static final int[] a = new int[EnumDirection.n.length];
 
         static {
             try {

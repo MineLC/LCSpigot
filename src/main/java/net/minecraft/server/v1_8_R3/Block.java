@@ -315,11 +315,7 @@ public class Block {
         org.spigotmc.AsyncCatcher.catchOp( "block remove"); // Spigot
     }
 
-    public int a(Random random) {
-        return 1;
-    }
-
-    public Item getDropType(IBlockData iblockdata, Random random, int i) {
+    public Item getDropType(IBlockData iblockdata, int i) {
         return Item.getItemOf(this);
     }
 
@@ -335,12 +331,12 @@ public class Block {
 
     public void dropNaturally(World world, BlockPosition blockposition, IBlockData iblockdata, float f, int i) {
         if (!world.isClientSide) {
-            int j = this.getDropCount(i, World.RANDOM);
+            int j = 1;
 
             for (int k = 0; k < j; ++k) {
                 // CraftBukkit - <= to < to allow for plugins to completely disable block drops from explosions
-                if (World.RANDOM.nextFloat() < f) {
-                    Item item = this.getDropType(iblockdata, World.RANDOM, i);
+                if (world.random.nextDouble() < f) {
+                    Item item = this.getDropType(iblockdata, i);
 
                     if (item != null) {
                         a(world, blockposition, new ItemStack(item, 1, this.getDropData(iblockdata)));
@@ -354,10 +350,7 @@ public class Block {
     public static void a(World world, BlockPosition blockposition, ItemStack itemstack) {
         if (!world.isClientSide && world.getGameRules().getBoolean("doTileDrops")) {
             float f = 0.5F;
-            double d0 = (double) (World.RANDOM.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-            double d1 = (double) (World.RANDOM.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-            double d2 = (double) (World.RANDOM.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
-            EntityItem entityitem = new EntityItem(world, (double) blockposition.getX() + d0, (double) blockposition.getY() + d1, (double) blockposition.getZ() + d2, itemstack);
+            EntityItem entityitem = new EntityItem(world, (double) blockposition.getX() + f, (double) blockposition.getY() + f, (double) blockposition.getZ() + f, itemstack);
 
             entityitem.p();
             world.addEntity(entityitem);
@@ -594,7 +587,7 @@ public class Block {
     }
 
     public int getDropCount(int i, Random random) {
-        return this.a(random);
+        return 1;
     }
 
     public void postPlace(World world, BlockPosition blockposition, IBlockData iblockdata, EntityLiving entityliving, ItemStack itemstack) {}
