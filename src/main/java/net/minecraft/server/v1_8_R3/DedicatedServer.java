@@ -289,14 +289,8 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         super.B();
     }
 
-      public boolean getSpawnMonsters() {
+    public boolean getSpawnMonsters() {
         return this.propertyManager.getBoolean("spawn-monsters", true);
-    }
-
-    public void a(MojangStatisticsGenerator mojangstatisticsgenerator) {
-        mojangstatisticsgenerator.a("whitelist_enabled", Boolean.valueOf(this.aP().getHasWhitelist()));
-        mojangstatisticsgenerator.a("whitelist_count", Integer.valueOf(this.aP().getWhitelisted().length));
-        super.a(mojangstatisticsgenerator);
     }
 
     public boolean getSnooperEnabled() {
