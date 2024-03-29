@@ -13,6 +13,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.base64.Base64;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +42,7 @@ import jline.console.ConsoleReader;
 import joptsimple.OptionSet;
 import lc.lcspigot.configuration.LCConfig;
 
-public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTick> implements Runnable, IAsyncTaskHandler {
+public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTick> implements Runnable, IAsyncTaskHandler, IMojangStatistics {
 
     public static final File a = new File("usercache.json");
     private static MinecraftServer l;
@@ -995,6 +996,52 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     public void setResourcePack(String s, String s1) {
         this.O = s;
         this.P = s1;
+    }
+
+    public void a(MojangStatisticsGenerator mojangstatisticsgenerator) {
+        mojangstatisticsgenerator.a("whitelist_enabled", Boolean.valueOf(false));
+        mojangstatisticsgenerator.a("whitelist_count", Integer.valueOf(0));
+        if (this.v != null) {
+            mojangstatisticsgenerator.a("players_current", Integer.valueOf(this.I()));
+            mojangstatisticsgenerator.a("players_max", Integer.valueOf(this.J()));
+            mojangstatisticsgenerator.a("players_seen", Integer.valueOf(this.v.getSeenPlayers().length));
+        }
+
+        mojangstatisticsgenerator.a("uses_auth", Boolean.valueOf(this.onlineMode));
+        mojangstatisticsgenerator.a("gui_state", this.as() ? "enabled" : "disabled");
+        mojangstatisticsgenerator.a("run_time", Long.valueOf((az() - mojangstatisticsgenerator.g()) / 60L * 1000L));
+        mojangstatisticsgenerator.a("avg_tick_ms", Integer.valueOf((int) (MathHelper.a(this.h) * 1.0E-6D)));
+        int i = 0;
+
+        if (this.worldServer != null) {
+            // CraftBukkit start
+            for (int j = 0; j < this.worlds.size(); ++j) {
+                WorldServer worldserver = this.worlds.get(j);
+                if (worldserver != null) {
+                    // CraftBukkit end
+                    WorldData worlddata = worldserver.getWorldData();
+
+                    mojangstatisticsgenerator.a("world[" + i + "][dimension]", Integer.valueOf(worldserver.worldProvider.getDimension()));
+                    mojangstatisticsgenerator.a("world[" + i + "][mode]", worlddata.getGameType());
+                    mojangstatisticsgenerator.a("world[" + i + "][difficulty]", worldserver.getDifficulty());
+                    mojangstatisticsgenerator.a("world[" + i + "][hardcore]", Boolean.valueOf(worlddata.isHardcore()));
+                    mojangstatisticsgenerator.a("world[" + i + "][generator_name]", worlddata.getType().name());
+                    mojangstatisticsgenerator.a("world[" + i + "][generator_version]", Integer.valueOf(worlddata.getType().getVersion()));
+                    mojangstatisticsgenerator.a("world[" + i + "][height]", Integer.valueOf(this.F));
+                    mojangstatisticsgenerator.a("world[" + i + "][chunks_loaded]", Integer.valueOf(worldserver.N().getLoadedChunks()));
+                    ++i;
+                }
+            }
+        }
+
+        mojangstatisticsgenerator.a("worlds", Integer.valueOf(i));
+    }
+
+    public void b(MojangStatisticsGenerator mojangstatisticsgenerator) {
+        mojangstatisticsgenerator.b("singleplayer", Boolean.valueOf(this.T()));
+        mojangstatisticsgenerator.b("server_brand", this.getServerModName());
+        mojangstatisticsgenerator.b("gui_supported", GraphicsEnvironment.isHeadless() ? "headless" : "supported");
+        mojangstatisticsgenerator.b("dedicated", Boolean.valueOf(this.ae()));
     }
 
     public boolean getSnooperEnabled() {

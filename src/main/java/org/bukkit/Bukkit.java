@@ -511,6 +511,14 @@ public final class Bukkit {
         server.reload();
     }
 
+    public static boolean getAllowEnd() {
+        return false;
+    }
+
+    public static boolean getAllowNether() {
+        return false;
+    }
+
 
     /**
      * Writes loaded players to disk.
