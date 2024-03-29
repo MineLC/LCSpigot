@@ -9,7 +9,6 @@ import io.netty.util.concurrent.GenericFutureListener;
 import lc.lcspigot.commands.CommandStorage;
 import lc.lcspigot.events.PreInteractEntityEvent;
 import lc.lcspigot.listeners.internal.EventsExecutor;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import java.io.IOException;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 import org.tinylog.Logger;
 
@@ -29,7 +27,6 @@ import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryView;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_8_R3.util.CraftChatMessage;
-import org.bukkit.craftbukkit.v1_8_R3.util.LazyPlayerSet;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;

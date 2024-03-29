@@ -286,7 +286,7 @@ public abstract class PlayerList {
         if (!event.isCancelled()) {
             // CraftBukkit start - sendAll above replaced with this loop
             final PacketPlayOutPlayerInfo packet = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, entityplayer);
-            final List<EntityPlayer> onlinePlayers = Lists.newArrayListWithExpectedSize(this.players.size() - 1); // PandaSpigot - use single player info update packet
+            final List<EntityPlayer> onlinePlayers = Lists.newArrayListWithExpectedSize(this.players.size() + 1); // PandaSpigot - use single player info update packet
 
             for (EntityPlayer entityplayer1 : players) {
                 entityplayer1.playerConnection.sendPacket(packet);
