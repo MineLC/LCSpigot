@@ -124,9 +124,7 @@ public class BlockPosition extends BaseBlockPosition {
     }
 
     public static Iterable<BlockPosition> a(BlockPosition blockposition, BlockPosition blockposition1) {
-        final BlockPosition blockposition2 = new BlockPosition(Math.min(blockposition.getX(), blockposition1.getX()), Math.min(blockposition.getY(), blockposition1.getY()), Math.min(blockposition.getZ(), blockposition1.getZ()));
-        final BlockPosition blockposition3 = new BlockPosition(Math.max(blockposition.getX(), blockposition1.getX()), Math.max(blockposition.getY(), blockposition1.getY()), Math.max(blockposition.getZ(), blockposition1.getZ()));
-
+    
         return new Iterable() {
             public Iterator<BlockPosition> iterator() {
                 return new AbstractIterator() {

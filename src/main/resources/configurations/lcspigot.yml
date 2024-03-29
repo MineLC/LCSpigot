@@ -7,8 +7,11 @@ unknown-command:
   - " &7 El comando &8\"&a%command%&8\""
   - " &7 no existe&8..."
   - " "
+
 commands:
   log: true
+
+create-console-log-thread: true
 
 container-update-delay: 4 # How many ticks wait to update the player inventory. Vanilla: 1
 

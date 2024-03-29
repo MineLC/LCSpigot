@@ -3,6 +3,7 @@ package net.minecraft.server.v1_8_R3;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -188,16 +189,16 @@ public abstract class BiomeBase {
     public List<BiomeBase.BiomeMeta> getMobs(EnumCreatureType enumcreaturetype) {
         switch (BiomeBase.SyntheticClass_1.switchMap[enumcreaturetype.ordinal()]) {
         case 1:
-            return List.of();
+            return Collections.emptyList();
 
         case 2:
-            return List.of();
+            return Collections.emptyList();
 
         case 3:
-            return List.of();
+            return Collections.emptyList();
 
         case 4:
-            return List.of();
+            return Collections.emptyList();
 
         default:
             return Collections.emptyList();

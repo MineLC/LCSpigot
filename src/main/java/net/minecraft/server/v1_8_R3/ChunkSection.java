@@ -13,10 +13,6 @@ public class ChunkSection {
         this.yPos = i;
         this.blockIds = new char[4096];
         this.emittedLight = new NibbleArray();
-        if (flag) {
-            this.skyLight = new NibbleArray();
-        }
-
     }
 
     // CraftBukkit start

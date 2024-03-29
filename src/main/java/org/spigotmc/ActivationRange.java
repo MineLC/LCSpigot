@@ -2,8 +2,6 @@ package org.spigotmc;
 
 import java.util.List;
 
-import org.bukkit.craftbukkit.v1_8_R3.SpigotTimings;
-
 import net.minecraft.server.v1_8_R3.AxisAlignedBB;
 import net.minecraft.server.v1_8_R3.Chunk;
 import net.minecraft.server.v1_8_R3.Entity;
@@ -81,7 +79,6 @@ public class ActivationRange
      */
     public static void activateEntities(World world)
     {
-        SpigotTimings.entityActivationCheckTimer.startTiming();
         final int miscActivationRange = world.spigotConfig.miscActivationRange;
         final int animalActivationRange = world.spigotConfig.animalActivationRange;
         final int monsterActivationRange = world.spigotConfig.monsterActivationRange;
@@ -93,9 +90,9 @@ public class ActivationRange
         for (Entity player : world.players){
             player.activatedTick = MinecraftServer.currentTick;
             maxBB = player.getBoundingBox().grow( maxRange, 256, maxRange );
-            miscBB = player.getBoundingBox().grow( miscActivationRange, 256, miscActivationRange );
-            animalBB = player.getBoundingBox().grow( animalActivationRange, 256, animalActivationRange );
-            monsterBB = player.getBoundingBox().grow( monsterActivationRange, 256, monsterActivationRange );
+            miscBB = player.getBoundingBox().grow( miscActivationRange, miscActivationRange, miscActivationRange );
+            animalBB = player.getBoundingBox().grow( animalActivationRange, animalActivationRange, animalActivationRange );
+            monsterBB = player.getBoundingBox().grow( monsterActivationRange, monsterActivationRange, monsterActivationRange );
 
             int i = MathHelper.floor( maxBB.a / 16.0D );
             int j = MathHelper.floor( maxBB.d / 16.0D );
@@ -113,7 +110,6 @@ public class ActivationRange
                 }
             }
         }
-        SpigotTimings.entityActivationCheckTimer.stopTiming();
     }
 
     /**
@@ -123,8 +119,9 @@ public class ActivationRange
      */
     private static void activateChunkEntities(Chunk chunk)
     {
-        for ( List<Entity> slice : chunk.entitySlices ) {
-            for ( Entity entity : slice ) {
+        final List<Entity>[] slices = chunk.entitySlices;
+        for (final List<Entity> slice : slices) {
+            for (final Entity entity : slice ) {
                 if ( MinecraftServer.currentTick > entity.activatedTick ) {
                     if ( entity.defaultActivationState ) {
                         entity.activatedTick = MinecraftServer.currentTick;
@@ -198,10 +195,8 @@ public class ActivationRange
      */
     public static boolean checkIfActive(Entity entity)
     {
-        SpigotTimings.checkIfActiveTimer.startTiming();
         // Never safe to skip fireworks or entities not yet added to chunk
         if ( !entity.isAddedToChunk() || entity instanceof EntityFireworks ) {
-            SpigotTimings.checkIfActiveTimer.stopTiming();
             return true;
         }
 
@@ -233,7 +228,6 @@ public class ActivationRange
         {
             isActive = false;
         }
-        SpigotTimings.checkIfActiveTimer.stopTiming();
         return isActive;
     }
 }

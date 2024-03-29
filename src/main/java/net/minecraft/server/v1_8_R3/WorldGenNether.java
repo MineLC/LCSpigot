@@ -1,5 +1,6 @@
 package net.minecraft.server.v1_8_R3;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -10,7 +11,7 @@ public class WorldGenNether extends StructureGenerator {
     }
 
     public List<BiomeBase.BiomeMeta> b() {
-        return List.of();
+        return Collections.emptyList();
     }
 
     protected boolean a(int i, int j) {

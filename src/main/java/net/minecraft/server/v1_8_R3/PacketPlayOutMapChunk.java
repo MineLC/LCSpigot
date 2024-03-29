@@ -54,38 +54,36 @@ public class PacketPlayOutMapChunk implements Packet<PacketListenerPlayOut> {
     public static PacketPlayOutMapChunk.ChunkMap a(Chunk chunk, boolean flag, boolean flag1, int i) {
         ChunkSection[] achunksection = chunk.getSections();
         PacketPlayOutMapChunk.ChunkMap packetplayoutmapchunk_chunkmap = new PacketPlayOutMapChunk.ChunkMap();
-        ArrayList arraylist = Lists.newArrayList();
+        ArrayList<ChunkSection> arraylist = new ArrayList<>(achunksection.length);
+        packetplayoutmapchunk_chunkmap.a = new byte[a(Integer.bitCount(packetplayoutmapchunk_chunkmap.b), flag1, flag)];
 
         int j;
-
+        int a = 0;
         for (j = 0; j < achunksection.length; ++j) {
             ChunkSection chunksection = achunksection[j];
 
             if (chunksection != null && (!flag || !chunksection.a()) && (i & 1 << j) != 0) {
                 packetplayoutmapchunk_chunkmap.b |= 1 << j;
                 arraylist.add(chunksection);
+        
+                char[] achar = chunksection.getIdArray();
+                char[] achar1 = achar;
+                int k = achar.length;
+    
+                for (int l = 0; l < k; ++l) {
+                    char c0 = achar1[l];
+    
+                    packetplayoutmapchunk_chunkmap.a[a++] = (byte) (c0 & 255);
+                    packetplayoutmapchunk_chunkmap.a[a++] = (byte) (c0 >> 8 & 255);
+                }
             }
         }
 
-        packetplayoutmapchunk_chunkmap.a = new byte[a(Integer.bitCount(packetplayoutmapchunk_chunkmap.b), flag1, flag)];
         j = 0;
+
         Iterator iterator = arraylist.iterator();
 
         ChunkSection chunksection1;
-
-        while (iterator.hasNext()) {
-            chunksection1 = (ChunkSection) iterator.next();
-            char[] achar = chunksection1.getIdArray();
-            char[] achar1 = achar;
-            int k = achar.length;
-
-            for (int l = 0; l < k; ++l) {
-                char c0 = achar1[l];
-
-                packetplayoutmapchunk_chunkmap.a[j++] = (byte) (c0 & 255);
-                packetplayoutmapchunk_chunkmap.a[j++] = (byte) (c0 >> 8 & 255);
-            }
-        }
 
         for (iterator = arraylist.iterator(); iterator.hasNext(); j = a(chunksection1.getEmittedLightArray().a(), packetplayoutmapchunk_chunkmap.a, j)) {
             chunksection1 = (ChunkSection) iterator.next();

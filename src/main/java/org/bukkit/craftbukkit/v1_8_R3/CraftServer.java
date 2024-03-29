@@ -778,7 +778,7 @@ public final class CraftServer implements Server {
             worlddata = new WorldData(worldSettings, name);
         }
         worlddata.checkName(name); // CraftBukkit - Migration did not rewrite the level.dat; This forces 1.8 to take the last loaded world as respawn (in this case the end)
-        WorldServer internal = (WorldServer) new WorldServer(console, sdm, worlddata, dimension, console.methodProfiler, creator.environment(), generator).b();
+        WorldServer internal = (WorldServer) new WorldServer(console, sdm, worlddata, dimension, creator.environment(), generator).b();
 
         if (!(worlds.containsKey(name.toLowerCase()))) {
             return null;

@@ -31,7 +31,6 @@ public class Chunk {
     public final List<Entity>[] entitySlices; // Spigot
     private boolean done;
     private boolean lit;
-    private boolean p;
     private boolean q;
     private boolean r;
     private long lastSaved;
@@ -217,7 +216,6 @@ public class Chunk {
     }
 
     private void h(boolean flag) {
-        this.world.methodProfiler.a("recheckGaps");
         if (this.world.areChunksLoaded(new BlockPosition(this.locX * 16 + 8, 0, this.locZ * 16 + 8), 16)) {
             for (int i = 0; i < 16; ++i) {
                 for (int j = 0; j < 16; ++j) {
@@ -244,7 +242,6 @@ public class Chunk {
                         }
 
                         if (flag) {
-                            this.world.methodProfiler.b();
                             return;
                         }
                     }
@@ -253,8 +250,6 @@ public class Chunk {
 
             this.k = false;
         }
-
-        this.world.methodProfiler.b();
     }
 
     private void c(int i, int j, int k) {
@@ -955,7 +950,6 @@ public class Chunk {
     }
 
     public void loadNearby(IChunkProvider ichunkprovider, IChunkProvider ichunkprovider1, int i, int j) {
-        world.timings.syncChunkLoadPostTimer.startTiming(); // Spigot
         boolean flag = ichunkprovider.isChunkLoaded(i, j - 1);
         boolean flag1 = ichunkprovider.isChunkLoaded(i + 1, j);
         boolean flag2 = ichunkprovider.isChunkLoaded(i, j + 1);
@@ -1001,8 +995,6 @@ public class Chunk {
                 ichunkprovider.a(ichunkprovider1, chunk, i - 1, j - 1);
             }
         }
-
-        world.timings.syncChunkLoadPostTimer.stopTiming(); // Spigot
     }
 
     public BlockPosition h(BlockPosition blockposition) {
@@ -1039,7 +1031,6 @@ public class Chunk {
             this.h(this.world.isClientSide);
         }
 
-        this.p = true;
         if (!this.lit && this.done && this.world.spigotConfig.randomLightUpdates) { // Spigot - also use random light updates setting to determine if we should relight
             this.n();
         }

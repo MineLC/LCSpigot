@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+
 import org.tinylog.Logger;
 
 // CraftBukkit start
@@ -51,6 +53,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.InventoryView;
+import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.util.NumberConversions;
 // CraftBukkit end
 
@@ -99,7 +102,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
     public void c() {
         ++this.e;
-        this.minecraftServer.methodProfiler.a("keepAlive");
         if ((long) this.e - this.k > 40L) {
             this.k = (long) this.e;
             this.j = this.d();
@@ -107,7 +109,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             this.sendPacket(new PacketPlayOutKeepAlive(this.i));
         }
 
-        this.minecraftServer.methodProfiler.b();
         // CraftBukkit start
         /* Use thread-safe field access instead
         if (this.chatThrottle > 0) {
@@ -811,33 +812,24 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             return;
         }
 
-        this.chat(message, true);
+        this.chat(message);
     }
 
-    public void chat(String s, boolean async) {
+    public void chat(String s) {
         final Player player = this.getPlayer();
-        final AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(async, player, s, new LazyPlayerSet());
+        final AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(false, player, s);
         this.server.getPluginManager().callEvent(event);
-
         if (event.isCancelled()) {
             return;
         }
-
-        s = String.format(event.getFormat(), event.getPlayer().getDisplayName(), event.getMessage());
+    
         minecraftServer.console.sendMessage(s);
-        final BaseComponent[] message = TextComponent.fromLegacyText(s);
+        final PacketPlayOutChat chatPacket = new PacketPlayOutChat(null);
+        chatPacket.components = TextComponent.fromLegacyText(event.getPlayer().getDisplayName() + ' ' + event.getMessage());
+        final List<EntityPlayer> players = minecraftServer.getPlayerList().players;
 
-        if (((LazyPlayerSet) event.getRecipients()).isLazy()) {
-            final PacketPlayOutChat chatPacket = new PacketPlayOutChat(null);
-            chatPacket.components = message;
-            for (EntityPlayer recipient : minecraftServer.getPlayerList().players) {
-                recipient.playerConnection.sendPacket(chatPacket);
-            }
-            return;
-        }    
-
-        for (Player recipient : event.getRecipients()) {
-            recipient.spigot().sendMessage(message);
+        for (final EntityPlayer recipient : players) {
+            recipient.playerConnection.sendPacket(chatPacket);
         }
     }
  

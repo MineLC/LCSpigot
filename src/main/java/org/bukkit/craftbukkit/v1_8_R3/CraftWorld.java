@@ -132,12 +132,12 @@ public class CraftWorld implements World {
     }
 
     public Chunk[] getLoadedChunks() {
-        Object[] chunks = world.chunkProviderServer.chunks.values().toArray();
-        org.bukkit.Chunk[] craftChunks = new CraftChunk[chunks.length];
+        Collection<net.minecraft.server.v1_8_R3.Chunk> chunks = world.chunkProviderServer.chunks.valueCollection();
+        org.bukkit.Chunk[] craftChunks = new CraftChunk[chunks.size()];
+        int i = 0;
 
-        for (int i = 0; i < chunks.length; i++) {
-            net.minecraft.server.v1_8_R3.Chunk chunk = (net.minecraft.server.v1_8_R3.Chunk) chunks[i];
-            craftChunks[i] = chunk.bukkitChunk;
+        for (net.minecraft.server.v1_8_R3.Chunk chunk : chunks) {
+            craftChunks[i++] = chunk.bukkitChunk;
         }
 
         return craftChunks;
@@ -251,11 +251,9 @@ public class CraftWorld implements World {
         net.minecraft.server.v1_8_R3.Chunk chunk = world.chunkProviderServer.chunks.get(LongHash.toLong(x, z));
 
         if (chunk == null) {
-            world.timings.syncChunkLoadTimer.startTiming(); // Spigot
             chunk = world.chunkProviderServer.loadChunk(x, z);
 
             chunkLoadPostProcess(chunk, x, z);
-            world.timings.syncChunkLoadTimer.stopTiming(); // Spigot
         }
         return chunk != null;
     }
@@ -1269,7 +1267,8 @@ public class CraftWorld implements World {
         }
 
         ChunkProviderServer cps = world.chunkProviderServer;
-        for (net.minecraft.server.v1_8_R3.Chunk chunk : cps.chunks.values()) {
+        final Collection<net.minecraft.server.v1_8_R3.Chunk> chunks = cps.chunks.valueCollection();
+        for (net.minecraft.server.v1_8_R3.Chunk chunk : chunks) {
             // If in use, skip it
             if (isChunkInUse(chunk.locX, chunk.locZ)) {
                 continue;

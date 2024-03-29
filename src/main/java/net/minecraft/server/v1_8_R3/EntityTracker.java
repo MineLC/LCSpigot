@@ -157,31 +157,19 @@ public class EntityTracker {
     }
 
     public void updatePlayers() {
-        ArrayList arraylist = Lists.newArrayList();
-        Iterator iterator = this.c.iterator();
-
-        while (iterator.hasNext()) {
-            EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry) iterator.next();
-
+        for (final EntityTrackerEntry entitytrackerentry : this.c) {
             entitytrackerentry.track(this.world.players);
+
             if (entitytrackerentry.n && entitytrackerentry.tracker instanceof EntityPlayer) {
-                arraylist.add((EntityPlayer) entitytrackerentry.tracker);
-            }
-        }
+                for (final EntityTrackerEntry entitytrackerentry1 : this.c) {
+                    entitytrackerentry.track(this.world.players);
 
-        for (int i = 0; i < arraylist.size(); ++i) {
-            EntityPlayer entityplayer = (EntityPlayer) arraylist.get(i);
-            Iterator iterator1 = this.c.iterator();
-
-            while (iterator1.hasNext()) {
-                EntityTrackerEntry entitytrackerentry1 = (EntityTrackerEntry) iterator1.next();
-
-                if (entitytrackerentry1.tracker != entityplayer) {
-                    entitytrackerentry1.updatePlayer(entityplayer);
+                    if (entitytrackerentry1.tracker != entitytrackerentry.tracker) {
+                        entitytrackerentry1.updatePlayer((EntityPlayer)entitytrackerentry.tracker);
+                    }
                 }
             }
         }
-
     }
 
     public void a(EntityPlayer entityplayer) {

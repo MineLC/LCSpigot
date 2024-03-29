@@ -1,7 +1,7 @@
 package net.minecraft.server.v1_8_R3;
 
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.Collection;
 import java.util.List;
 
 // CraftBukkit start
@@ -16,7 +16,7 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 // CraftBukkit end
 import org.tinylog.Logger;
 
-import io.netty.util.collection.LongObjectHashMap;
+import gnu.trove.map.hash.TLongObjectHashMap;
 
 public class ChunkProviderServer implements IChunkProvider {
 
@@ -25,7 +25,7 @@ public class ChunkProviderServer implements IChunkProvider {
     public IChunkProvider chunkProvider; // CraftBukkit - public
     private IChunkLoader chunkLoader;
     public boolean forceChunkLoad = false; // CraftBukkit - true -> false
-    public LongObjectHashMap<Chunk> chunks = new LongObjectHashMap<Chunk>();
+    public TLongObjectHashMap<Chunk> chunks = new TLongObjectHashMap<Chunk>();
     public WorldServer world; // CraftBukkit - public
 
     public ChunkProviderServer(WorldServer worldserver, IChunkLoader ichunkloader, IChunkProvider ichunkprovider) {
@@ -42,7 +42,7 @@ public class ChunkProviderServer implements IChunkProvider {
     // CraftBukkit start - Change return type to Collection and return the values of our chunk map
     public java.util.Collection a() {
         // return this.chunkList;
-        return this.chunks.values();
+        return this.chunks.valueCollection();
         // CraftBukkit end
     }
 
@@ -72,11 +72,8 @@ public class ChunkProviderServer implements IChunkProvider {
     }
 
     public void b() {
-        Iterator iterator = this.chunks.values().iterator();
-
-        while (iterator.hasNext()) {
-            Chunk chunk = (Chunk) iterator.next();
-
+        Collection<Chunk> iterator = chunks.valueCollection();
+        for (final Chunk chunk : iterator) {
             this.queueUnload(chunk.locX, chunk.locZ);
         }
 
@@ -126,7 +123,6 @@ public class ChunkProviderServer implements IChunkProvider {
         // CraftBukkit end
 
         if (chunk == null) {
-            world.timings.syncChunkLoadTimer.startTiming(); // Spigot
             chunk = this.loadChunk(i, j);
             if (chunk == null) {
                 if (this.chunkProvider == null) {
@@ -178,7 +174,6 @@ public class ChunkProviderServer implements IChunkProvider {
             }
             // CraftBukkit end
             chunk.loadNearby(this, this, i, j);
-            world.timings.syncChunkLoadTimer.stopTiming(); // Spigot
         }
 
         return chunk;
@@ -213,9 +208,7 @@ public class ChunkProviderServer implements IChunkProvider {
                 if (chunk != null) {
                     chunk.setLastSaved(this.world.getTime());
                     if (this.chunkProvider != null) {
-                        world.timings.syncChunkLoadStructuresTimer.startTiming(); // Spigot
                         this.chunkProvider.recreateStructures(chunk, i, j);
-                        world.timings.syncChunkLoadStructuresTimer.stopTiming(); // Spigot
                     }
                 }
 
@@ -304,9 +297,8 @@ public class ChunkProviderServer implements IChunkProvider {
         int i = 0;
 
         // CraftBukkit start
-        Iterator iterator = this.chunks.values().iterator();
-        while (iterator.hasNext()) {
-            Chunk chunk = (Chunk) iterator.next();
+        Collection<Chunk> iterator = this.chunks.valueCollection();
+        for (final Chunk chunk : iterator) {
             // CraftBukkit end
 
             if (flag) {

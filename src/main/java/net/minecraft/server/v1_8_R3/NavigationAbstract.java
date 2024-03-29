@@ -43,13 +43,11 @@ public abstract class NavigationAbstract {
         } else {
             float f = this.i();
 
-            this.c.methodProfiler.a("pathfind");
             BlockPosition blockposition1 = new BlockPosition(this.b);
             int i = (int) (f + 8.0F);
             ChunkCache chunkcache = new ChunkCache(this.c, blockposition1.a(-i, -i, -i), blockposition1.a(i, i, i), 0);
             PathEntity pathentity = this.j.a((IBlockAccess) chunkcache, (Entity) this.b, blockposition, f);
 
-            this.c.methodProfiler.b();
             return pathentity;
         }
     }
@@ -70,13 +68,11 @@ public abstract class NavigationAbstract {
         } else {
             float f = this.i();
 
-            this.c.methodProfiler.a("pathfind");
             BlockPosition blockposition = (new BlockPosition(this.b)).up();
             int i = (int) (f + 16.0F);
             ChunkCache chunkcache = new ChunkCache(this.c, blockposition.a(-i, -i, -i), blockposition.a(i, i, i), 0);
             PathEntity pathentity = this.j.a((IBlockAccess) chunkcache, (Entity) this.b, entity, f);
 
-            this.c.methodProfiler.b();
             return pathentity;
         }
     }

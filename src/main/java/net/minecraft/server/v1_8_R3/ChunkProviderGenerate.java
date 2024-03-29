@@ -23,7 +23,6 @@ public class ChunkProviderGenerate implements IChunkProvider {
     private double[] t;
     private WorldGenBase u;
     private WorldGenStronghold v;
-    private WorldGenVillage w;
     private WorldGenMineshaft x;
     private WorldGenLargeFeature y;
     private WorldGenBase z;
@@ -39,7 +38,6 @@ public class ChunkProviderGenerate implements IChunkProvider {
         this.t = new double[256];
         this.u = new WorldGenCaves();
         this.v = new WorldGenStronghold();
-        this.w = new WorldGenVillage();
         this.x = new WorldGenMineshaft();
         this.y = new WorldGenLargeFeature();
         this.z = new WorldGenCanyon();
@@ -166,10 +164,6 @@ public class ChunkProviderGenerate implements IChunkProvider {
 
         if (this.r.w && this.n) {
             this.x.a(this, this.m, i, j, chunksnapshot);
-        }
-
-        if (this.r.v && this.n) {
-            this.w.a(this, this.m, i, j, chunksnapshot);
         }
 
         if (this.r.u && this.n) {
@@ -323,10 +317,6 @@ public class ChunkProviderGenerate implements IChunkProvider {
             this.x.a(this.m, this.h, chunkcoordintpair);
         }
 
-        if (this.r.v && this.n) {
-            flag = this.w.a(this.m, this.h, chunkcoordintpair);
-        }
-
         if (this.r.u && this.n) {
             this.v.a(this.m, this.h, chunkcoordintpair);
         }
@@ -445,10 +435,6 @@ public class ChunkProviderGenerate implements IChunkProvider {
     public void recreateStructures(Chunk chunk, int i, int j) {
         if (this.r.w && this.n) {
             this.x.a(this, this.m, i, j, (ChunkSnapshot) null);
-        }
-
-        if (this.r.v && this.n) {
-            this.w.a(this, this.m, i, j, (ChunkSnapshot) null);
         }
 
         if (this.r.u && this.n) {

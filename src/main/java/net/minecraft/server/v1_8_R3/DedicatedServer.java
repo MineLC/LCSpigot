@@ -3,6 +3,7 @@ package net.minecraft.server.v1_8_R3;
 import lc.lcspigot.commands.CommandStorage;
 import lc.lcspigot.commands.custom.CustomCommandLoader;
 import lc.lcspigot.commands.vanilla.VanillaCommandLoader;
+import lc.lcspigot.configuration.LCConfig;
 import lc.lcspigot.configuration.StartLCConfiguration;
 
 import java.io.File;
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import org.spigotmc.SpigotConfig;
 import org.tinylog.Logger;
 // CraftBukkit end
+import org.tinylog.provider.ProviderRegistry;
 
 public class DedicatedServer extends MinecraftServer implements IMinecraftServer {
 
@@ -30,39 +32,6 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
     }
 
     protected boolean init() throws IOException {
-        Thread thread = new Thread("Server console handler") {
-            public void run() {
-                // CraftBukkit start
-                if (!org.bukkit.craftbukkit.v1_8_R3.Main.useConsole) {
-                    return;
-                }
-                // CraftBukkit end
-
-                jline.console.ConsoleReader bufferedreader = reader; // CraftBukkit
-                String s;
-
-                try {
-                    // CraftBukkit start - JLine disabling compatibility
-                    while (!isStopped() && isRunning()) {
-                        if (org.bukkit.craftbukkit.v1_8_R3.Main.useJline) {
-                            s = bufferedreader.readLine(">", null);
-                        } else {
-                            s = bufferedreader.readLine();
-                        }
-                        if (s != null && s.trim().length() > 0) { // Trim to filter lines which are just spaces
-                            CommandStorage.execute(console, s);
-                        }
-                        // CraftBukkit end
-                    }
-                } catch (IOException ioexception) {
-                    Logger.error("Exception handling console input", ioexception);
-                }
-            }
-        };
-
-        thread.setDaemon(true);
-        thread.start();
-
         Logger.info("Starting minecraft server version 1.8.4");
         if (Runtime.getRuntime().maxMemory() / 1024L / 1024L < 512L) {
             Logger.warn("To start the server with more ram, launch it as \"java -Xmx1024M -Xms1024M -jar minecraft_server.jar\"");
@@ -92,7 +61,7 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         } else if (this.propertyManager.getInt("difficulty", 1) > 3) {
             this.propertyManager.setProperty("difficulty", Integer.valueOf(3));
         }
-        nativeTransport = this.propertyManager.getBoolean("use-native-transport", true);
+        this.nativeTransport = this.propertyManager.getBoolean("use-native-transport", true);
         this.generateStructures = this.propertyManager.getBoolean("generate-structures", true);
         int i = this.propertyManager.getInt("gamemode", WorldSettings.EnumGamemode.SURVIVAL.getId());
 
@@ -112,6 +81,43 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         new VanillaCommandLoader().load();
         new CustomCommandLoader().load();
 
+        if (LCConfig.getConfig().disableLogging) {
+            try {
+                ProviderRegistry.getLoggingProvider().shutdown();
+            } catch (InterruptedException e) {
+                System.err.println(e);
+            }
+        }
+
+        if (LCConfig.getConfig().allowConsole) {
+            final Thread thread = new Thread("Server console handler") {
+                public void run() {
+                    // CraftBukkit start
+                    if (!org.bukkit.craftbukkit.v1_8_R3.Main.useConsole) {
+                        return;
+                    }
+                    // CraftBukkit end
+    
+                    final jline.console.ConsoleReader bufferedreader = reader; // CraftBukkit
+    
+                    try {
+                        // CraftBukkit start - JLine disabling compatibility
+                        while (!isStopped() && isRunning()) {
+                            final String input = bufferedreader.readLine();
+                            if (input != null && input.trim().length() > 0) { // Trim to filter lines which are just spaces
+                                CommandStorage.execute(console, input);
+                            }
+                            // CraftBukkit end
+                        }
+                    } catch (IOException ioexception) {
+                        Logger.error("Exception handling console input", ioexception);
+                    }
+                }
+            };
+    
+            thread.setDaemon(true);
+            thread.start();   
+        }
         // Spigot start
         this.a(new DedicatedPlayerList(this));
         new SpigotConfig().init();
@@ -183,7 +189,6 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
             }
 
             this.aB();
-            this.getEnableCommandBlock();
             this.p();
             this.getSnooperEnabled();
             this.aK();

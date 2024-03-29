@@ -77,7 +77,6 @@ public class WorldGenFactory {
 
     static {
         b(WorldGenMineshaftStart.class, "Mineshaft");
-        b(WorldGenVillage.WorldGenVillageStart.class, "Village");
         b(WorldGenNether.WorldGenNetherStart.class, "Fortress");
         b(WorldGenStronghold.WorldGenStronghold2Start.class, "Stronghold");
         b(WorldGenLargeFeature.WorldGenLargeFeatureStart.class, "Temple");

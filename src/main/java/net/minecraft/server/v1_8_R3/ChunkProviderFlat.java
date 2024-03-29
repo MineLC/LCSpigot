@@ -31,8 +31,6 @@ public class ChunkProviderFlat implements IChunkProvider {
                 if (!map1.containsKey("size")) {
                     map1.put("size", "1");
                 }
-
-                this.e.add(new WorldGenVillage(map1));
             }
 
             if (map.containsKey("biome_1")) {
@@ -143,17 +141,6 @@ public class ChunkProviderFlat implements IChunkProvider {
         long j1 = this.b.nextLong() / 2L * 2L + 1L;
 
         this.b.setSeed((long) i * i1 + (long) j * j1 ^ this.a.getSeed());
-        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
-        Iterator iterator = this.e.iterator();
-
-        while (iterator.hasNext()) {
-            StructureGenerator structuregenerator = (StructureGenerator) iterator.next();
-            boolean flag1 = structuregenerator.a(this.a, this.b, chunkcoordintpair);
-
-            if (structuregenerator instanceof WorldGenVillage) {
-                flag |= flag1;
-            }
-        }
 
         if (this.h != null && !flag && this.b.nextInt(4) == 0) {
             this.h.generate(this.a, this.b, blockposition.a(this.b.nextInt(16) + 8, this.b.nextInt(256), this.b.nextInt(16) + 8));

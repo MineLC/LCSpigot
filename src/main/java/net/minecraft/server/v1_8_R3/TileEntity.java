@@ -5,12 +5,10 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import org.tinylog.Logger;
 
-import org.spigotmc.CustomTimingsHandler; // Spigot
 import org.bukkit.inventory.InventoryHolder; // CraftBukkit
 
 public abstract class TileEntity {
 
-    public CustomTimingsHandler tickTimer = org.bukkit.craftbukkit.v1_8_R3.SpigotTimings.getTileEntityTimings(this); // Spigot
     private static Map<String, Class<? extends TileEntity>> f = Maps.newHashMap();
     private static Map<Class<? extends TileEntity>, String> g = Maps.newHashMap();
     protected World world;

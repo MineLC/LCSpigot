@@ -3,7 +3,6 @@ package net.minecraft.server.v1_8_R3;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import lc.lcspigot.configuration.LCConfig;
@@ -16,7 +15,6 @@ import java.util.*;
 
 import org.bukkit.WeatherType;
 import org.bukkit.block.BlockState;
-import org.bukkit.craftbukkit.v1_8_R3.util.LongHash;
 import org.bukkit.craftbukkit.v1_8_R3.util.HashTreeSet;
 
 import org.bukkit.event.block.BlockFormEvent;
@@ -37,7 +35,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     private int emptyTime;
     private final PortalTravelAgent Q;
     private final SpawnerCreature R = new SpawnerCreature();
-    protected final VillageSiege siegeManager = new VillageSiege(this);
     private WorldServer.BlockActionDataList[] S = new WorldServer.BlockActionDataList[] { new WorldServer.BlockActionDataList(null), new WorldServer.BlockActionDataList(null)};
     private int T;
     private static final List<StructurePieceTreasure> U = Lists.newArrayList(new StructurePieceTreasure[] { new StructurePieceTreasure(Items.STICK, 0, 1, 3, 10), new StructurePieceTreasure(Item.getItemOf(Blocks.PLANKS), 0, 1, 3, 10), new StructurePieceTreasure(Item.getItemOf(Blocks.LOG), 0, 1, 3, 10), new StructurePieceTreasure(Items.STONE_AXE, 0, 1, 1, 3), new StructurePieceTreasure(Items.WOODEN_AXE, 0, 1, 1, 5), new StructurePieceTreasure(Items.STONE_PICKAXE, 0, 1, 1, 3), new StructurePieceTreasure(Items.WOODEN_PICKAXE, 0, 1, 1, 5), new StructurePieceTreasure(Items.APPLE, 0, 2, 3, 5), new StructurePieceTreasure(Items.BREAD, 0, 2, 3, 3), new StructurePieceTreasure(Item.getItemOf(Blocks.LOG2), 0, 1, 3, 10)});
@@ -47,8 +44,8 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     public final int dimension;
 
     // Add env and gen to constructor
-    public WorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, WorldData worlddata, int i, MethodProfiler methodprofiler, org.bukkit.World.Environment env, org.bukkit.generator.ChunkGenerator gen) {
-        super(idatamanager, worlddata, WorldProvider.byDimension(env.getId()), methodprofiler, false, gen, env);
+    public WorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, WorldData worlddata, int i, org.bukkit.World.Environment env, org.bukkit.generator.ChunkGenerator gen) {
+        super(idatamanager, worlddata, WorldProvider.byDimension(env.getId()), false, gen, env);
         this.dimension = i;
         this.pvpMode = minecraftserver.getPVP();
         worlddata.world = this;
@@ -66,16 +63,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     public World b() {
         this.worldMaps = new PersistentCollection(this.dataManager);
-        String s = PersistentVillage.a(this.worldProvider);
-        PersistentVillage persistentvillage = (PersistentVillage) this.worldMaps.get(PersistentVillage.class, s);
-
-        if (persistentvillage == null) {
-            this.villages = new PersistentVillage(this);
-            this.worldMaps.a(s, this.villages);
-        } else {
-            this.villages = persistentvillage;
-            this.villages.a((World) this);
-        }
 
         if (getServer().getScoreboardManager() == null) { // CraftBukkit
         this.scoreboard = new ScoreboardServer(this.server);
@@ -212,14 +199,10 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         // CraftBukkit start - Only call spawner if we have players online and the world allows for mobs or animals
         long time = this.worldData.getTime();
         if (this.getGameRules().getBoolean("doMobSpawning") && this.worldData.getType() != WorldType.DEBUG_ALL_BLOCK_STATES && (this.allowMonsters || this.allowAnimals) && (this instanceof WorldServer && this.players.size() > 0)) {
-            timings.mobSpawn.startTiming(); // Spigot
             this.R.a(this, this.allowMonsters && (this.ticksPerMonsterSpawns != 0 && time % this.ticksPerMonsterSpawns == 0L), this.allowAnimals && (this.ticksPerAnimalSpawns != 0 && time % this.ticksPerAnimalSpawns == 0L), this.worldData.getTime() % 400L == 0L);
-            timings.mobSpawn.stopTiming(); // Spigot
             // CraftBukkit end
         }
         // CraftBukkit end
-        timings.doChunkUnload.startTiming(); // Spigot
-        this.methodProfiler.c("chunkSource");
         this.chunkProvider.unloadChunks();
         int j = this.a(1.0F);
 
@@ -232,34 +215,13 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             this.worldData.setDayTime(this.worldData.getDayTime() + 1L);
         }
 
-        timings.doChunkUnload.stopTiming(); // Spigot
-        this.methodProfiler.c("tickPending");
-        timings.doTickPending.startTiming(); // Spigot
         this.a(false);
-        timings.doTickPending.stopTiming(); // Spigot
-        this.methodProfiler.c("tickBlocks");
-        timings.doTickTiles.startTiming(); // Spigot
         this.h();
-        timings.doTickTiles.stopTiming(); // Spigot
-        this.methodProfiler.c("chunkMap");
-        timings.doChunkMap.startTiming(); // Spigot
         this.manager.flush();
-        timings.doChunkMap.stopTiming(); // Spigot
-        this.methodProfiler.c("village");
-        timings.doVillages.startTiming(); // Spigot
-        this.villages.tick();
-        this.siegeManager.a();
-        timings.doVillages.stopTiming(); // Spigot
-        this.methodProfiler.c("portalForcer");
-        timings.doPortalForcer.startTiming(); // Spigot
         this.Q.a(this.getTime());
-        timings.doPortalForcer.stopTiming(); // Spigot
-        this.methodProfiler.b();
-        timings.doSounds.startTiming(); // Spigot
         this.ak();
 
         this.getWorld().processChunkGC(); // CraftBukkit
-        timings.doChunkGC.stopTiming(); // Spigot
     }
 
     public BiomeBase.BiomeMeta a(EnumCreatureType enumcreaturetype, BlockPosition blockposition) {
@@ -377,12 +339,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             int i = 0;
             int j = 0;
 
-            // CraftBukkit start
-            //for (Iterator iterator1 = this.chunkTickList.iterator(); iterator1.hasNext(); this.methodProfiler.b()) {
-            //    ChunkCoordIntPair chunkcoordintpair1 = (ChunkCoordIntPair) iterator1.next();
-            //    int k = chunkcoordintpair1.x * 16;
-            //    int l = chunkcoordintpair1.z * 16;
-            // Spigot start
+
             for (gnu.trove.iterator.TLongShortIterator iter = chunkTickList.iterator(); iter.hasNext(); )
             {
                 iter.advance();
@@ -400,14 +357,11 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                 int k = chunkX * 16;
                 int l = chunkZ * 16;
 
-                this.methodProfiler.a("getChunk");
                 Chunk chunk = this.getChunkAt(chunkX, chunkZ);
                 // CraftBukkit end
 
                 this.a(k, l, chunk);
-                this.methodProfiler.c("tickChunk");
                 chunk.b(false);
-                this.methodProfiler.c("thunder");
                 int i1;
                 BlockPosition blockposition;
 
@@ -420,7 +374,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                     }
                 }
 
-                this.methodProfiler.c("iceandsnow");
                 if (RANDOM.nextInt(16) == 0) {
                     this.m = this.m * 3 + 1013904223;
                     i1 = this.m >> 2;
@@ -458,7 +411,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
                     }
                 }
 
-                this.methodProfiler.c("tickBlocks");
                 i1 = this.getGameRules().c("randomTickSpeed");
                 if (i1 > 0) {
                     ChunkSection[] achunksection = chunk.getSections();
@@ -602,8 +554,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             // CraftBukkit end
         }
 
-        this.methodProfiler.a("cleaning");
-
         if (i > LCConfig.getConfig().tickNextTickCap) {
             i = LCConfig.getConfig().tickNextTickCap;
         }
@@ -621,8 +571,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             this.V.add(nextticklistentry);
         }
 
-        this.methodProfiler.b();
-        this.methodProfiler.a("ticking");
         Iterator iterator = this.V.iterator();
 
         while (iterator.hasNext()) {
@@ -649,7 +597,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             }
         }
 
-        this.methodProfiler.b();
         this.V.clear();
         return !this.M.isEmpty();
     }

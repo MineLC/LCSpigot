@@ -33,7 +33,9 @@ public final class StartLCConfiguration {
             getInt(config, "tick-next-tick-cap", 10000),
             config.getBoolean("can-save-worlds"),
             getKnockback(config),
-            config.getBoolean("commands.log")
+            config.getBoolean("commands.log"),
+            config.getBoolean("create-console-log-thread"),
+            config.getBoolean("disable-logging")
         );
 
         LCConfig.setInstance(lcConfig);

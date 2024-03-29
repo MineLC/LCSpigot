@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ThreadLocalRandom;
 
 // CraftBukkit start
 import org.bukkit.Bukkit;
@@ -16,7 +17,6 @@ import org.bukkit.entity.Hanging;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Painting;
 import org.bukkit.entity.Vehicle;
-import org.spigotmc.CustomTimingsHandler; // Spigot
 import org.tinylog.Logger;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
@@ -42,7 +42,7 @@ public abstract class Entity {
     }
     // CraftBukikt end
 
-    protected static final Random RANDOM = new Random();
+    protected static final Random RANDOM = ThreadLocalRandom.current();
     private static final AxisAlignedBB a = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
     private static int entityCount;
     private int id;
@@ -116,7 +116,6 @@ public abstract class Entity {
     public org.bukkit.projectiles.ProjectileSource projectileSource; // CraftBukkit - For projectiles only
 
     // Spigot start
-    public CustomTimingsHandler tickTimer = org.bukkit.craftbukkit.v1_8_R3.SpigotTimings.getEntityTimings(this); // Spigot
     public final byte activationType = org.spigotmc.ActivationRange.initializeEntityActivationType(this);
     public final boolean defaultActivationState;
     public long activatedTick = Integer.MIN_VALUE;
@@ -257,7 +256,6 @@ public abstract class Entity {
     }
 
     public void K() {
-        this.world.methodProfiler.a("entityBaseTick");
         if (this.vehicle != null && this.vehicle.dead) {
             this.vehicle = null;
         }
@@ -269,7 +267,6 @@ public abstract class Entity {
         this.lastPitch = this.pitch;
         this.lastYaw = this.yaw;
         if (!this.world.isClientSide && this.world instanceof WorldServer) {
-            this.world.methodProfiler.a("portal");
             MinecraftServer minecraftserver = ((WorldServer) this.world).getMinecraftServer();
             int i = this.L();
 
@@ -305,7 +302,7 @@ public abstract class Entity {
                 --this.portalCooldown;
             }
 
-            this.world.methodProfiler.b();
+            
         }
 
         this.Y();
@@ -341,7 +338,7 @@ public abstract class Entity {
         }
 
         this.justCreated = false;
-        this.world.methodProfiler.b();
+        
     }
 
     public int L() {
@@ -409,7 +406,6 @@ public abstract class Entity {
         this.recalcPosition();
     }
     public void move(double d0, double d1, double d2) {
-        org.bukkit.craftbukkit.v1_8_R3.SpigotTimings.entityMoveTimer.startTiming(); // Spigot
         if (this.noclip) {
             this.a(this.getBoundingBox().c(d0, d1, d2));
             this.recalcPosition();
@@ -430,7 +426,6 @@ public abstract class Entity {
                 return;
             }
             // CraftBukkit end
-            this.world.methodProfiler.a("move");
             double d3 = this.locX;
             double d4 = this.locY;
             double d5 = this.locZ;
@@ -615,8 +610,7 @@ public abstract class Entity {
                 }
             }
 
-            this.world.methodProfiler.b();
-            this.world.methodProfiler.a("rest");
+            
             this.recalcPosition();
             this.positionChanged = d6 != d0 || d8 != d2;
             this.E = d7 != d1;
@@ -718,7 +712,7 @@ public abstract class Entity {
 
             boolean flag2 = this.U();
 
-            if (this.world.e(this.getBoundingBox().shrink(0.001D, 0.001D, 0.001D))) {
+            if (this.world.e(this.getBoundingBox())) {
                 this.burn(1);
                 if (!flag2) {
                     ++this.fireTicks;
@@ -744,9 +738,8 @@ public abstract class Entity {
                 this.fireTicks = -this.maxFireTicks;
             }
 
-            this.world.methodProfiler.b();
+            
         }
-        org.bukkit.craftbukkit.v1_8_R3.SpigotTimings.entityMoveTimer.stopTiming(); // Spigot
     }
 
     private void recalcPosition() {
@@ -865,7 +858,7 @@ public abstract class Entity {
     }
 
     public boolean W() {
-        if (this.world.a(this.getBoundingBox().grow(0.0D, -0.4000000059604645D, 0.0D).shrink(0.001D, 0.001D, 0.001D), Material.WATER, this)) {
+        if (this.world.a(this.getBoundingBox().grow(0.0D, -0.4000000059604645D, 0.0D), Material.WATER, this)) {
             if (!this.inWater && !this.justCreated) {
                 this.X();
             }
@@ -1905,7 +1898,6 @@ public abstract class Entity {
 
     public void c(int i) {
         if (!this.world.isClientSide && !this.dead) {
-            this.world.methodProfiler.a("changeDimension");
             MinecraftServer minecraftserver = MinecraftServer.getServer();
             // CraftBukkit start - Move logic into new function "teleportToLocation"
             // int j = this.dimension;
@@ -1954,7 +1946,6 @@ public abstract class Entity {
 
             this.world.kill(this);
             this.dead = false;
-            this.world.methodProfiler.a("reposition");
             // CraftBukkit start - Ensure chunks are loaded in case TravelAgent is not used which would initially cause chunks to load during find/create
             // minecraftserver.getPlayerList().changeWorld(this, j, worldserver, worldserver1);
             boolean before = worldserver1.chunkProviderServer.forceChunkLoad;
@@ -1962,7 +1953,6 @@ public abstract class Entity {
             worldserver1.getMinecraftServer().getPlayerList().repositionEntity(this, exit, portal);
             worldserver1.chunkProviderServer.forceChunkLoad = before;
             // CraftBukkit end
-            this.world.methodProfiler.c("reloading");
             Entity entity = EntityTypes.createEntityByName(EntityTypes.b(this), worldserver1);
 
             if (entity != null) {
@@ -1987,10 +1977,10 @@ public abstract class Entity {
             }
 
             this.dead = true;
-            this.world.methodProfiler.b();
+            
             worldserver.j();
             worldserver1.j();
-            this.world.methodProfiler.b();
+            
         }
     }
 

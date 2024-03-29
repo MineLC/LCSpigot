@@ -1,7 +1,6 @@
 package org.bukkit.event.player;
 
 import java.util.IllegalFormatException;
-import java.util.Set;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -28,20 +27,16 @@ public class AsyncPlayerChatEvent extends PlayerEvent implements Cancellable {
     private boolean cancel = false;
     private String message;
     private String format = "<%1$s> %2$s";
-    private final Set<Player> recipients;
 
     /**
      *
      * @param async This changes the event to a synchronous state.
      * @param who the chat sender
      * @param message the message sent
-     * @param players the players to receive the message. This may be a lazy
-     *     or unmodifiable collection.
      */
-    public AsyncPlayerChatEvent(final boolean async, final Player who, final String message, final Set<Player> players) {
+    public AsyncPlayerChatEvent(final boolean async, final Player who, final String message) {
         super(who, async);
         this.message = message;
-        recipients = players;
     }
 
     /**
@@ -102,23 +97,6 @@ public class AsyncPlayerChatEvent extends PlayerEvent implements Cancellable {
         }
 
         this.format = format;
-    }
-
-    /**
-     * Gets a set of recipients that this chat message will be displayed to.
-     * <p>
-     * The set returned is not guaranteed to be mutable and may auto-populate
-     * on access. Any listener accessing the returned set should be aware that
-     * it may reduce performance for a lazy set implementation.
-     * <p>
-     * Listeners should be aware that modifying the list may throw {@link
-     * UnsupportedOperationException} if the event caller provides an
-     * unmodifiable set.
-     *
-     * @return All Players who will see this chat message
-     */
-    public Set<Player> getRecipients() {
-        return recipients;
     }
 
     public boolean isCancelled() {

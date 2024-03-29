@@ -666,7 +666,6 @@ public abstract class PlayerList {
         double d2 = 8.0D;
         float f = entity.yaw;
 
-        worldserver.methodProfiler.a("moving");
         */
         if (worldserver1.dimension == -1) {
             d0 = MathHelper.a(d0 / d2, worldserver1.getWorldBorder().b()+ 16.0D, worldserver1.getWorldBorder().d() - 16.0D);
@@ -708,9 +707,7 @@ public abstract class PlayerList {
             */
         }
 
-        // worldserver.methodProfiler.b();
         if (i != 1) {
-            worldserver.methodProfiler.a("placing");
             d0 = (double) MathHelper.clamp((int) d0, -29999872, 29999872);
             d1 = (double) MathHelper.clamp((int) d1, -29999872, 29999872);
             /*
@@ -720,8 +717,6 @@ public abstract class PlayerList {
                 worldserver1.addEntity(entity);
                 worldserver1.entityJoinedWorld(entity, false);
             }
-
-            worldserver.methodProfiler.b();
             */
         }
 
@@ -741,7 +736,6 @@ public abstract class PlayerList {
         double d2 = 8.0D;
         float f = entity.yaw;
 
-        worldserver.methodProfiler.a("moving");
         */
         entity.setPositionRotation(exit.getX(), exit.getY(), exit.getZ(), exit.getYaw(), exit.getPitch());
         if (entity.isAlive()) {
@@ -783,9 +777,7 @@ public abstract class PlayerList {
         }
         */
 
-        worldserver.methodProfiler.b();
         if (i != 1) {
-            worldserver.methodProfiler.a("placing");
             /*
             d0 = (double) MathHelper.clamp((int) d0, -29999872, 29999872);
             d1 = (double) MathHelper.clamp((int) d1, -29999872, 29999872);
@@ -804,8 +796,6 @@ public abstract class PlayerList {
                 worldserver1.addEntity(entity);
                 worldserver1.entityJoinedWorld(entity, false);
             }
-
-            worldserver.methodProfiler.b();
         }
 
         entity.spawnIn(worldserver1);

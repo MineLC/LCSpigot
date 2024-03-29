@@ -5,21 +5,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.apache.commons.lang3.ObjectUtils;
 
-public class DataWatcher {
+public final class DataWatcher {
 
     private final Entity a;
     private boolean b = true;
     // Spigot Start
-    private static final gnu.trove.map.TObjectIntMap classToId = new gnu.trove.map.hash.TObjectIntHashMap<>( 10, 0.5f, -1 );
     private final gnu.trove.map.TIntObjectMap dataValues = new gnu.trove.map.hash.TIntObjectHashMap( 10, 0.5f, -1 );
     // These exist as an attempt at backwards compatability for (broken) NMS plugins
-    private static final Map<Class<?>, Integer> c = gnu.trove.TDecorators.wrap( classToId );
-    private final Map<Integer, DataWatcher.WatchableObject> d = gnu.trove.TDecorators.wrap( dataValues );
     // Spigot End
     private boolean e;
     private ReadWriteLock f = new ReentrantReadWriteLock();
@@ -29,7 +25,7 @@ public class DataWatcher {
     }
 
     public <T> void a(int i, T t0) {
-        int integer = classToId.get(t0.getClass()); // Spigot
+        int integer = get(t0); // Spigot
 
         if (integer == -1) { // Spigot
             throw new IllegalArgumentException("Unknown data type: " + t0.getClass());
@@ -332,17 +328,16 @@ public class DataWatcher {
         this.e = false;
     }
 
-    static {
-        // Spigot Start - remove valueOf
-        classToId.put(Byte.class, 0);
-        classToId.put(Short.class, 1);
-        classToId.put(Integer.class, 2);
-        classToId.put(Float.class, 3);
-        classToId.put(String.class, 4);
-        classToId.put(ItemStack.class, 5);
-        classToId.put(BlockPosition.class, 6);
-        classToId.put(Vector3f.class, 7);
-        // Spigot End
+    private static int get(final Object object){
+        return 
+            (object instanceof Byte) ? 0 :
+            (object instanceof Short) ? 1 :
+            (object instanceof Integer) ? 2 :
+            (object instanceof Float) ? 3 :
+            (object instanceof String) ? 4 :
+            (object instanceof ItemStack) ? 5 :
+            (object instanceof BlockPosition) ? 6 :
+            (object instanceof Vector3f) ? 7: -1;
     }
 
     public static class WatchableObject {

@@ -1,9 +1,7 @@
 package net.minecraft.server.v1_8_R3;
 
-import com.google.common.collect.Lists;
 import java.util.Iterator;
 import java.util.List;
-import org.tinylog.Logger;
 
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList; // CraftBukkit
 
@@ -11,13 +9,8 @@ public class PathfinderGoalSelector {
 
     private List<PathfinderGoalSelector.PathfinderGoalSelectorItem> b = new UnsafeList<PathfinderGoalSelector.PathfinderGoalSelectorItem>();
     private List<PathfinderGoalSelector.PathfinderGoalSelectorItem> c = new UnsafeList<PathfinderGoalSelector.PathfinderGoalSelectorItem>();
-    private final MethodProfiler d;
     private int e;
     private int f = 3;
-
-    public PathfinderGoalSelector(MethodProfiler methodprofiler) {
-        this.d = methodprofiler;
-    }
 
     public void a(int i, PathfinderGoal pathfindergoal) {
         this.b.add(new PathfinderGoalSelector.PathfinderGoalSelectorItem(i, pathfindergoal));
@@ -43,7 +36,6 @@ public class PathfinderGoalSelector {
     }
 
     public void a() {
-        this.d.a("goalSetup");
         Iterator iterator;
         PathfinderGoalSelector.PathfinderGoalSelectorItem pathfindergoalselector_pathfindergoalselectoritem;
 
@@ -80,16 +72,12 @@ public class PathfinderGoalSelector {
             }
         }
 
-        this.d.b();
-        this.d.a("goalTick");
         iterator = this.c.iterator();
 
         while (iterator.hasNext()) {
             pathfindergoalselector_pathfindergoalselectoritem = (PathfinderGoalSelector.PathfinderGoalSelectorItem) iterator.next();
             pathfindergoalselector_pathfindergoalselectoritem.a.e();
         }
-
-        this.d.b();
     }
 
     private boolean a(PathfinderGoalSelector.PathfinderGoalSelectorItem pathfindergoalselector_pathfindergoalselectoritem) {

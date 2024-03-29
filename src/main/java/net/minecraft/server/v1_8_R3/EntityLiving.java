@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
-import org.bukkit.craftbukkit.v1_8_R3.SpigotTimings;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -170,7 +169,6 @@ public abstract class EntityLiving extends Entity {
     public void K() {
         this.ay = this.az;
         super.K();
-        this.world.methodProfiler.a("livingEntityBaseTick");
         boolean flag = this instanceof EntityHuman;
 
         if (this.isAlive()) {
@@ -263,7 +261,7 @@ public abstract class EntityLiving extends Entity {
         this.aL = this.aK;
         this.lastYaw = this.yaw;
         this.lastPitch = this.pitch;
-        this.world.methodProfiler.b();
+        
     }
 
     // CraftBukkit start
@@ -1423,7 +1421,6 @@ public abstract class EntityLiving extends Entity {
     }
 
     public void t_() {
-        SpigotTimings.timerEntityBaseTick.startTiming(); // Spigot
         super.t_();
         if (!this.world.isClientSide) {
             int i = this.bv();
@@ -1462,9 +1459,7 @@ public abstract class EntityLiving extends Entity {
             }
         }
 
-        SpigotTimings.timerEntityBaseTick.stopTiming(); // Spigot
         this.m();
-        SpigotTimings.timerEntityTickRest.startTiming(); // Spigot
         double d0 = this.locX - this.lastX;
         double d1 = this.locZ - this.lastZ;
         float f = (float) (d0 * d0 + d1 * d1);
@@ -1490,10 +1485,8 @@ public abstract class EntityLiving extends Entity {
         }
 
         this.aS += (f3 - this.aS) * 0.3F;
-        this.world.methodProfiler.a("headTurn");
         f2 = this.h(f1, f2);
-        this.world.methodProfiler.b();
-        this.world.methodProfiler.a("rangeChecks");
+        
 
         while (this.yaw - this.lastYaw < -180.0F) {
             this.lastYaw -= 360.0F;
@@ -1527,9 +1520,8 @@ public abstract class EntityLiving extends Entity {
             this.aL += 360.0F;
         }
 
-        this.world.methodProfiler.b();
+        
         this.aT += f2;
-        SpigotTimings.timerEntityTickRest.stopTiming(); // Spigot
     }
 
     protected float h(float f, float f1) {
@@ -1593,22 +1585,16 @@ public abstract class EntityLiving extends Entity {
             this.motZ = 0.0D;
         }
 
-        this.world.methodProfiler.a("ai");
-        SpigotTimings.timerEntityAI.startTiming(); // Spigot
         if (this.bD()) {
             this.aY = false;
             this.aZ = 0.0F;
             this.ba = 0.0F;
             this.bb = 0.0F;
         } else if (this.bM()) {
-            this.world.methodProfiler.a("newAi");
             this.doTick();
-            this.world.methodProfiler.b();
+            
         }
-        SpigotTimings.timerEntityAI.stopTiming(); // Spigot
-
-        this.world.methodProfiler.b();
-        this.world.methodProfiler.a("jump");
+        
         if (this.aY) {
             if (this.V()) {
                 this.bG();
@@ -1622,23 +1608,17 @@ public abstract class EntityLiving extends Entity {
             this.bn = 0;
         }
 
-        this.world.methodProfiler.b();
-        this.world.methodProfiler.a("travel");
+        
         this.aZ *= 0.98F;
         this.ba *= 0.98F;
         this.bb *= 0.9F;
-        SpigotTimings.timerEntityAIMove.startTiming(); // Spigot
         this.g(this.aZ, this.ba);
-        SpigotTimings.timerEntityAIMove.stopTiming(); // Spigot
-        this.world.methodProfiler.b();
-        this.world.methodProfiler.a("push");
+        
         if (!this.world.isClientSide) {
-            SpigotTimings.timerEntityAICollision.startTiming(); // Spigot
             this.bL();
-            SpigotTimings.timerEntityAICollision.stopTiming(); // Spigot
         }
 
-        this.world.methodProfiler.b();
+        
     }
 
     protected void doTick() {}

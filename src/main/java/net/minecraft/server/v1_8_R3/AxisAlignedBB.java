@@ -175,17 +175,6 @@ public class AxisAlignedBB {
         return (d0 + d1 + d2) / 3.0D;
     }
 
-    public AxisAlignedBB shrink(double d0, double d1, double d2) {
-        double d3 = this.a + d0;
-        double d4 = this.b + d1;
-        double d5 = this.c + d2;
-        double d6 = this.d - d0;
-        double d7 = this.e - d1;
-        double d8 = this.f - d2;
-
-        return new AxisAlignedBB(d3, d4, d5, d6, d7, d8);
-    }
-
     public MovingObjectPosition a(Vec3D vec3d, Vec3D vec3d1) {
         Vec3D vec3d2 = vec3d.a(vec3d1, this.a);
         Vec3D vec3d3 = vec3d.a(vec3d1, this.d);

@@ -2,16 +2,15 @@ package net.minecraft.server.v1_8_R3;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ThreadLocalRandom;
 
 // CraftBukkit start
 import com.google.common.collect.Maps;
@@ -20,10 +19,8 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_8_R3.util.CraftMagicNumbers;
-import org.bukkit.craftbukkit.v1_8_R3.util.LongHashSet;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.SpigotTimings;
 import org.bukkit.generator.ChunkGenerator;
 import org.tinylog.Logger;
 import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
@@ -87,8 +84,6 @@ public abstract class World implements IBlockAccess {
     public WorldData worldData; // CraftBukkit - public
     protected boolean isLoading;
     public PersistentCollection worldMaps; // CraftBukkit - public
-    protected PersistentVillage villages;
-    public final MethodProfiler methodProfiler;
     private final Calendar K = Calendar.getInstance();
     public Scoreboard scoreboard = new Scoreboard(); // CraftBukkit - public
     public final boolean isClientSide;
@@ -160,8 +155,6 @@ public abstract class World implements IBlockAccess {
 
     public final org.spigotmc.SpigotWorldConfig spigotConfig; // Spigot
 
-    public final SpigotTimings.WorldTimingsHandler timings; // Spigot
-
     public CraftWorld getWorld() {
         return this.world;
     }
@@ -174,7 +167,7 @@ public abstract class World implements IBlockAccess {
         return ((ChunkProviderServer) this.chunkProvider).getChunkIfLoaded(x, z);
     }
 
-    protected World(IDataManager idatamanager, WorldData worlddata, WorldProvider worldprovider, MethodProfiler methodprofiler, boolean flag, ChunkGenerator gen, org.bukkit.World.Environment env) {
+    protected World(IDataManager idatamanager, WorldData worlddata, WorldProvider worldprovider, boolean flag, ChunkGenerator gen, org.bukkit.World.Environment env) {
         this.spigotConfig = new org.spigotmc.SpigotWorldConfig( worlddata.getName() ); // Spigot
         this.generator = gen;
         this.world = new CraftWorld((WorldServer) this, gen, env);
@@ -192,7 +185,6 @@ public abstract class World implements IBlockAccess {
         this.allowAnimals = true;
         this.H = new int['\u8000'];
         this.dataManager = idatamanager;
-        this.methodProfiler = methodprofiler;
         this.worldData = worlddata;
         this.worldProvider = worldprovider;
         this.isClientSide = flag;
@@ -226,7 +218,6 @@ public abstract class World implements IBlockAccess {
         }); 
         this.getServer().addWorld(this.world); 
         // CraftBukkit end
-        timings = new SpigotTimings.WorldTimingsHandler(this); // Spigot - code below can generate new world and access timings 
         this.entityLimiter = new org.spigotmc.TickLimiter(spigotConfig.entityMaxTickTime);
         this.tileLimiter = new org.spigotmc.TickLimiter(spigotConfig.tileMaxTickTime);
     }
@@ -405,9 +396,7 @@ public abstract class World implements IBlockAccess {
                 Block block1 = iblockdata1.getBlock();
 
                 if (block.p() != block1.p() || block.r() != block1.r()) {
-                    this.methodProfiler.a("checkLight");
                     this.x(blockposition);
-                    this.methodProfiler.b();
                 }
 
                 /*
@@ -1349,10 +1338,6 @@ public abstract class World implements IBlockAccess {
     }
 
     public void tickEntities() {
-        this.methodProfiler.a("entities");
-        this.methodProfiler.a("global");
-
-        this.methodProfiler.c("remove");
         this.entityList.removeAll(this.g);
 
         tickKEntities();
@@ -1361,10 +1346,7 @@ public abstract class World implements IBlockAccess {
             this.b(entity);
         }
         this.g.clear();
-        this.methodProfiler.c("regular");
 
-        org.spigotmc.ActivationRange.activateEntities(this); // Spigot
-        timings.entityTick.startTiming(); // Spigot
         guardEntityList = true; // Spigot
         // CraftBukkit start - Use field for loop variable
         int entitiesThisCycle = 0;
@@ -1384,12 +1366,9 @@ public abstract class World implements IBlockAccess {
                 entity.vehicle = null;
             }
 
-            this.methodProfiler.a("tick");
             if (!entity.dead) {
                 try {
-                    SpigotTimings.tickEntityTimer.startTiming(); // Spigot
                     this.g(entity);
-                    SpigotTimings.tickEntityTimer.stopTiming(); // Spigot
                 } catch (Throwable throwable1) {
                     CrashReport crashreport = CrashReport.a(throwable1, "Ticking entity");
                     entity.appendEntityCrashDetails(crashreport.a("Entity being ticked"));
@@ -1397,8 +1376,6 @@ public abstract class World implements IBlockAccess {
                 }
             }
 
-            this.methodProfiler.b();
-            this.methodProfiler.a("remove");
             if (entity.dead) {
                 int j = entity.ae;
                 int  k = entity.ag;
@@ -1411,14 +1388,8 @@ public abstract class World implements IBlockAccess {
                 guardEntityList = true; // Spigot
                 this.b(entity);
             }
-
-            this.methodProfiler.b();
         }
         guardEntityList = false; // Spigot
-
-        timings.entityTick.stopTiming(); // Spigot
-        this.methodProfiler.c("blockEntities");
-        timings.tileEntityTick.startTiming(); // Spigot
         this.M = true;
         // CraftBukkit start - From below, clean up tile entities before ticking them
         if (!this.c.isEmpty()) {
@@ -1449,7 +1420,6 @@ public abstract class World implements IBlockAccess {
 
                 if (this.isLoaded(blockposition) && this.N.a(blockposition)) {
                     try {
-                        tileentity.tickTimer.startTiming(); // Spigot
                         ((IUpdatePlayerListBox) tileentity).c();
                     } catch (Throwable throwable2) {
                         CrashReport crashreport1 = CrashReport.a(throwable2, "Ticking block entity");
@@ -1457,10 +1427,6 @@ public abstract class World implements IBlockAccess {
 
                         tileentity.a(crashreportsystemdetails1);
                         throw new ReportedException(crashreport1);
-                    }
-                    // Spigot start
-                    finally {
-                        tileentity.tickTimer.stopTiming();
                     }
                     // Spigot end
                 }
@@ -1476,8 +1442,6 @@ public abstract class World implements IBlockAccess {
             }
         }
 
-        timings.tileEntityTick.stopTiming(); // Spigot
-        timings.tileEntityPending.startTiming(); // Spigot
         this.M = false;
         /* CraftBukkit start - Moved up
         if (!this.c.isEmpty()) {
@@ -1487,7 +1451,6 @@ public abstract class World implements IBlockAccess {
         }
         // CraftBukkit end */
 
-        this.methodProfiler.c("pendingBlockEntities");
         if (!this.b.isEmpty()) {
             for (int l = 0; l < this.b.size(); ++l) {
                 TileEntity tileentity1 = (TileEntity) this.b.get(l);
@@ -1509,10 +1472,6 @@ public abstract class World implements IBlockAccess {
 
             this.b.clear();
         }
-
-        timings.tileEntityPending.stopTiming(); // Spigot
-        this.methodProfiler.b();
-        this.methodProfiler.b();
     }
 
     public boolean a(TileEntity tileentity) {
@@ -1557,7 +1516,6 @@ public abstract class World implements IBlockAccess {
             entity.ticksLived++;
             entity.inactiveTick();
         } else {
-            entity.tickTimer.startTiming(); // Spigot
             // CraftBukkit end
             entity.P = entity.locX;
             entity.Q = entity.locY;
@@ -1572,8 +1530,6 @@ public abstract class World implements IBlockAccess {
                     entity.t_();
                 }
             }
-
-            this.methodProfiler.a("chunkCheck");
             if (Double.isNaN(entity.locX) || Double.isInfinite(entity.locX)) {
                 entity.locX = entity.P;
             }
@@ -1611,7 +1567,6 @@ public abstract class World implements IBlockAccess {
                 }
             }
 
-            this.methodProfiler.b();
             if (flag && entity.ad && entity.passenger != null) {
                 if (!entity.passenger.dead && entity.passenger.vehicle == entity) {
                     this.g(entity.passenger);
@@ -1620,8 +1575,6 @@ public abstract class World implements IBlockAccess {
                     entity.passenger = null;
                 }
             }
-
-            entity.tickTimer.stopTiming(); // Spigot
         }
     }
 
@@ -2108,7 +2061,6 @@ public abstract class World implements IBlockAccess {
 
     protected void D() {
         // this.chunkTickList.clear(); // CraftBukkit - removed
-        this.methodProfiler.a("buildList");
 
         int i;
         EntityHuman entityhuman;
@@ -2156,12 +2108,10 @@ public abstract class World implements IBlockAccess {
             // Spigot End
         }
 
-        this.methodProfiler.b();
         if (this.L > 0) {
             --this.L;
         }
 
-        this.methodProfiler.a("playerCheckLight");
         if (spigotConfig.randomLightUpdates && !this.players.isEmpty()) { // Spigot
             i = RANDOM.nextInt(this.players.size());
             entityhuman = (EntityHuman) this.players.get(i);
@@ -2171,13 +2121,11 @@ public abstract class World implements IBlockAccess {
             this.x(new BlockPosition(j, k, l));
         }
 
-        this.methodProfiler.b();
     }
 
     protected abstract int q();
 
     protected void a(int i, int j, Chunk chunk) {
-        this.methodProfiler.c("moodSound");
         if (this.L == 0 && !this.isClientSide) {
             this.m = this.m * 3 + 1013904223;
             int k = this.m >> 2;
@@ -2199,7 +2147,6 @@ public abstract class World implements IBlockAccess {
             }
         }
 
-        this.methodProfiler.c("checkLight");
         chunk.m();
     }
 
@@ -2338,7 +2285,6 @@ public abstract class World implements IBlockAccess {
             int i = 0;
             int j = 0;
 
-            this.methodProfiler.a("getBrightness");
             int k = this.b(enumskyblock, blockposition);
             int l = this.a(blockposition, enumskyblock);
             int i1 = blockposition.getX();
@@ -2399,10 +2345,6 @@ public abstract class World implements IBlockAccess {
 
                 i = 0;
             }
-
-            this.methodProfiler.b();
-            this.methodProfiler.a("checkedPosition < toCheckCount");
-
             while (i < j) {
                 l1 = this.H[i++];
                 i2 = (l1 & 63) - 32 + i1;
@@ -2449,7 +2391,6 @@ public abstract class World implements IBlockAccess {
                 }
             }
 
-            this.methodProfiler.b();
             return true;
         }
     }
@@ -2471,11 +2412,11 @@ public abstract class World implements IBlockAccess {
     }
 
     public List<Entity> a(Entity entity, AxisAlignedBB axisalignedbb, Predicate<? super Entity> predicate) {
-        ArrayList arraylist = Lists.newArrayList();
-        int i = MathHelper.floor((axisalignedbb.a - 2.0D) / 16.0D);
-        int j = MathHelper.floor((axisalignedbb.d + 2.0D) / 16.0D);
-        int k = MathHelper.floor((axisalignedbb.c - 2.0D) / 16.0D);
-        int l = MathHelper.floor((axisalignedbb.f + 2.0D) / 16.0D);
+        final ArrayList<Entity> arraylist = Lists.newArrayList();
+        final int i = MathHelper.floor((axisalignedbb.a - 2.0D) / 16.0D);
+        final int j = MathHelper.floor((axisalignedbb.d + 2.0D) / 16.0D);
+        final int k = MathHelper.floor((axisalignedbb.c - 2.0D) / 16.0D);
+        final int l = MathHelper.floor((axisalignedbb.f + 2.0D) / 16.0D);
 
         // CraftBukkit start - filter out large ranges
         if (j - i > 10 || l - k > 10) {
@@ -2486,9 +2427,11 @@ public abstract class World implements IBlockAccess {
 
         for (int i1 = i; i1 <= j; ++i1) {
             for (int j1 = k; j1 <= l; ++j1) {
-                if (this.isChunkLoaded(i1, j1, true)) {
-                    this.getChunkAt(i1, j1).a(entity, axisalignedbb, arraylist, predicate);
+                Chunk chunk = getChunkIfLoaded(i1, j1);
+                if (chunk == null) {
+                    chunk = getChunkAt(i1, j1);
                 }
+                chunk.a(entity, axisalignedbb, arraylist, predicate);
             }
         }
 
@@ -3073,10 +3016,6 @@ public abstract class World implements IBlockAccess {
 
     public boolean ad() {
         return this.isLoading;
-    }
-
-    public PersistentVillage ae() {
-        return this.villages;
     }
 
     public WorldBorder getWorldBorder() {

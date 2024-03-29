@@ -34,7 +34,6 @@ import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.craftbukkit.v1_8_R3.Main;
-import org.bukkit.craftbukkit.v1_8_R3.SpigotTimings;
 import org.tinylog.Logger;
 
 // CraftBukkit start
@@ -51,7 +50,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     private final MojangStatisticsGenerator n = new MojangStatisticsGenerator("server", this, az());
     public File universe; // CraftBukkit - remove final, public
     private final List<IUpdatePlayerListBox> p = Lists.newArrayList();
-    public final MethodProfiler methodProfiler = new MethodProfiler();
     private ServerConnection q; // Spigot
     private final ServerPing r = new ServerPing();
     private final Random s = new Random();
@@ -234,7 +232,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
                     worlddata = new WorldData(worldsettings, s1);
                 }
                 worlddata.checkName(s1); // CraftBukkit - Migration did not rewrite the level.dat; This forces 1.8 to take the last loaded world as respawn (in this case the end)
-                world = (WorldServer) (new WorldServer(this, idatamanager, worlddata, dimension, this.methodProfiler, org.bukkit.World.Environment.getEnvironment(dimension), gen)).b();
+                world = (WorldServer) (new WorldServer(this, idatamanager, worlddata, dimension, org.bukkit.World.Environment.getEnvironment(dimension), gen)).b();
 
                 world.a(worldsettings);
                 this.server.scoreboardManager = new org.bukkit.craftbukkit.v1_8_R3.scoreboard.CraftScoreboardManager(this, world.getScoreboard());
@@ -280,7 +278,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
                     worlddata = new WorldData(worldsettings, name);
                 }
                 worlddata.checkName(name); // CraftBukkit - Migration did not rewrite the level.dat; This forces 1.8 to take the last loaded world as respawn (in this case the end)
-                world = (WorldServer) new SecondaryWorldServer(this, idatamanager, dimension, this.worlds.get(0), this.methodProfiler, worlddata, org.bukkit.World.Environment.getEnvironment(dimension), gen).b();
+                world = (WorldServer) new SecondaryWorldServer(this, idatamanager, dimension, this.worlds.get(0), worlddata, org.bukkit.World.Environment.getEnvironment(dimension), gen).b();
             }
 
             this.server.getPluginManager().callEvent(new org.bukkit.event.world.WorldInitEvent(world.getWorld()));
@@ -516,13 +514,10 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
                     lastTick = curTime;
 
                     this.nextTickTime += 50L;
-                    this.methodProfiler.a("tick");
                     this.A(this::haveTime);
-                    this.methodProfiler.c("nextTickWait");
                     this.mayHaveDelayedTasks = true;
                     this.delayedTasksMaxNextTickTime = Math.max(getMillis() + 50L, this.nextTickTime);
                     this.waitUntilNextTick();
-                    this.methodProfiler.b();
                     this.isReady = true;
                     // PandaSpigot end
                 }
@@ -557,7 +552,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
             this.a(crashreport);
         } finally {
             try {
-                org.spigotmc.WatchdogThread.doStop();
                 this.isStopped = true;
                 this.stop();
             } catch (Throwable throwable1) {
@@ -610,7 +604,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     protected void z() {}
 
     protected void A(java.util.function.BooleanSupplier shouldKeepTicking) throws ExceptionWorldConflict { // CraftBukkit - added throws
-        SpigotTimings.serverTickTimer.startTiming(); // Spigot
         long i = System.nanoTime();
         isOversleep = true;
         this.controlTerminate(() -> !this.canOversleep());
@@ -618,13 +611,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
         // PandaSpigot end
 
         ++this.ticks;
-        if (this.T) {
-            this.T = false;
-            this.methodProfiler.a = true;
-            this.methodProfiler.a();
-        }
 
-        this.methodProfiler.a("root");
         this.B();
         if (i - this.X >= 5000000000L) {
             this.X = i;
@@ -641,8 +628,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
         }
 
         if (LCConfig.getConfig().canSaveWorlds && autosavePeriod > 0 && this.ticks % autosavePeriod == 0) { // CraftBukkit
-            SpigotTimings.worldSaveTimer.startTiming(); // Spigot
-            this.methodProfiler.a("save");
             this.v.savePlayers();
             // Spigot Start
             // We replace this with saving each individual world as this.saveChunks(...) is broken,
@@ -655,15 +640,10 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
             server.playerCommandState = false;
             // this.saveChunks(true);
             // Spigot End
-            this.methodProfiler.b();
-            SpigotTimings.worldSaveTimer.stopTiming(); // Spigot
         }
         // PandaSpigot end
 
-        this.methodProfiler.a("tallying");
         this.h[this.ticks % 100] = System.nanoTime() - i;
-        this.methodProfiler.b();
-        this.methodProfiler.a("snooper");
         if (getSnooperEnabled() && !this.n.d() && this.ticks > 100) {  // Spigot
             this.n.a();
         }
@@ -671,16 +651,9 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
         if (getSnooperEnabled() && this.ticks % 6000 == 0) { // Spigot
             this.n.b();
         }
-
-        this.methodProfiler.b();
-        this.methodProfiler.b();
-        org.spigotmc.WatchdogThread.tick(); // Spigot
-        SpigotTimings.serverTickTimer.stopTiming(); // Spigot
-        org.spigotmc.CustomTimingsHandler.tick(); // Spigot
     }
 
     public void B() {
-        this.methodProfiler.a("jobs");
 
         // Spigot start
         FutureTask<?> entry;
@@ -689,32 +662,15 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
             SystemUtils.a(entry);
          }
         // Spigot end
-
-        this.methodProfiler.c("levels");
-
-        SpigotTimings.schedulerTimer.startTiming(); // Spigot
         // CraftBukkit start
         this.server.getScheduler().mainThreadHeartbeat(this.ticks);
-        SpigotTimings.schedulerTimer.stopTiming(); // Spigot
-
-        // Run tasks that are waiting on processing
-        SpigotTimings.processQueueTimer.startTiming(); // Spigot
         while (!processQueue.isEmpty()) {
             processQueue.remove().run();
         }
-        SpigotTimings.processQueueTimer.stopTiming(); // Spigot
-
-        SpigotTimings.chunkIOTickTimer.startTiming(); // Spigot
         org.bukkit.craftbukkit.v1_8_R3.chunkio.ChunkIOExecutor.tick();
-        SpigotTimings.chunkIOTickTimer.stopTiming(); // Spigot
-
-        SpigotTimings.timeUpdateTimer.startTiming(); // Spigot
         // Send time updates to everyone, it will get the right time from the world the player is in.
-        if (this.ticks % LCConfig.getConfig().tickTime == 0) {
+        if (LCConfig.getConfig().tickTime > 0 && this.ticks % LCConfig.getConfig().tickTime == 0) {
             for (final WorldServer world : this.worlds) {
-                if (!world.getGameRules().getBoolean("doDaylightCycle")) {
-                    break;
-                }
                 final PacketPlayOutUpdateTime packet = new PacketPlayOutUpdateTime(world.getTime(), world.getDayTime(), true);
                 for (final EntityHuman human : world.players) {
                     if (!(human instanceof EntityPlayer)) {
@@ -724,27 +680,12 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
                 }
             }
         }
-        SpigotTimings.timeUpdateTimer.stopTiming(); // Spigot
 
         for (final WorldServer worldserver : worlds) {
-            // if (i == 0 || this.getAllowNether()) {
-                this.methodProfiler.a(worldserver.getWorldData().getName());
-                /* Drop global time updates
-                if (this.ticks % 20 == 0) {
-                    this.methodProfiler.a("timeSync");
-                    this.v.a(new PacketPlayOutUpdateTime(worldserver.getTime(), worldserver.getDayTime(), worldserver.getGameRules().getBoolean("doDaylightCycle")), worldserver.worldProvider.getDimension());
-                    this.methodProfiler.b();
-                }
-                // CraftBukkit end */
-
-                this.methodProfiler.a("tick");
-
                 CrashReport crashreport;
 
                 try {
-                    worldserver.timings.doTick.startTiming(); // Spigot
                     worldserver.doTick();
-                    worldserver.timings.doTick.stopTiming(); // Spigot
                 } catch (Throwable throwable) {
                     // Spigot Start
                     try {
@@ -758,9 +699,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
                 }
 
                 try {
-                    worldserver.timings.tickEntities.startTiming(); // Spigot
                     worldserver.tickEntities();
-                    worldserver.timings.tickEntities.stopTiming(); // Spigot
                 } catch (Throwable throwable1) {
                     // Spigot Start
                     try {
@@ -772,11 +711,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
                     worldserver.a(crashreport);
                     throw new ReportedException(crashreport);
                 }
-
-                this.methodProfiler.b();
-                this.methodProfiler.a("tracker");
                 // PandaSpigot end
-                worldserver.timings.tracker.startTiming(); // Spigot
                 // PandaSpigot start - controlled flush for entity tracker packets
                 List<NetworkManager> disabledFlushes = new ArrayList<>(worldserver.players.size());
                 for (EntityHuman player : worldserver.players) {
@@ -795,32 +730,18 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
                         networkManager.enableAutomaticFlush();
                     }
                 }
-                // PandaSpigot end
-                worldserver.timings.tracker.stopTiming(); // Spigot
-                this.methodProfiler.b();
-                this.methodProfiler.b();
+
             // } // CraftBukkit
 
             // this.i[i][this.ticks % 100] = System.nanoTime() - j; // CraftBukkit
         }
 
-        this.methodProfiler.c("connection");
-        SpigotTimings.connectionTimer.startTiming(); // Spigot
         this.aq().c();
-        SpigotTimings.connectionTimer.stopTiming(); // Spigot
-        this.methodProfiler.c("players");
-        SpigotTimings.playerListTimer.startTiming(); // Spigot
         this.v.tick();
-        SpigotTimings.playerListTimer.stopTiming(); // Spigot
-        this.methodProfiler.c("tickables");
 
-        SpigotTimings.tickablesTimer.startTiming(); // Spigot
         for (IUpdatePlayerListBox list : p) {
             list.c();
         }
-        SpigotTimings.tickablesTimer.stopTiming(); // Spigot
-
-        this.methodProfiler.b();
     }
 
     public boolean getAllowNether() {
@@ -938,7 +859,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     public CrashReport b(CrashReport crashreport) {
         crashreport.g().a("Profiler Position", new Callable() {
             public String a() throws Exception {
-                return MinecraftServer.this.methodProfiler.a ? MinecraftServer.this.methodProfiler.c() : "N/A (disabled)";
+                return "N/A (disabled)";
             }
 
             public Object call() throws Exception {
