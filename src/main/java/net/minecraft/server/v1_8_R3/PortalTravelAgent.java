@@ -2,6 +2,9 @@ package net.minecraft.server.v1_8_R3;
 
 import com.google.common.collect.Lists;
 
+import gnu.trove.iterator.TLongIterator;
+import gnu.trove.list.TLongList;
+import gnu.trove.list.array.TLongArrayList;
 import io.netty.util.collection.LongObjectHashMap;
 
 import java.util.Iterator;
@@ -19,7 +22,7 @@ public class PortalTravelAgent {
     private final WorldServer a;
     private final Random b;
     private final LongObjectHashMap<PortalTravelAgent.ChunkCoordinatesPortal> c = new LongObjectHashMap<>();
-    private final List<Long> d = Lists.newArrayList();
+    private final TLongList d = new TLongArrayList();
 
     public PortalTravelAgent(WorldServer worldserver) {
         this.a = worldserver;
@@ -33,9 +36,6 @@ public class PortalTravelAgent {
                 this.b(entity, f);
             }
         } else {
-            int i = MathHelper.floor(entity.locX);
-            int j = MathHelper.floor(entity.locY) - 1;
-            int k = MathHelper.floor(entity.locZ);
             // CraftBukkit start - Modularize end portal creation
             BlockPosition created = this.createEndPortal(entity.locX, entity.locY, entity.locZ);
             entity.setPositionRotation((double) created.getX(), (double) created.getY(), (double) created.getZ(), entity.yaw, 0.0F);
@@ -459,7 +459,10 @@ public class PortalTravelAgent {
 
     public void a(long i) {
         if (i % 100L == 0L) {
-            Iterator iterator = this.d.iterator();
+            if (this.d.isEmpty()) {
+                return;
+            }
+            final TLongIterator iterator = this.d.iterator();
             long j = i - 300L;
 
             while (iterator.hasNext()) {

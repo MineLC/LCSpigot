@@ -822,10 +822,10 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         if (event.isCancelled()) {
             return;
         }
-    
-        minecraftServer.console.sendMessage(s);
+        final String parsedMessage = event.getPlayer().getDisplayName() + ' ' + event.getMessage();
+        minecraftServer.console.sendMessage(parsedMessage);
         final PacketPlayOutChat chatPacket = new PacketPlayOutChat(null);
-        chatPacket.components = TextComponent.fromLegacyText(event.getPlayer().getDisplayName() + ' ' + event.getMessage());
+        chatPacket.components = TextComponent.fromLegacyText(parsedMessage);
         final List<EntityPlayer> players = minecraftServer.getPlayerList().players;
 
         for (final EntityPlayer recipient : players) {

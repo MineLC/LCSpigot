@@ -40,26 +40,24 @@ public class PlayerChunkMap {
 
     public void flush() {
         long i = this.world.getTime();
-        int j;
-        PlayerChunkMap.PlayerChunk playerchunkmap_playerchunk;
-
         if (i - this.h > 8000L) {
             this.h = i;
 
             // CraftBukkit start - Use iterator
-            java.util.Iterator iterator = this.f.iterator();
-            while (iterator.hasNext()) {
-                playerchunkmap_playerchunk = (PlayerChunk) iterator.next();
-                playerchunkmap_playerchunk.b();
-                playerchunkmap_playerchunk.a();
+            if (!f.isEmpty()) {
+                for (final PlayerChunk playerchunkmap : f) {
+                    playerchunkmap.b();
+                    playerchunkmap.a();
+                }
             }
         } else {
-            java.util.Iterator iterator = this.e.iterator();
-            while (iterator.hasNext()) {
-                playerchunkmap_playerchunk = (PlayerChunk) iterator.next();
-                playerchunkmap_playerchunk.b();
-                iterator.remove();
-                // CraftBukkit end
+            if (!e.isEmpty()) {
+                final java.util.Iterator<PlayerChunk> iterator = this.e.iterator();
+                while (iterator.hasNext()) {
+                    iterator.next().b();
+                    iterator.remove();
+                    // CraftBukkit end
+                }
             }
         }
 

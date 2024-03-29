@@ -682,55 +682,54 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
         }
 
         for (final WorldServer worldserver : worlds) {
-                CrashReport crashreport;
+            CrashReport crashreport;
 
+            try {
+                worldserver.doTick();
+            } catch (Throwable throwable) {
+                // Spigot Start
                 try {
-                    worldserver.doTick();
-                } catch (Throwable throwable) {
-                    // Spigot Start
-                    try {
                     crashreport = CrashReport.a(throwable, "Exception ticking world");
-                    } catch (Throwable t){
-                        throw new RuntimeException("Error generating crash report", t);
-                    }
-                    // Spigot End
-                    worldserver.a(crashreport);
-                    throw new ReportedException(crashreport);
+                } catch (Throwable t){
+                    throw new RuntimeException("Error generating crash report", t);
                 }
+                // Spigot End
+                worldserver.a(crashreport);
+                 throw new ReportedException(crashreport);
+            }
 
+            try {
+                worldserver.tickEntities();
+            } catch (Throwable throwable1) {
+                // Spigot Start
                 try {
-                    worldserver.tickEntities();
-                } catch (Throwable throwable1) {
-                    // Spigot Start
-                    try {
                     crashreport = CrashReport.a(throwable1, "Exception ticking world entities");
-                    } catch (Throwable t){
-                        throw new RuntimeException("Error generating crash report", t);
-                    }
-                    // Spigot End
-                    worldserver.a(crashreport);
-                    throw new ReportedException(crashreport);
+                } catch (Throwable t){
+                    throw new RuntimeException("Error generating crash report", t);
                 }
-                // PandaSpigot end
+                // Spigot End
+                worldserver.a(crashreport);
+                throw new ReportedException(crashreport);
+            }
+            // PandaSpigot end
+            // PandaSpigot start - controlled flush for entity tracker packets
+            List<NetworkManager> disabledFlushes = new ArrayList<>(worldserver.players.size());
+            for (EntityHuman player : worldserver.players) {
+                if (!(player instanceof EntityPlayer)) continue; // skip non-player entities
+                PlayerConnection connection = ((EntityPlayer) player).playerConnection;
+                if (connection != null) {
+                    connection.networkManager.disableAutomaticFlush();
+                    disabledFlushes.add(connection.networkManager);
+                }
+            }
+            try {
+                worldserver.getTracker().updatePlayers();
                 // PandaSpigot start - controlled flush for entity tracker packets
-                List<NetworkManager> disabledFlushes = new ArrayList<>(worldserver.players.size());
-                for (EntityHuman player : worldserver.players) {
-                    if (!(player instanceof EntityPlayer)) continue; // skip non-player entities
-                    PlayerConnection connection = ((EntityPlayer) player).playerConnection;
-                    if (connection != null) {
-                        connection.networkManager.disableAutomaticFlush();
-                        disabledFlushes.add(connection.networkManager);
-                    }
+            } finally {
+                for (NetworkManager networkManager : disabledFlushes) {
+                    networkManager.enableAutomaticFlush();
                 }
-                try {
-                    worldserver.getTracker().updatePlayers();
-                    // PandaSpigot start - controlled flush for entity tracker packets
-                } finally {
-                    for (NetworkManager networkManager : disabledFlushes) {
-                        networkManager.enableAutomaticFlush();
-                    }
-                }
-
+            }
             // } // CraftBukkit
 
             // this.i[i][this.ticks % 100] = System.nanoTime() - j; // CraftBukkit

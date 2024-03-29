@@ -9,7 +9,6 @@ import java.util.concurrent.Callable;
 
 public abstract class StructureGenerator extends WorldGenBase {
 
-    private PersistentStructure d;
     protected Map<Long, StructureStart> e = Maps.newHashMap();
 
     public StructureGenerator() {}
@@ -194,49 +193,11 @@ public abstract class StructureGenerator extends WorldGenBase {
     }
 
     private void a(World world) {
-        if (this.d == null) {
-            // Spigot Start
-            if ( world.spigotConfig.saveStructureInfo && !this.a().equals( "Mineshaft" ) )
-            {
-            this.d = (PersistentStructure) world.a(PersistentStructure.class, this.a());
-            } else
-            {
-                this.d = new PersistentStructure( this.a() );
-            }
-            // Spigot End
-            if (this.d == null) {
-                this.d = new PersistentStructure(this.a());
-                world.a(this.a(), (PersistentBase) this.d);
-            } else {
-                NBTTagCompound nbttagcompound = this.d.a();
-                Iterator iterator = nbttagcompound.c().iterator();
-
-                while (iterator.hasNext()) {
-                    String s = (String) iterator.next();
-                    NBTBase nbtbase = nbttagcompound.get(s);
-
-                    if (nbtbase.getTypeId() == 10) {
-                        NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbtbase;
-
-                        if (nbttagcompound1.hasKey("ChunkX") && nbttagcompound1.hasKey("ChunkZ")) {
-                            int i = nbttagcompound1.getInt("ChunkX");
-                            int j = nbttagcompound1.getInt("ChunkZ");
-                            StructureStart structurestart = WorldGenFactory.a(nbttagcompound1, world);
-
-                            if (structurestart != null) {
-                                this.e.put(Long.valueOf(ChunkCoordIntPair.a(i, j)), structurestart);
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
     }
 
     private void a(int i, int j, StructureStart structurestart) {
-        this.d.a(structurestart.a(i, j), i, j);
-        this.d.c();
+
     }
 
     protected abstract boolean a(int i, int j);

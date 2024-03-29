@@ -65,17 +65,8 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         this.worldMaps = new PersistentCollection(this.dataManager);
 
         if (getServer().getScoreboardManager() == null) { // CraftBukkit
-        this.scoreboard = new ScoreboardServer(this.server);
-        PersistentScoreboard persistentscoreboard = (PersistentScoreboard) this.worldMaps.get(PersistentScoreboard.class, "scoreboard");
-
-        if (persistentscoreboard == null) {
-            persistentscoreboard = new PersistentScoreboard();
-            this.worldMaps.a("scoreboard", persistentscoreboard);
-        }
-
-        persistentscoreboard.a(this.scoreboard);
-        ((ScoreboardServer) this.scoreboard).a(persistentscoreboard);
-        // CraftBukkit start
+            this.scoreboard = new ScoreboardServer(this.server);
+            // CraftBukkit start
         } else {
             this.scoreboard = getServer().getScoreboardManager().getMainScoreboard().getHandle();
         }
@@ -325,122 +316,40 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         super.h();
         if (this.worldData.getType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
             // Spigot start
-           gnu.trove.iterator.TLongShortIterator iterator = this.chunkTickList.iterator();
+            if (!this.chunkTickList.isEmpty()) {
+                final gnu.trove.iterator.TLongShortIterator iterator = this.chunkTickList.iterator();
 
-            while (iterator.hasNext()) {
-                iterator.advance();
-                long chunkCoord = iterator.key();
+                while (iterator.hasNext()) {
+                    iterator.advance();
+                    long chunkCoord = iterator.key();
 
-                this.getChunkAt(World.keyToX( chunkCoord ), World.keyToZ( chunkCoord )).b(false);
-                // Spigot end
+                    this.getChunkAt(World.keyToX( chunkCoord ), World.keyToZ( chunkCoord )).b(false);
+                    // Spigot end
+                }
             }
 
         } else {
-            int i = 0;
-            int j = 0;
-
-
-            for (gnu.trove.iterator.TLongShortIterator iter = chunkTickList.iterator(); iter.hasNext(); )
-            {
-                iter.advance();
-                long chunkCoord = iter.key();
-                int chunkX = World.keyToX( chunkCoord );
-                int chunkZ = World.keyToZ( chunkCoord );
-                // If unloaded, or in procedd of being unloaded, drop it
-                if ( ( !this.chunkProvider.isChunkLoaded( chunkX, chunkZ ) ) || ( this.chunkProviderServer.unloadQueue.contains( chunkX, chunkZ ) ) )
-                {
-                    iter.remove();
-                    continue;
-                }
-                // Spigot end
-                // ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair) iterator.next();
-                int k = chunkX * 16;
-                int l = chunkZ * 16;
-
-                Chunk chunk = this.getChunkAt(chunkX, chunkZ);
-                // CraftBukkit end
-
-                this.a(k, l, chunk);
-                chunk.b(false);
-                int i1;
-                BlockPosition blockposition;
-
-                if (RANDOM.nextInt(100000) == 0 && this.S() && this.R()) {
-                    this.m = this.m * 3 + 1013904223;
-                    i1 = this.m >> 2;
-                    blockposition = this.a(new BlockPosition(k + (i1 & 15), 0, l + (i1 >> 8 & 15)));
-                    if (this.isRainingAt(blockposition)) {
-                        this.strikeLightning(new EntityLightning(this, (double) blockposition.getX(), (double) blockposition.getY(), (double) blockposition.getZ()));
+            if (!this.chunkTickList.isEmpty()) {
+                final gnu.trove.iterator.TLongShortIterator iterator = this.chunkTickList.iterator();
+                while (iterator.hasNext()) {
+                    iterator.advance();
+                    long chunkCoord = iterator.key();
+                    int chunkX = World.keyToX( chunkCoord );
+                    int chunkZ = World.keyToZ( chunkCoord );
+                    Chunk chunk = this.getChunkIfLoaded(chunkX, chunkZ);
+                    // If unloaded, or in procedd of being unloaded, drop it
+                    if ( (chunk == null ) || ( this.chunkProviderServer.unloadQueue.contains( chunkX, chunkZ ) ) ) {
+                        iterator.remove();
+                        continue;
                     }
-                }
-
-                if (RANDOM.nextInt(16) == 0) {
-                    this.m = this.m * 3 + 1013904223;
-                    i1 = this.m >> 2;
-                    blockposition = this.q(new BlockPosition(k + (i1 & 15), 0, l + (i1 >> 8 & 15)));
-                    BlockPosition blockposition1 = blockposition.down();
-
-                    if (this.w(blockposition1)) {
-                        // CraftBukkit start
-                        BlockState blockState = this.getWorld().getBlockAt(blockposition1.getX(), blockposition1.getY(), blockposition1.getZ()).getState();
-                        blockState.setTypeId(Block.getId(Blocks.ICE));
-
-                        BlockFormEvent iceBlockForm = new BlockFormEvent(blockState.getBlock(), blockState);
-                        this.getServer().getPluginManager().callEvent(iceBlockForm);
-                        if (!iceBlockForm.isCancelled()) {
-                            blockState.update(true);
-                        }
-                        // CraftBukkit end
-                    }
-
-                    if (this.S() && this.f(blockposition, true)) {
-                        // CraftBukkit start
-                        BlockState blockState = this.getWorld().getBlockAt(blockposition.getX(), blockposition.getY(), blockposition.getZ()).getState();
-                        blockState.setTypeId(Block.getId(Blocks.SNOW_LAYER));
-
-                        BlockFormEvent snow = new BlockFormEvent(blockState.getBlock(), blockState);
-                        this.getServer().getPluginManager().callEvent(snow);
-                        if (!snow.isCancelled()) {
-                            blockState.update(true);
-                        }
-                        // CraftBukkit end
-                    }
-
-                    if (this.S() && this.getBiome(blockposition1).e()) {
-                        this.getType(blockposition1).getBlock().k(this, blockposition1);
-                    }
-                }
-
-                i1 = this.getGameRules().c("randomTickSpeed");
-                if (i1 > 0) {
-                    ChunkSection[] achunksection = chunk.getSections();
-                    int j1 = achunksection.length;
-
-                    for (int k1 = 0; k1 < j1; ++k1) {
-                        ChunkSection chunksection = achunksection[k1];
-
-                        if (chunksection != null && chunksection.shouldTick()) {
-                            for (int l1 = 0; l1 < i1; ++l1) {
-                                this.m = this.m * 3 + 1013904223;
-                                int i2 = this.m >> 2;
-                                int j2 = i2 & 15;
-                                int k2 = i2 >> 8 & 15;
-                                int l2 = i2 >> 16 & 15;
-
-                                ++j;
-                                IBlockData iblockdata = chunksection.getType(j2, l2, k2);
-                                Block block = iblockdata.getBlock();
-
-                                if (block.isTicking()) {
-                                    ++i;
-                                    block.a((World) this, new BlockPosition(j2 + k, l2 + chunksection.getYPosition(), k2 + l), iblockdata, RANDOM);
-                                }
-                            }
-                        }
-                    }
+                    // Spigot end
+                    // ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair) iterator.next();
+    
+                    // CraftBukkit end
+                    this.a(chunkX << 4, chunkZ << 4, chunk);
+                    chunk.b(false);
                 }
             }
-
         }
         // Spigot Start
         if ( spigotConfig.clearChunksOnTick )

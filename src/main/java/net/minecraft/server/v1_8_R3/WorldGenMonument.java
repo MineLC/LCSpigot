@@ -56,7 +56,7 @@ public class WorldGenMonument extends StructureGenerator {
 
         int i1 = i / this.f;
         int j1 = j / this.f;
-        Random random = this.c.a(i1, j1, 10387313);
+        Random random = c.a(i1, j1, 10387313);
 
         i1 *= this.f;
         j1 *= this.f;
