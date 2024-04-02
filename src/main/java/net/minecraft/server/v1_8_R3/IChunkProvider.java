@@ -1,7 +1,5 @@
 package net.minecraft.server.v1_8_R3;
 
-import java.util.List;
-
 public interface IChunkProvider {
 
     boolean isChunkLoaded(int i, int j);

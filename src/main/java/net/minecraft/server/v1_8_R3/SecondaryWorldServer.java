@@ -45,7 +45,6 @@ public class SecondaryWorldServer extends WorldServer {
     // protected void a() {} // CraftBukkit
 
     public World b() {
-        this.worldMaps = this.a.T();
         // this.scoreboard = this.a.getScoreboard(); // CraftBukkit
 
         return super.b(); // CraftBukkit

@@ -12,12 +12,9 @@ import org.tinylog.Logger;
 // CraftBukkit start
 import java.util.*;
 
-
 import org.bukkit.WeatherType;
-import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_8_R3.util.HashTreeSet;
 
-import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.weather.LightningStrikeEvent;
 // CraftBukkit end
 
@@ -25,22 +22,38 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
     private final MinecraftServer server;
     public EntityTracker tracker; // CraftBukkit - public, remove final
-    private final PlayerChunkMap manager;
+    private PlayerChunkMap manager;
     // private final Set<NextTickListEntry> L = Sets.newHashSet(); // CraftBukkit, PAIL: Rename nextTickListHash
-    private final HashTreeSet<NextTickListEntry> M = new HashTreeSet<NextTickListEntry>(); // CraftBukkit - HashTreeSet, PAIL: Rename nextTickList
-    private final Map<UUID, Entity> entitiesByUUID = Maps.newHashMap();
+    private HashTreeSet<NextTickListEntry> M = new HashTreeSet<NextTickListEntry>(); // CraftBukkit - HashTreeSet, PAIL: Rename nextTickList
+    private Map<UUID, Entity> entitiesByUUID = Maps.newHashMap();
     public ChunkProviderServer chunkProviderServer;
     public boolean savingDisabled;
     private boolean O;
-    private int emptyTime;
-    private final SpawnerCreature R = new SpawnerCreature();
     private WorldServer.BlockActionDataList[] S = new WorldServer.BlockActionDataList[] { new WorldServer.BlockActionDataList(null), new WorldServer.BlockActionDataList(null)};
     private int T;
-    private static final List<StructurePieceTreasure> U = Lists.newArrayList(new StructurePieceTreasure[] { new StructurePieceTreasure(Items.STICK, 0, 1, 3, 10), new StructurePieceTreasure(Item.getItemOf(Blocks.PLANKS), 0, 1, 3, 10), new StructurePieceTreasure(Item.getItemOf(Blocks.LOG), 0, 1, 3, 10), new StructurePieceTreasure(Items.STONE_AXE, 0, 1, 1, 3), new StructurePieceTreasure(Items.WOODEN_AXE, 0, 1, 1, 5), new StructurePieceTreasure(Items.STONE_PICKAXE, 0, 1, 1, 3), new StructurePieceTreasure(Items.WOODEN_PICKAXE, 0, 1, 1, 5), new StructurePieceTreasure(Items.APPLE, 0, 2, 3, 5), new StructurePieceTreasure(Items.BREAD, 0, 2, 3, 3), new StructurePieceTreasure(Item.getItemOf(Blocks.LOG2), 0, 1, 3, 10)});
     private List<NextTickListEntry> V = Lists.newArrayList();
-
     // CraftBukkit start
     public final int dimension;
+
+    public void unloadAll() {
+        entitiesByUUID.values().forEach((entity) -> { 
+            entity.world = null;
+            entity.die();
+        });
+        entitiesByUUID.clear();
+        M.clear();
+        V.clear();
+        super.unloadAll();
+
+        entitiesById = null;
+        entitiesByUUID = null;
+        manager.clear();
+        M = null;
+        V = null;
+        S = null;
+        chunkProviderServer.clear();
+        chunkProviderServer = null;
+    }
 
     // Add env and gen to constructor
     public WorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, WorldData worlddata, int i, org.bukkit.World.Environment env, org.bukkit.generator.ChunkGenerator gen) {
@@ -60,8 +73,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     public World b() {
-        this.worldMaps = new PersistentCollection(this.dataManager);
-
         if (getServer().getScoreboardManager() == null) { // CraftBukkit
             this.scoreboard = new ScoreboardServer(this.server);
             // CraftBukkit start
@@ -174,7 +185,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             this.getWorldData().setDifficulty(EnumDifficulty.HARD);
         }
 
-        this.worldProvider.m().b();
         if (this.everyoneDeeplySleeping()) {
             if (this.getGameRules().getBoolean("doDaylightCycle")) {
                 long i = this.worldData.getDayTime() + 24000L;
@@ -185,12 +195,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             this.e();
         }
 
-        // CraftBukkit start - Only call spawner if we have players online and the world allows for mobs or animals
-        long time = this.worldData.getTime();
-        if (this.getGameRules().getBoolean("doMobSpawning") && this.worldData.getType() != WorldType.DEBUG_ALL_BLOCK_STATES && (this.allowMonsters || this.allowAnimals) && (this instanceof WorldServer && this.players.size() > 0)) {
-            this.R.a(this, this.allowMonsters && (this.ticksPerMonsterSpawns != 0 && time % this.ticksPerMonsterSpawns == 0L), this.allowAnimals && (this.ticksPerAnimalSpawns != 0 && time % this.ticksPerAnimalSpawns == 0L), this.worldData.getTime() % 400L == 0L);
-            // CraftBukkit end
-        }
         // CraftBukkit end
         this.chunkProvider.unloadChunks();
         int j = this.a(1.0F);
@@ -428,7 +432,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     public void j() {
-        this.emptyTime = 0;
+
     }
 
     public boolean a(boolean flag) {
@@ -670,9 +674,8 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         } else {
             this.isLoading = true;
             WorldChunkManager worldchunkmanager = this.worldProvider.m();
-            List list = worldchunkmanager.a();
             Random random = new Random(this.getSeed());
-            BlockPosition blockposition = worldchunkmanager.a(0, 0, 256, list, random);
+            BlockPosition blockposition = worldchunkmanager.a(0, 0, 256, Arrays.asList(BiomeBase.PLAINS), random);
             int i = 0;
             int j = this.worldProvider.getSeaLevel();
             int k = 0;
@@ -722,18 +725,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     protected void l() {
-        WorldGenBonusChest worldgenbonuschest = new WorldGenBonusChest(WorldServer.U, 10);
-
-        for (int i = 0; i < 10; ++i) {
-            int j = this.worldData.c() + RANDOM.nextInt(6) - RANDOM.nextInt(6);
-            int k = this.worldData.e() + RANDOM.nextInt(6) - RANDOM.nextInt(6);
-            BlockPosition blockposition = this.r(new BlockPosition(j, 0, k)).up();
-
-            if (worldgenbonuschest.generate(this, RANDOM, blockposition)) {
-                break;
-            }
-        }
-
     }
 
     public BlockPosition getDimensionSpawn() {
@@ -788,10 +779,6 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         this.worldData.k(this.getWorldBorder().getWarningTime());
         this.worldData.b(this.getWorldBorder().j());
         this.worldData.e(this.getWorldBorder().i());
-        // CraftBukkit start - save worldMaps once, rather than once per shared world
-        if (!(this instanceof SecondaryWorldServer)) {
-            this.worldMaps.a();
-        }
         this.dataManager.saveWorldData(this.worldData, this.server.getPlayerList().t());
         // CraftBukkit end
     }

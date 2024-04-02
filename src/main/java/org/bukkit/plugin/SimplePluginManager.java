@@ -508,7 +508,8 @@ public final class SimplePluginManager implements PluginManager {
                             ));
                 }
             } catch (Throwable ex) {
-                Logger.error("Could not pass event " + event.getEventName() + " to " + registration.getPlugin().getDescription().getFullName(), ex);
+                Logger.error("Could not pass event " + event.getEventName() + " to " + registration.getPlugin().getDescription().getFullName());
+                Logger.error(ex);
             }
         }
     }

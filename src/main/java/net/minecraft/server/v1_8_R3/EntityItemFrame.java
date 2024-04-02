@@ -82,12 +82,6 @@ public class EntityItemFrame extends EntityHanging {
 
     private void b(ItemStack itemstack) {
         if (itemstack != null) {
-            if (itemstack.getItem() == Items.FILLED_MAP) {
-                WorldMap worldmap = ((ItemWorldMap) itemstack.getItem()).getSavedMap(itemstack, this.world);
-
-                worldmap.decorations.remove("frame-" + this.getId());
-            }
-
             itemstack.a((EntityItemFrame) null);
         }
     }

@@ -20,13 +20,7 @@ public class RecipeMapExtend extends ShapedRecipes {
                 }
             }
 
-            if (itemstack == null) {
-                return false;
-            } else {
-                WorldMap worldmap = Items.FILLED_MAP.getSavedMap(itemstack, world);
-
-                return worldmap == null ? false : worldmap.scale < 4;
-            }
+            return false;
         }
     }
 

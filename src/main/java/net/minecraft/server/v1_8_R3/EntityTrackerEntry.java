@@ -77,26 +77,6 @@ public class EntityTrackerEntry {
         }
 
         if (this.tracker instanceof EntityItemFrame /*&& this.m % 10 == 0*/) { // CraftBukkit - Moved below, should always enter this block
-            EntityItemFrame entityitemframe = (EntityItemFrame) this.tracker;
-            ItemStack itemstack = entityitemframe.getItem();
-
-            if (this.m % 10 == 0 && itemstack != null && itemstack.getItem() instanceof ItemWorldMap) { // CraftBukkit - Moved this.m % 10 logic here so item frames do not enter the other blocks
-                WorldMap worldmap = Items.FILLED_MAP.getSavedMap(itemstack, this.tracker.world);
-                Iterator iterator = this.trackedPlayers.iterator(); // CraftBukkit
-
-                while (iterator.hasNext()) {
-                    EntityHuman entityhuman = (EntityHuman) iterator.next();
-                    EntityPlayer entityplayer = (EntityPlayer) entityhuman;
-
-                    worldmap.a(entityplayer, itemstack);
-                    Packet packet = Items.FILLED_MAP.c(itemstack, this.tracker.world, entityplayer);
-
-                    if (packet != null) {
-                        entityplayer.playerConnection.sendPacket(packet);
-                    }
-                }
-            }
-
             this.b();
         }
 

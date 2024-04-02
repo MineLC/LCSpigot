@@ -60,9 +60,9 @@ public class CraftWorld implements World {
     private WorldBorder worldBorder;
     private Environment environment;
     private final CraftServer server = (CraftServer) Bukkit.getServer();
-    private final ChunkGenerator generator;
-    private final List<BlockPopulator> populators = new ArrayList<BlockPopulator>();
-    private final BlockMetadataStore blockMetadata = new BlockMetadataStore(this);
+    private ChunkGenerator generator;
+    private List<BlockPopulator> populators = new ArrayList<BlockPopulator>();
+    private BlockMetadataStore blockMetadata = new BlockMetadataStore(this);
     private int monsterSpawn = -1;
     private int animalSpawn = -1;
     private int waterAnimalSpawn = -1;
@@ -85,6 +85,11 @@ public class CraftWorld implements World {
 
     public Block getBlockAt(int x, int y, int z) {
         return getChunkAt(x >> 4, z >> 4).getBlock(x & 0xF, y, z & 0xF);
+    }
+
+    public void unloadAll() {
+        populators.clear();
+        world.unloadAll();
     }
 
     public int getBlockTypeIdAt(int x, int y, int z) {
@@ -1053,7 +1058,7 @@ public class CraftWorld implements World {
     }
 
     public boolean getKeepSpawnInMemory() {
-        return world.keepSpawnInMemory;
+        return false;
     }
 
     public void setKeepSpawnInMemory(boolean keepLoaded) {

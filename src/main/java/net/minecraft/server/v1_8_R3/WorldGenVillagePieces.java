@@ -1342,9 +1342,7 @@ public class WorldGenVillagePieces {
             this.a = worldchunkmanager;
             this.e = list;
             this.c = l;
-            BiomeBase biomebase = worldchunkmanager.getBiome(new BlockPosition(j, 0, k), BiomeBase.ad);
-
-            this.b = biomebase == BiomeBase.DESERT || biomebase == BiomeBase.DESERT_HILLS;
+            this.b = false;
             this.a(this.b);
         }
 

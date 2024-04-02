@@ -109,7 +109,7 @@ public class OldChunkLoader {
         for (j = 0; j < 16; ++j) {
             for (k = 0; k < 16; ++k) {
                 blockposition_mutableblockposition.c(oldchunkloader_oldchunk.k << 4 | j, 0, oldchunkloader_oldchunk.l << 4 | k);
-                abyte1[k << 4 | j] = (byte) (worldchunkmanager.getBiome(blockposition_mutableblockposition, BiomeBase.ad).id & 255);
+                abyte1[k << 4 | j] = (byte) (BiomeBase.PLAINS.id & 255);
             }
         }
 

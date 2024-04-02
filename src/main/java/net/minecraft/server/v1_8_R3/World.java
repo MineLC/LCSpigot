@@ -61,13 +61,13 @@ public abstract class World implements IBlockAccess {
     // Spigot end
     public static final Random RANDOM = new Random();
     public final SplittableRandom random = new SplittableRandom();
-    protected final List<Entity> g = Lists.newArrayList();
-    public final List<TileEntity> tileEntityList = Lists.newArrayList();
-    private final List<TileEntity> b = Lists.newArrayList();
-    private final List<TileEntity> c = Lists.newArrayList();
-    public final List<EntityHuman> players = Lists.newArrayList();
-    public final List<Entity> k = Lists.newArrayList();
-    protected final IntHashMap<Entity> entitiesById = new IntHashMap<Entity>();
+    protected List<Entity> g = Lists.newArrayList();
+    public List<TileEntity> tileEntityList = Lists.newArrayList();
+    private List<TileEntity> b = Lists.newArrayList();
+    private List<TileEntity> c = Lists.newArrayList();
+    public List<EntityHuman> players = Lists.newArrayList();
+    public List<Entity> k = Lists.newArrayList();
+    protected IntHashMap<Entity> entitiesById = new IntHashMap<Entity>();
     private int I;
     protected int m = random.nextInt();
     protected final int n = 1013904223;
@@ -81,7 +81,6 @@ public abstract class World implements IBlockAccess {
     protected final IDataManager dataManager;
     public WorldData worldData; // CraftBukkit - public
     protected boolean isLoading;
-    public PersistentCollection worldMaps; // CraftBukkit - public
     private final Calendar K = Calendar.getInstance();
     public Scoreboard scoreboard = new Scoreboard(); // CraftBukkit - public
     public final boolean isClientSide;
@@ -94,7 +93,7 @@ public abstract class World implements IBlockAccess {
     int[] H;
 
     // CraftBukkit start Added the following
-    private final CraftWorld world;
+    private CraftWorld world;
     public boolean pvpMode;
     public boolean keepSpawnInMemory = true;
     public ChunkGenerator generator;
@@ -120,9 +119,33 @@ public abstract class World implements IBlockAccess {
     public boolean populating;
     private int tickPosition;
 
+    public void unloadAll() {
+        chunkTickList.clear();
+        u.clear();
+        this.chunkProvider = null;
+        this.capturedBlockStates.clear();
+        this.entitiesById.c();
+        g.clear();
+        tileEntityList.clear();;
+        b.clear();
+        c.clear();
+        players.clear();
+        k.clear();
+
+        u = null;
+        entitiesById = null;
+        g = null;
+        tileEntityList = null;
+        b = null;
+        c = null;
+        players = null;
+        k = null;
+        chunkTickList = null;
+    }
+
     // Spigot start
     private boolean guardEntityList;
-    protected final gnu.trove.map.hash.TLongShortHashMap chunkTickList;
+    protected gnu.trove.map.hash.TLongShortHashMap chunkTickList;
     protected float growthOdds = 100;
     protected float modifiedOdds = 100;
     private final byte chunkTickRadius;
@@ -223,29 +246,7 @@ public abstract class World implements IBlockAccess {
     }
 
     public BiomeBase getBiome(final BlockPosition blockposition) {
-        if (this.isLoaded(blockposition)) {
-            Chunk chunk = this.getChunkAtWorldCoords(blockposition);
-
-            try {
-                return chunk.getBiome(blockposition, this.worldProvider.m());
-            } catch (Throwable throwable) {
-                CrashReport crashreport = CrashReport.a(throwable, "Getting biome");
-                CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Coordinates of biome request");
-
-                crashreportsystemdetails.a("Location", new Callable() {
-                    public String a() throws Exception {
-                        return CrashReportSystemDetails.a(blockposition);
-                    }
-
-                    public Object call() throws Exception {
-                        return this.a();
-                    }
-                });
-                throw new ReportedException(crashreport);
-            }
-        } else {
-            return this.worldProvider.m().getBiome(blockposition, BiomeBase.PLAINS);
-        }
+        return BiomeBase.PLAINS;
     }
 
     public WorldChunkManager getWorldChunkManager() {
@@ -1075,23 +1076,6 @@ public abstract class World implements IBlockAccess {
         entity.die();
         if (entity instanceof EntityHuman) {
             this.players.remove(entity);
-            // Spigot start
-            for ( Object o : worldMaps.c )
-            {
-                if ( o instanceof WorldMap )
-                {
-                    WorldMap map = (WorldMap) o;
-                    map.i.remove( entity );
-                    for ( Iterator<WorldMap.WorldMapHumanTracker> iter = (Iterator<WorldMap.WorldMapHumanTracker>) map.g.iterator(); iter.hasNext(); )
-                    {
-                        if ( iter.next().trackee == entity )
-                        {
-                            iter.remove();
-                        }
-                    }
-                }
-            }
-            // Spigot end
             this.everyoneSleeping();
             this.b(entity);
         }
@@ -2816,21 +2800,6 @@ public abstract class World implements IBlockAccess {
         return biomebase.f();
     }
 
-    public PersistentCollection T() {
-        return this.worldMaps;
-    }
-
-    public void a(String s, PersistentBase persistentbase) {
-        this.worldMaps.a(s, persistentbase);
-    }
-
-    public PersistentBase a(Class<? extends PersistentBase> oclass, String s) {
-        return this.worldMaps.get(oclass, s);
-    }
-
-    public int b(String s) {
-        return this.worldMaps.a(s);
-    }
 
     public void a(int i, BlockPosition blockposition, int j) {
         for (int k = 0; k < this.u.size(); ++k) {

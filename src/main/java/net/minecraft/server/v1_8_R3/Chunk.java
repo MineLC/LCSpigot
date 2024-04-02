@@ -1082,19 +1082,7 @@ public class Chunk {
     }
 
     public BiomeBase getBiome(BlockPosition blockposition, WorldChunkManager worldchunkmanager) {
-        int i = blockposition.getX() & 15;
-        int j = blockposition.getZ() & 15;
-        int k = this.e[j << 4 | i] & 255;
-        BiomeBase biomebase;
-
-        if (k == 255) {
-            biomebase = worldchunkmanager.getBiome(blockposition, BiomeBase.PLAINS);
-            k = biomebase.id;
-            this.e[j << 4 | i] = (byte) (k & 255);
-        }
-
-        biomebase = BiomeBase.getBiome(k);
-        return biomebase == null ? BiomeBase.PLAINS : biomebase;
+        return BiomeBase.PLAINS;
     }
 
     public byte[] getBiomeIndex() {

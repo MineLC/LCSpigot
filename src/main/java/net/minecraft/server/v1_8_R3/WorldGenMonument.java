@@ -62,17 +62,6 @@ public class WorldGenMonument extends StructureGenerator {
         j1 *= this.f;
         i1 += (random.nextInt(this.f - this.g) + random.nextInt(this.f - this.g)) / 2;
         j1 += (random.nextInt(this.f - this.g) + random.nextInt(this.f - this.g)) / 2;
-        if (k == i1 && l == j1) {
-            if (this.c.getWorldChunkManager().getBiome(new BlockPosition(k * 16 + 8, 64, l * 16 + 8), (BiomeBase) null) != BiomeBase.DEEP_OCEAN) {
-                return false;
-            }
-
-            boolean flag = this.c.getWorldChunkManager().a(k * 16 + 8, l * 16 + 8, 29, WorldGenMonument.d);
-
-            if (flag) {
-                return true;
-            }
-        }
 
         return false;
     }
