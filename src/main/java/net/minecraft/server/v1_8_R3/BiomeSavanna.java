@@ -4,8 +4,6 @@ import java.util.Random;
 
 public class BiomeSavanna extends BiomeBase {
 
-    private static final WorldGenAcaciaTree aD = new WorldGenAcaciaTree(false);
-
     protected BiomeSavanna(int i) {
         super(i);
         this.as.A = 1;
@@ -13,9 +11,6 @@ public class BiomeSavanna extends BiomeBase {
         this.as.C = 20;
     }
 
-    public WorldGenTreeAbstract a(Random random) {
-        return (WorldGenTreeAbstract) (random.nextInt(5) > 0 ? BiomeSavanna.aD : this.aA);
-    }
 
     protected BiomeBase d(int i) {
         BiomeSavanna.BiomeSavannaSub biomesavanna_biomesavannasub = new BiomeSavanna.BiomeSavannaSub(i, this);

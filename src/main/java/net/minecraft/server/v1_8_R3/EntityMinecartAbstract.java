@@ -207,28 +207,9 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
         int i;
 
         if (!this.world.isClientSide && this.world instanceof WorldServer) {
-            MinecraftServer minecraftserver = ((WorldServer) this.world).getMinecraftServer();
 
             i = this.L();
-            if (this.ak) {
-                if (true || minecraftserver.getAllowNether()) { // CraftBukkit - multi-world should still allow teleport even if default vanilla nether disabled
-                    if (this.vehicle == null && this.al++ >= i) {
-                        this.al = i;
-                        this.portalCooldown = this.aq();
-                        byte b0;
-
-                        if (this.world.worldProvider.getDimension() == -1) {
-                            b0 = 0;
-                        } else {
-                            b0 = -1;
-                        }
-
-                        this.c(b0);
-                    }
-
-                    this.ak = false;
-                }
-            } else {
+            if (!this.ak) {
                 if (this.al > 0) {
                     this.al -= 4;
                 }
@@ -237,12 +218,6 @@ public abstract class EntityMinecartAbstract extends Entity implements INamableT
                     this.al = 0;
                 }
             }
-
-            if (this.portalCooldown > 0) {
-                --this.portalCooldown;
-            }
-
-            
         }
 
         if (this.world.isClientSide) {

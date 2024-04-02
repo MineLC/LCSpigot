@@ -1,12 +1,10 @@
 package net.minecraft.server.v1_8_R3;
 
-import java.util.List;
 import java.util.Random;
 
 public class ChunkProviderHell implements IChunkProvider {
 
     private final World h;
-    private final boolean i;
     private final Random j;
     private double[] k = new double[256];
     private double[] l = new double[256];
@@ -23,11 +21,6 @@ public class ChunkProviderHell implements IChunkProvider {
     private final WorldGenLightStone1 u = new WorldGenLightStone1();
     private final WorldGenLightStone2 v = new WorldGenLightStone2();
     private final WorldGenerator w;
-    private final WorldGenHellLava x;
-    private final WorldGenHellLava y;
-    private final WorldGenMushrooms z;
-    private final WorldGenMushrooms A;
-    private final WorldGenNether B;
     private final WorldGenBase C;
     double[] c;
     double[] d;
@@ -37,14 +30,8 @@ public class ChunkProviderHell implements IChunkProvider {
 
     public ChunkProviderHell(World world, boolean flag, long i) {
         this.w = new WorldGenMinable(Blocks.QUARTZ_ORE.getBlockData(), 14, BlockPredicate.a(Blocks.NETHERRACK));
-        this.x = new WorldGenHellLava(Blocks.FLOWING_LAVA, true);
-        this.y = new WorldGenHellLava(Blocks.FLOWING_LAVA, false);
-        this.z = new WorldGenMushrooms(Blocks.BROWN_MUSHROOM);
-        this.A = new WorldGenMushrooms(Blocks.RED_MUSHROOM);
-        this.B = new WorldGenNether();
         this.C = new WorldGenCavesHell();
         this.h = world;
-        this.i = flag;
         this.j = new Random(i);
         this.o = new NoiseGeneratorOctaves(this.j, 16);
         this.p = new NoiseGeneratorOctaves(this.j, 16);
@@ -199,9 +186,6 @@ public class ChunkProviderHell implements IChunkProvider {
         this.a(i, j, chunksnapshot);
         this.b(i, j, chunksnapshot);
         this.C.a(this, this.h, i, j, chunksnapshot);
-        if (this.i) {
-            this.B.a(this, this.h, i, j, chunksnapshot);
-        }
 
         Chunk chunk = new Chunk(this.h, chunksnapshot, i, j);
         BiomeBase[] abiomebase = this.h.getWorldChunkManager().getBiomeBlock((BiomeBase[]) null, i * 16, j * 16, 16, 16);
@@ -296,15 +280,8 @@ public class ChunkProviderHell implements IChunkProvider {
     public void getChunkAt(IChunkProvider ichunkprovider, int i, int j) {
         BlockFalling.instaFall = true;
         BlockPosition blockposition = new BlockPosition(i * 16, 0, j * 16);
-        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
-
-        this.B.a(this.h, this.j, chunkcoordintpair);
 
         int k;
-
-        for (k = 0; k < 8; ++k) {
-            this.y.generate(this.h, this.j, blockposition.a(this.j.nextInt(16) + 8, this.j.nextInt(120) + 4, this.j.nextInt(16) + 8));
-        }
 
         for (k = 0; k < this.j.nextInt(this.j.nextInt(10) + 1) + 1; ++k) {
             this.t.generate(this.h, this.j, blockposition.a(this.j.nextInt(16) + 8, this.j.nextInt(120) + 4, this.j.nextInt(16) + 8));
@@ -318,20 +295,8 @@ public class ChunkProviderHell implements IChunkProvider {
             this.v.generate(this.h, this.j, blockposition.a(this.j.nextInt(16) + 8, this.j.nextInt(128), this.j.nextInt(16) + 8));
         }
 
-        if (this.j.nextBoolean()) {
-            this.z.generate(this.h, this.j, blockposition.a(this.j.nextInt(16) + 8, this.j.nextInt(128), this.j.nextInt(16) + 8));
-        }
-
-        if (this.j.nextBoolean()) {
-            this.A.generate(this.h, this.j, blockposition.a(this.j.nextInt(16) + 8, this.j.nextInt(128), this.j.nextInt(16) + 8));
-        }
-
         for (k = 0; k < 16; ++k) {
             this.w.generate(this.h, this.j, blockposition.a(this.j.nextInt(16), this.j.nextInt(108) + 10, this.j.nextInt(16)));
-        }
-
-        for (k = 0; k < 16; ++k) {
-            this.x.generate(this.h, this.j, blockposition.a(this.j.nextInt(16), this.j.nextInt(108) + 10, this.j.nextInt(16)));
         }
 
         BlockFalling.instaFall = false;
@@ -368,7 +333,7 @@ public class ChunkProviderHell implements IChunkProvider {
     }
 
     public void recreateStructures(Chunk chunk, int i, int j) {
-        this.B.a(this, this.h, i, j, (ChunkSnapshot) null);
+
     }
 
     public Chunk getChunkAt(BlockPosition blockposition) {

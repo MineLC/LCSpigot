@@ -11,7 +11,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.TravelAgent;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Hanging;
 import org.bukkit.entity.LivingEntity;
@@ -102,7 +101,6 @@ public abstract class Entity {
     public int ag;
     public boolean ah;
     public boolean ai;
-    public int portalCooldown;
     protected boolean ak;
     protected int al;
     public int dimension;
@@ -259,28 +257,8 @@ public abstract class Entity {
         this.lastPitch = this.pitch;
         this.lastYaw = this.yaw;
         if (!this.world.isClientSide && this.world instanceof WorldServer) {
-            MinecraftServer minecraftserver = ((WorldServer) this.world).getMinecraftServer();
-            int i = this.L();
 
-            if (this.ak) {
-                if (true || minecraftserver.getAllowNether()) { // CraftBukkit
-                    if (this.vehicle == null && this.al++ >= i) {
-                        this.al = i;
-                        this.portalCooldown = this.aq();
-                        byte b0;
-
-                        if (this.world.worldProvider.getDimension() == -1) {
-                            b0 = 0;
-                        } else {
-                            b0 = -1;
-                        }
-
-                        this.c(b0);
-                    }
-
-                    this.ak = false;
-                }
-            } else {
+            if (!this.ak) {
                 if (this.al > 0) {
                     this.al -= 4;
                 }
@@ -289,11 +267,6 @@ public abstract class Entity {
                     this.al = 0;
                 }
             }
-
-            if (this.portalCooldown > 0) {
-                --this.portalCooldown;
-            }
-
             
         }
 
@@ -1211,7 +1184,6 @@ public abstract class Entity {
             nbttagcompound.setBoolean("OnGround", this.onGround);
             nbttagcompound.setInt("Dimension", this.dimension);
             nbttagcompound.setBoolean("Invulnerable", this.invulnerable);
-            nbttagcompound.setInt("PortalCooldown", this.portalCooldown);
             nbttagcompound.setLong("UUIDMost", this.getUniqueID().getMostSignificantBits());
             nbttagcompound.setLong("UUIDLeast", this.getUniqueID().getLeastSignificantBits());
             // CraftBukkit start
@@ -1284,7 +1256,6 @@ public abstract class Entity {
             this.onGround = nbttagcompound.getBoolean("OnGround");
             this.dimension = nbttagcompound.getInt("Dimension");
             this.invulnerable = nbttagcompound.getBoolean("Invulnerable");
-            this.portalCooldown = nbttagcompound.getInt("PortalCooldown");
             if (nbttagcompound.hasKeyOfType("UUIDMost", 4) && nbttagcompound.hasKeyOfType("UUIDLeast", 4)) {
                 this.uniqueID = new UUID(nbttagcompound.getLong("UUIDMost"), nbttagcompound.getLong("UUIDLeast"));
             } else if (nbttagcompound.hasKeyOfType("UUID", 8)) {
@@ -1626,27 +1597,6 @@ public abstract class Entity {
         return null;
     }
 
-    public void d(BlockPosition blockposition) {
-        if (this.portalCooldown > 0) {
-            this.portalCooldown = this.aq();
-        } else {
-            if (!this.world.isClientSide && !blockposition.equals(this.an)) {
-                this.an = blockposition;
-                ShapeDetector.ShapeDetectorCollection shapedetector_shapedetectorcollection = Blocks.PORTAL.f(this.world, blockposition);
-                double d0 = shapedetector_shapedetectorcollection.b().k() == EnumDirection.EnumAxis.X ? (double) shapedetector_shapedetectorcollection.a().getZ() : (double) shapedetector_shapedetectorcollection.a().getX();
-                double d1 = shapedetector_shapedetectorcollection.b().k() == EnumDirection.EnumAxis.X ? this.locZ : this.locX;
-
-                d1 = Math.abs(MathHelper.c(d1 - (double) (shapedetector_shapedetectorcollection.b().e().c() == EnumDirection.EnumAxisDirection.NEGATIVE ? 1 : 0), d0, d0 - (double) shapedetector_shapedetectorcollection.d()));
-                double d2 = MathHelper.c(this.locY - 1.0D, (double) shapedetector_shapedetectorcollection.a().getY(), (double) (shapedetector_shapedetectorcollection.a().getY() - shapedetector_shapedetectorcollection.e()));
-
-                this.ao = new Vec3D(d1, d2, 0.0D);
-                this.ap = shapedetector_shapedetectorcollection.b();
-            }
-
-            this.ak = true;
-        }
-    }
-
     public int aq() {
         return 300;
     }
@@ -1892,7 +1842,6 @@ public abstract class Entity {
 
         entity.e(nbttagcompound);
         this.f(nbttagcompound);
-        this.portalCooldown = entity.portalCooldown;
         this.an = entity.an;
         this.ao = entity.ao;
         this.ap = entity.ap;
@@ -1923,7 +1872,6 @@ public abstract class Entity {
 
     public void teleportTo(Location exit, boolean portal) {
         if (true) {
-            WorldServer worldserver = ((CraftWorld) getBukkitEntity().getLocation().getWorld()).getHandle();
             WorldServer worldserver1 = ((CraftWorld) exit.getWorld()).getHandle();
             int i = worldserver1.dimension;
             // CraftBukkit end
@@ -1969,10 +1917,6 @@ public abstract class Entity {
             }
 
             this.dead = true;
-            
-            worldserver.j();
-            worldserver1.j();
-            
         }
     }
 

@@ -1,4 +1,5 @@
 tick-time: 100 # How many ticks wait to send PacketPlayOutUpdateTime to player. Vanilla: 20
+default-time: 0 # Only works if "tick-time" is less than 0
 
 unknown-command:
   - " "

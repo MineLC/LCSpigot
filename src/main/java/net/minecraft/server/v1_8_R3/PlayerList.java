@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
+import lc.lcspigot.configuration.LCConfig;
 import lc.lcspigot.events.PlayerJoinTabInfoEvent;
 import lc.lcspigot.listeners.ListenerData;
 import lc.lcspigot.listeners.internal.EventsExecutor;
@@ -473,7 +474,6 @@ public abstract class PlayerList {
         // */
         EntityPlayer entityplayer1 = entityplayer;
         org.bukkit.World fromWorld = entityplayer.getBukkitEntity().getWorld();
-        entityplayer.viewingCredits = false;
         // CraftBukkit end
         
         entityplayer1.playerConnection = entityplayer.playerConnection;
@@ -575,51 +575,6 @@ public abstract class PlayerList {
         }
         // CraftBukkit end
         return entityplayer1;
-    }
-
-    // CraftBukkit start - Replaced the standard handling of portals with a more customised method.
-    public void changeDimension(EntityPlayer entityplayer, int i, TeleportCause cause) {
-        WorldServer exitWorld = null;
-        if (entityplayer.dimension < CraftWorld.CUSTOM_DIMENSION_OFFSET) { // plugins must specify exit from custom Bukkit worlds
-            // only target existing worlds (compensate for allow-nether/allow-end as false)
-            for (WorldServer world : this.server.worlds) {
-                if (world.dimension == i) {
-                    exitWorld = world;
-                }
-            }
-        }
-
-        Location enter = entityplayer.getBukkitEntity().getLocation();
-        Location exit = null;
-        boolean useTravelAgent = false; // don't use agent for custom worlds or return from THE_END
-        if (exitWorld != null) {
-            if ((cause == TeleportCause.END_PORTAL) && (i == 0)) {
-                // THE_END -> NORMAL; use bed if available, otherwise default spawn
-                exit = ((org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer) entityplayer.getBukkitEntity()).getBedSpawnLocation();
-                if (exit == null || ((CraftWorld) exit.getWorld()).getHandle().dimension != 0) {
-                    exit = exitWorld.getWorld().getSpawnLocation();
-                }
-            } else {
-                // NORMAL <-> NETHER or NORMAL -> THE_END
-                exit = this.calculateTarget(enter, exitWorld);
-                useTravelAgent = true;
-            }
-        }
-        exitWorld = ((CraftWorld) exit.getWorld()).getHandle();
-        org.bukkit.event.player.PlayerTeleportEvent tpEvent = new org.bukkit.event.player.PlayerTeleportEvent(entityplayer.getBukkitEntity(), enter, exit, cause);
-        Bukkit.getServer().getPluginManager().callEvent(tpEvent);
-        if (tpEvent.isCancelled() || tpEvent.getTo() == null) {
-            return;
-        }
-
-        Vector velocity = entityplayer.getBukkitEntity().getVelocity();
-        boolean before = exitWorld.chunkProviderServer.forceChunkLoad;
-        exitWorld.chunkProviderServer.forceChunkLoad = before;
-
-        this.moveToWorld(entityplayer, exitWorld.dimension, true, exit, false); // Vanilla doesn't check for suffocation when handling portals, so neither should we
-        if (entityplayer.motX != velocity.getX() || entityplayer.motY != velocity.getY() || entityplayer.motZ != velocity.getZ()) {
-            entityplayer.getBukkitEntity().setVelocity(velocity);
-        }
     }
 
     public void changeWorld(Entity entity, int i, WorldServer worldserver, WorldServer worldserver1) {
@@ -1001,7 +956,11 @@ public abstract class PlayerList {
         WorldBorder worldborder = entityplayer.world.getWorldBorder(); // CraftBukkit
 
         entityplayer.playerConnection.sendPacket(new PacketPlayOutWorldBorder(worldborder, PacketPlayOutWorldBorder.EnumWorldBorderAction.INITIALIZE));
-        entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateTime(worldserver.getTime(), worldserver.getDayTime(), worldserver.getGameRules().getBoolean("doDaylightCycle")));
+        if (LCConfig.getConfig().tickTime > 0) {
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateTime(worldserver.getTime(), worldserver.getDayTime(), worldserver.getGameRules().getBoolean("doDaylightCycle")));
+        } else {
+            entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateTime(LCConfig.getConfig().defaultTime, LCConfig.getConfig().defaultTime, false));
+        }
         if (worldserver.S()) {
             // CraftBukkit start - handle player weather
             // entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(1, 0.0F));

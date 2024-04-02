@@ -5,7 +5,7 @@ public class WorldProviderHell extends WorldProvider {
     public WorldProviderHell() {}
 
     public void b() {
-        this.c = new WorldChunkManager(BiomeBase.HELL, 0.0F);
+        this.c = new WorldChunkManagerHell(BiomeBase.HELL, 0.0F);
         this.d = true;
         this.e = true;
         this.dimension = -1;

@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.Random;
 
 // CraftBukkit start
-import org.bukkit.TreeType;
 import org.bukkit.block.BlockState;
 import org.bukkit.event.block.BlockSpreadEvent;
 // CraftBukkit end
@@ -85,22 +84,7 @@ public class BlockMushroom extends BlockPlant implements IBlockFragilePlantEleme
 
     public boolean d(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
         world.setAir(blockposition);
-        WorldGenHugeMushroom worldgenhugemushroom = null;
-
-        if (this == Blocks.BROWN_MUSHROOM) {
-            BlockSapling.treeType = TreeType.BROWN_MUSHROOM; // CraftBukkit
-            worldgenhugemushroom = new WorldGenHugeMushroom(Blocks.BROWN_MUSHROOM_BLOCK);
-        } else if (this == Blocks.RED_MUSHROOM) {
-            BlockSapling.treeType = TreeType.RED_MUSHROOM; // CraftBukkit
-            worldgenhugemushroom = new WorldGenHugeMushroom(Blocks.RED_MUSHROOM_BLOCK);
-        }
-
-        if (worldgenhugemushroom != null && worldgenhugemushroom.generate(world, random, blockposition)) {
-            return true;
-        } else {
-            world.setTypeAndData(blockposition, iblockdata, 3);
-            return false;
-        }
+        return false;
     }
 
     public boolean a(World world, BlockPosition blockposition, IBlockData iblockdata, boolean flag) {

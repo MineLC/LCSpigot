@@ -34,7 +34,7 @@ public abstract class World implements IBlockAccess {
     private int a = 63;
     protected boolean e;
     // Spigot start - guard entity list from removals
-    public final List<Entity> entityList = new java.util.ArrayList<Entity>()
+    public List<Entity> entityList = new java.util.ArrayList<Entity>()
     {
         @Override
         public Entity remove(int index)
@@ -93,13 +93,13 @@ public abstract class World implements IBlockAccess {
     int[] H;
 
     // CraftBukkit start Added the following
-    private CraftWorld world;
+    private final CraftWorld world;
     public boolean pvpMode;
     public boolean keepSpawnInMemory = true;
     public ChunkGenerator generator;
 
     public boolean captureBlockStates = false;
-    public boolean captureTreeGeneration = false;
+
     public ArrayList<BlockState> capturedBlockStates= new ArrayList<BlockState>(){
         @Override
         public boolean add( BlockState blockState ) {
@@ -119,30 +119,6 @@ public abstract class World implements IBlockAccess {
     public boolean populating;
     private int tickPosition;
 
-    public void unloadAll() {
-        chunkTickList.clear();
-        u.clear();
-        this.chunkProvider = null;
-        this.capturedBlockStates.clear();
-        this.entitiesById.c();
-        g.clear();
-        tileEntityList.clear();;
-        b.clear();
-        c.clear();
-        players.clear();
-        k.clear();
-
-        u = null;
-        entitiesById = null;
-        g = null;
-        tileEntityList = null;
-        b = null;
-        c = null;
-        players = null;
-        k = null;
-        chunkTickList = null;
-    }
-
     // Spigot start
     private boolean guardEntityList;
     protected gnu.trove.map.hash.TLongShortHashMap chunkTickList;
@@ -154,6 +130,25 @@ public abstract class World implements IBlockAccess {
     private org.spigotmc.TickLimiter entityLimiter;
     private org.spigotmc.TickLimiter tileLimiter;
     private int tileTickPosition;
+
+    public void unload() {
+        g.clear();
+        tileEntityList.clear();
+        b.clear();
+        c.clear();
+        players.clear();
+        k.clear();
+        entitiesById.c();
+        chunkTickList.clear();
+        g = null;
+        tileEntityList = null;
+        b = null;
+        c = null;
+        players = null;
+        k = null;
+        entitiesById = null;
+        chunkTickList = null;
+    }
 
     public static long chunkToKey(int x, int z)
     {
@@ -246,7 +241,29 @@ public abstract class World implements IBlockAccess {
     }
 
     public BiomeBase getBiome(final BlockPosition blockposition) {
-        return BiomeBase.PLAINS;
+        if (this.isLoaded(blockposition)) {
+            Chunk chunk = this.getChunkAtWorldCoords(blockposition);
+
+            try {
+                return chunk.getBiome(blockposition, this.worldProvider.m());
+            } catch (Throwable throwable) {
+                CrashReport crashreport = CrashReport.a(throwable, "Getting biome");
+                CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Coordinates of biome request");
+
+                crashreportsystemdetails.a("Location", new Callable() {
+                    public String a() throws Exception {
+                        return CrashReportSystemDetails.a(blockposition);
+                    }
+
+                    public Object call() throws Exception {
+                        return this.a();
+                    }
+                });
+                throw new ReportedException(crashreport);
+            }
+        } else {
+            return this.worldProvider.m().getBiome(blockposition, BiomeBase.PLAINS);
+        }
     }
 
     public WorldChunkManager getWorldChunkManager() {
@@ -344,25 +361,6 @@ public abstract class World implements IBlockAccess {
 
     public boolean setTypeAndData(BlockPosition blockposition, IBlockData iblockdata, int i) {
         // CraftBukkit start - tree generation
-        if (this.captureTreeGeneration) {
-            BlockState blockstate = null;
-            Iterator<BlockState> it = capturedBlockStates.iterator();
-            while (it.hasNext()) {
-                BlockState previous = it.next();
-                if (previous.getX() == blockposition.getX() && previous.getY() == blockposition.getY() && previous.getZ() == blockposition.getZ()) {
-                    blockstate = previous;
-                    it.remove();
-                    break;
-                }
-            }
-            if (blockstate == null) {
-                blockstate = org.bukkit.craftbukkit.v1_8_R3.block.CraftBlockState.getBlockState(this, blockposition.getX(), blockposition.getY(), blockposition.getZ(), i);
-            }
-            blockstate.setTypeId(CraftMagicNumbers.getId(iblockdata.getBlock()));
-            blockstate.setRawData((byte) iblockdata.getBlock().toLegacyData(iblockdata));
-            this.capturedBlockStates.add(blockstate);
-            return true;
-        }
         // CraftBukkit end
         if (!this.isValidLocation(blockposition)) {
             return false;
@@ -765,18 +763,6 @@ public abstract class World implements IBlockAccess {
     }
     
     public IBlockData getType(BlockPosition blockposition, boolean useCaptured) {
-        // CraftBukkit start - tree generation
-        if (captureTreeGeneration && useCaptured) {
-    // Spigot end
-            Iterator<BlockState> it = capturedBlockStates.iterator();
-            while (it.hasNext()) {
-                BlockState previous = it.next();
-                if (previous.getX() == blockposition.getX() && previous.getY() == blockposition.getY() && previous.getZ() == blockposition.getZ()) {
-                    return CraftMagicNumbers.getBlock(previous.getTypeId()).fromLegacyData(previous.getRawData());
-                }
-            }
-        }
-        // CraftBukkit end
         if (!this.isValidLocation(blockposition)) {
             return Blocks.AIR.getBlockData();
         } else {

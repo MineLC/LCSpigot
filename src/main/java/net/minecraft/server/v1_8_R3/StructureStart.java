@@ -54,7 +54,6 @@ public abstract class StructureStart {
     public NBTTagCompound a(int i, int j) {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        nbttagcompound.setString("id", WorldGenFactory.a(this));
         nbttagcompound.setInt("ChunkX", i);
         nbttagcompound.setInt("ChunkZ", j);
         nbttagcompound.set("BB", this.b.g());
@@ -80,13 +79,6 @@ public abstract class StructureStart {
         if (nbttagcompound.hasKey("BB")) {
             this.b = new StructureBoundingBox(nbttagcompound.getIntArray("BB"));
         }
-
-        NBTTagList nbttaglist = nbttagcompound.getList("Children", 10);
-
-        for (int i = 0; i < nbttaglist.size(); ++i) {
-            this.a.add(WorldGenFactory.b(nbttaglist.get(i), world));
-        }
-
         this.b(nbttagcompound);
     }
 

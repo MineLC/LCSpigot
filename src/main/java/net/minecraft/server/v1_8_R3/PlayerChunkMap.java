@@ -13,8 +13,6 @@ import org.tinylog.Logger;
 import java.util.Collections;
 import java.util.Queue;
 import java.util.LinkedList;
-
-import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.chunkio.ChunkIOExecutor;
 import java.util.HashMap;
 // CraftBukkit end
@@ -36,16 +34,15 @@ public class PlayerChunkMap {
         this.a(viewDistance); // Spigot
     }
 
-    public WorldServer a() {
-        return this.world;
-    }
-
     public void clear() {
-        managedPlayers.forEach((player) -> player.getBukkitEntity().teleport(Bukkit.getWorlds().get(0).getSpawnLocation()));
         managedPlayers.clear();
         d.clear();
         e.clear();
-        f.clear();
+        f.clear();;
+    }
+
+    public WorldServer a() {
+        return this.world;
     }
 
     public void flush() {

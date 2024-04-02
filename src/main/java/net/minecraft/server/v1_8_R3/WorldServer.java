@@ -32,28 +32,9 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     private WorldServer.BlockActionDataList[] S = new WorldServer.BlockActionDataList[] { new WorldServer.BlockActionDataList(null), new WorldServer.BlockActionDataList(null)};
     private int T;
     private List<NextTickListEntry> V = Lists.newArrayList();
+
     // CraftBukkit start
     public final int dimension;
-
-    public void unloadAll() {
-        entitiesByUUID.values().forEach((entity) -> { 
-            entity.world = null;
-            entity.die();
-        });
-        entitiesByUUID.clear();
-        M.clear();
-        V.clear();
-        super.unloadAll();
-
-        entitiesById = null;
-        entitiesByUUID = null;
-        manager.clear();
-        M = null;
-        V = null;
-        S = null;
-        chunkProviderServer.clear();
-        chunkProviderServer = null;
-    }
 
     // Add env and gen to constructor
     public WorldServer(MinecraftServer minecraftserver, IDataManager idatamanager, WorldData worlddata, int i, org.bukkit.World.Environment env, org.bukkit.generator.ChunkGenerator gen) {
@@ -70,6 +51,27 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         this.B();
         this.C();
         this.getWorldBorder().a(minecraftserver.aI());
+    }
+
+    public void unloadAll() {
+        V.clear();
+        entitiesByUUID.values().forEach((entity) -> {
+            entity.die();
+            entity.world = null;
+        });
+        entitiesByUUID.clear();
+        M.clear();
+        manager.clear();
+        tracker.clear();
+        super.unload();
+        chunkProviderServer.unloadQueue = null;
+        chunkProviderServer.chunks = null;
+        chunkProviderServer = null;
+        tracker = null;
+        M = null;
+        V = null;
+        S = null;
+        manager = null;
     }
 
     public World b() {
@@ -185,6 +187,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
             this.getWorldData().setDifficulty(EnumDifficulty.HARD);
         }
 
+        this.worldProvider.m().b();
         if (this.everyoneDeeplySleeping()) {
             if (this.getGameRules().getBoolean("doDaylightCycle")) {
                 long i = this.worldData.getDayTime() + 24000L;
@@ -194,6 +197,9 @@ public class WorldServer extends World implements IAsyncTaskHandler {
 
             this.e();
         }
+
+        // CraftBukkit start - Only call spawner if we have players online and the world allows for mobs or animals
+        long time = this.worldData.getTime();
 
         // CraftBukkit end
         this.chunkProvider.unloadChunks();
@@ -425,14 +431,8 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     public void tickEntities() {
-        this.j();
-
         super.tickEntities();
         spigotConfig.currentPrimedTnt = 0; // Spigot
-    }
-
-    public void j() {
-
     }
 
     public boolean a(boolean flag) {
@@ -674,8 +674,9 @@ public class WorldServer extends World implements IAsyncTaskHandler {
         } else {
             this.isLoading = true;
             WorldChunkManager worldchunkmanager = this.worldProvider.m();
+            List list = worldchunkmanager.a();
             Random random = new Random(this.getSeed());
-            BlockPosition blockposition = worldchunkmanager.a(0, 0, 256, Arrays.asList(BiomeBase.PLAINS), random);
+            BlockPosition blockposition = worldchunkmanager.a(0, 0, 256, list, random);
             int i = 0;
             int j = this.worldProvider.getSeaLevel();
             int k = 0;
@@ -725,6 +726,7 @@ public class WorldServer extends World implements IAsyncTaskHandler {
     }
 
     protected void l() {
+
     }
 
     public BlockPosition getDimensionSpawn() {

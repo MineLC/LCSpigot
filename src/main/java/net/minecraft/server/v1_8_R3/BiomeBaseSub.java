@@ -41,10 +41,6 @@ public class BiomeBaseSub extends BiomeBase {
         return this.aE.g();
     }
 
-    public WorldGenTreeAbstract a(Random random) {
-        return this.aE.a(random);
-    }
-
     public Class<? extends BiomeBase> l() {
         return this.aE.l();
     }

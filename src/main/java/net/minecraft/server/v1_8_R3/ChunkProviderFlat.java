@@ -12,7 +12,6 @@ public class ChunkProviderFlat implements IChunkProvider {
     private Random b;
     private final IBlockData[] c = new IBlockData[256];
     private final WorldGenFlatInfo d;
-    private final List<StructureGenerator> e = Lists.newArrayList();
     private final boolean f;
     private final boolean g;
     private WorldGenLakes h;
@@ -31,22 +30,6 @@ public class ChunkProviderFlat implements IChunkProvider {
                 if (!map1.containsKey("size")) {
                     map1.put("size", "1");
                 }
-            }
-
-            if (map.containsKey("biome_1")) {
-                this.e.add(new WorldGenLargeFeature((Map) map.get("biome_1")));
-            }
-
-            if (map.containsKey("mineshaft")) {
-                this.e.add(new WorldGenMineshaft((Map) map.get("mineshaft")));
-            }
-
-            if (map.containsKey("stronghold")) {
-                this.e.add(new WorldGenStronghold((Map) map.get("stronghold")));
-            }
-
-            if (map.containsKey("oceanmonument")) {
-                this.e.add(new WorldGenMonument((Map) map.get("oceanmonument")));
             }
         }
 
@@ -103,14 +86,6 @@ public class ChunkProviderFlat implements IChunkProvider {
                     }
                 }
             }
-        }
-
-        Iterator iterator = this.e.iterator();
-
-        while (iterator.hasNext()) {
-            WorldGenBase worldgenbase = (WorldGenBase) iterator.next();
-
-            worldgenbase.a(this, this.a, i, j, chunksnapshot);
         }
 
         Chunk chunk = new Chunk(this.a, chunksnapshot, i, j);
@@ -189,17 +164,6 @@ public class ChunkProviderFlat implements IChunkProvider {
     }
 
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
-        if ("Stronghold".equals(s)) {
-            Iterator iterator = this.e.iterator();
-
-            while (iterator.hasNext()) {
-                StructureGenerator structuregenerator = (StructureGenerator) iterator.next();
-
-                if (structuregenerator instanceof WorldGenStronghold) {
-                    return structuregenerator.getNearestGeneratedFeature(world, blockposition);
-                }
-            }
-        }
 
         return null;
     }
@@ -209,13 +173,6 @@ public class ChunkProviderFlat implements IChunkProvider {
     }
 
     public void recreateStructures(Chunk chunk, int i, int j) {
-        Iterator iterator = this.e.iterator();
-
-        while (iterator.hasNext()) {
-            StructureGenerator structuregenerator = (StructureGenerator) iterator.next();
-
-            structuregenerator.a(this, this.a, i, j, (ChunkSnapshot) null);
-        }
 
     }
 

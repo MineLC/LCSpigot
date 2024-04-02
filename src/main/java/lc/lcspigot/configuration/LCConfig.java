@@ -7,6 +7,7 @@ public final class LCConfig {
 
     public final String unknownCommand;
     public final int tickTime;
+    public final int defaultTime;
     public final int containerUpdateDelay;
     public final int tickNextTickCap;
     public final ConfigKnockback knockback;
@@ -16,10 +17,11 @@ public final class LCConfig {
     public final boolean allowConsole;
     public final boolean disableLogging;
 
-    LCConfig(String unknownCommand, int tickTime, int containerUpdateDelay, int tickNextTickCap, boolean canSaveWorlds, ConfigKnockback knockback, boolean logCommands, boolean allowConsole, boolean disableLogging) {
+    LCConfig(String unknownCommand, int tickTime, int defaultTime, int containerUpdateDelay, int tickNextTickCap, boolean canSaveWorlds, ConfigKnockback knockback, boolean logCommands, boolean allowConsole, boolean disableLogging) {
         this.unknownCommand = unknownCommand;
         this.tickTime = tickTime;
         this.containerUpdateDelay = containerUpdateDelay;
+        this.defaultTime = defaultTime;
         this.tickNextTickCap = tickNextTickCap;
         this.canSaveWorlds = canSaveWorlds;
         this.knockback = knockback;

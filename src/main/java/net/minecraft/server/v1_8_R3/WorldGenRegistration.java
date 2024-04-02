@@ -7,12 +7,6 @@ import java.util.Random;
 
 public class WorldGenRegistration {
 
-    public static void a() {
-        WorldGenFactory.a(WorldGenRegistration.WorldGenPyramidPiece.class, "TeDP");
-        WorldGenFactory.a(WorldGenRegistration.WorldGenJungleTemple.class, "TeJP");
-        WorldGenFactory.a(WorldGenRegistration.WorldGenWitchHut.class, "TeSH");
-    }
-
     static class SyntheticClass_1 {
 
         static final int[] a = new int[EnumDirection.n.length];

@@ -129,13 +129,8 @@ public class BiomeDecorator {
         for (j = 0; j < i; ++j) {
             k = this.b.nextInt(16) + 8;
             l = this.b.nextInt(16) + 8;
-            WorldGenTreeAbstract worldgentreeabstract = biomebase.a(this.b);
 
-            worldgentreeabstract.e();
             blockposition = this.a.getHighestBlockYAt(this.c.a(k, 0, l));
-            if (worldgentreeabstract.generate(this.a, this.b, blockposition)) {
-                worldgentreeabstract.a(this.a, this.b, blockposition);
-            }
         }
 
         for (j = 0; j < this.K; ++j) {

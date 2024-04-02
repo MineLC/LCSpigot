@@ -37,13 +37,6 @@ public class BlockEnderPortal extends BlockContainer {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        if (entity.vehicle == null && entity.passenger == null && !world.isClientSide) {
-            // CraftBukkit start - Entity in portal
-            EntityPortalEnterEvent event = new EntityPortalEnterEvent(entity.getBukkitEntity(), new org.bukkit.Location(world.getWorld(), blockposition.getX(), blockposition.getY(), blockposition.getZ()));
-            world.getServer().getPluginManager().callEvent(event);
-            // CraftBukkit end
-            entity.c(1);
-        }
 
     }
 

@@ -173,7 +173,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         final boolean moveCord = !(packetplayinflying.x == 0 && packetplayinflying.y == 0 && packetplayinflying.z == 0);
         final boolean moveHead = !(packetplayinflying.pitch == 0 && packetplayinflying.yaw == 0);
 
-        if ((!moveCord && !moveHead) || this.player.viewingCredits) {
+        if ((!moveCord && !moveHead)) {
             return;
         }
         if (!moveCord && moveHead) {
@@ -336,7 +336,8 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         if (!this.player.noclip) {
             final BlockPosition position = new BlockPosition(player.locX, player.locY, player.locZ);
             final WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
-            if ((flag1 || !worldserver.getWorldBorder().a(position) || worldserver.getType(position).getBlock().u()) && !this.player.isSleeping()) {
+            final Block block = worldserver.getType(position).getBlock();
+            if ((flag1 || !worldserver.getWorldBorder().a(position) || block.u()) && !this.player.isSleeping() && block.getMaterial() != Material.SAND) {
                 this.a(this.o, this.p, this.q, f2, f3);
                 return;
             }
@@ -1039,10 +1040,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
 
         switch (PlayerConnection.SyntheticClass_1.c[packetplayinclientcommand_enumclientcommand.ordinal()]) {
         case 1:
-            if (this.player.viewingCredits) {
-                // this.player = this.minecraftServer.getPlayerList().moveToWorld(this.player, 0, true);
-                this.minecraftServer.getPlayerList().changeDimension(this.player, 0, PlayerTeleportEvent.TeleportCause.END_PORTAL); // CraftBukkit - reroute logic through custom portal management
-            } else if (this.player.u().getWorldData().isHardcore()) {
+            if (this.player.u().getWorldData().isHardcore()) {
                 if (this.minecraftServer.T() && this.player.getName().equals(this.minecraftServer.S())) {
                     this.player.playerConnection.disconnect("You have died. Game over, man, it\'s game over!");
                     this.minecraftServer.aa();

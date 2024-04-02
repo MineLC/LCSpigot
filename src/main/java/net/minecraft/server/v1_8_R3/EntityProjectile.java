@@ -149,7 +149,7 @@ public abstract class EntityProjectile extends Entity implements IProjectile {
 
         if (movingobjectposition != null) {
             if (movingobjectposition.type == MovingObjectPosition.EnumMovingObjectType.BLOCK && this.world.getType(movingobjectposition.a()).getBlock() == Blocks.PORTAL) {
-                this.d(movingobjectposition.a());
+
             } else {
                 this.a(movingobjectposition);
                 // CraftBukkit start

@@ -22,10 +22,6 @@ public class BiomeJungle extends BiomeBase {
         this.as.B = 4;
     }
 
-    public WorldGenTreeAbstract a(Random random) {
-        return (WorldGenTreeAbstract) (random.nextInt(10) == 0 ? this.aB : (random.nextInt(2) == 0 ? new WorldGenGroundBush(BiomeJungle.aE, BiomeJungle.aG) : (!this.aD && random.nextInt(3) == 0 ? new WorldGenJungleTree(false, 10, 20, BiomeJungle.aE, BiomeJungle.aF) : new WorldGenTrees(false, 4 + random.nextInt(7), BiomeJungle.aE, BiomeJungle.aF, true))));
-    }
-
     public WorldGenerator b(Random random) {
         return random.nextInt(4) == 0 ? new WorldGenGrass(BlockLongGrass.EnumTallGrassType.FERN) : new WorldGenGrass(BlockLongGrass.EnumTallGrassType.GRASS);
     }

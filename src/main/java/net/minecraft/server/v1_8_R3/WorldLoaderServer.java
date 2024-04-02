@@ -63,11 +63,15 @@ public class WorldLoaderServer extends WorldLoader {
         WorldData worlddata = this.c(s);
         Object object = null;
 
-        object = new WorldChunkManager(BiomeBase.PLAINS, 0.5F);
- 
+        if (worlddata.getType() == WorldType.FLAT) {
+            object = new WorldChunkManagerHell(BiomeBase.PLAINS, 0.5F);
+        } else {
+            object = new WorldChunkManager(worlddata.getSeed(), worlddata.getType(), worlddata.getGeneratorOptions());
+        }
+
         this.a(new File(file, "region"), (Iterable) arraylist, (WorldChunkManager) object, 0, i, iprogressupdate);
-        this.a(new File(file1, "region"), (Iterable) arraylist1, new WorldChunkManager(BiomeBase.HELL, 0.0F), arraylist.size(), i, iprogressupdate);
-        this.a(new File(file2, "region"), (Iterable) arraylist2, new WorldChunkManager(BiomeBase.SKY, 0.0F), arraylist.size() + arraylist1.size(), i, iprogressupdate);
+        this.a(new File(file1, "region"), (Iterable) arraylist1, new WorldChunkManagerHell(BiomeBase.HELL, 0.0F), arraylist.size(), i, iprogressupdate);
+        this.a(new File(file2, "region"), (Iterable) arraylist2, new WorldChunkManagerHell(BiomeBase.SKY, 0.0F), arraylist.size() + arraylist1.size(), i, iprogressupdate);
         worlddata.e(19133);
         if (worlddata.getType() == WorldType.NORMAL_1_1) {
             worlddata.a(WorldType.NORMAL);

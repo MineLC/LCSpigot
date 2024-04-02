@@ -32,10 +32,6 @@ public class BiomeMesa extends BiomeBase {
 
     }
 
-    public WorldGenTreeAbstract a(Random random) {
-        return this.aA;
-    }
-
     public void a(World world, Random random, BlockPosition blockposition) {
         super.a(world, random, blockposition);
     }

@@ -39,10 +39,6 @@ public class BiomeIcePlains extends BiomeBase {
         super.a(world, random, blockposition);
     }
 
-    public WorldGenTreeAbstract a(Random random) {
-        return new WorldGenTaiga2(false);
-    }
-
     protected BiomeBase d(int i) {
         BiomeBase biomebase = (new BiomeIcePlains(i, true)).a(13828095, true).a(this.ah + " Spikes").c().a(0.0F, 0.5F).a(new BiomeBase.BiomeTemperature(this.an + 0.1F, this.ao + 0.1F));
 

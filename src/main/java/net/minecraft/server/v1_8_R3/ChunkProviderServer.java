@@ -35,17 +35,6 @@ public class ChunkProviderServer implements IChunkProvider {
         this.chunkProvider = ichunkprovider;
     }
 
-    public void clear() {
-        unloadQueue.clear();
-        chunks.clear();
-        unloadQueue = null;
-        emptyChunk = null;
-        chunkProvider = null;
-        chunkLoader = null;
-        world = null;
-        chunks = null;
-    }
-
     public boolean isChunkLoaded(int i, int j) {
         return this.chunks.containsKey(LongHash.toLong(i, j)); // CraftBukkit
     }
@@ -336,11 +325,9 @@ public class ChunkProviderServer implements IChunkProvider {
         }
 
     }
+
     public boolean unloadChunks() {
-        return unloadChunks(this.world.savingDisabled);
-    }
-    public boolean unloadChunks(boolean saving) {
-        if (!saving) {
+        if (!this.world.savingDisabled) {
             // CraftBukkit start
             Server server = this.world.getServer();
             for (int i = 0; i < 100 && !this.unloadQueue.isEmpty(); ++i) {

@@ -1,23 +1,24 @@
 package net.minecraft.server.v1_8_R3;
 
-import lc.lcspigot.worlds.VoidChunkProvider;
-
 public abstract class WorldProvider {
 
     public static final float[] a = new float[] { 1.0F, 0.75F, 0.5F, 0.25F, 0.0F, 0.25F, 0.5F, 0.75F};
     protected World b;
     private WorldType type;
+    private String i;
     protected WorldChunkManager c;
     protected boolean d;
     protected boolean e;
     protected final float[] f = new float[16];
     protected int dimension;
+    private final float[] j = new float[4];
 
     public WorldProvider() {}
 
     public final void a(World world) {
         this.b = world;
         this.type = world.getWorldData().getType();
+        this.i = world.getWorldData().getGeneratorOptions();
         this.b();
         this.a();
     }
@@ -34,11 +35,22 @@ public abstract class WorldProvider {
     }
 
     protected void b() {
-        this.c = new WorldChunkManager(BiomeBase.PLAINS, 0.0F);
+        WorldType worldtype = this.b.getWorldData().getType();
+
+        if (worldtype == WorldType.FLAT) {
+            WorldGenFlatInfo worldgenflatinfo = WorldGenFlatInfo.a(this.b.getWorldData().getGeneratorOptions());
+
+            this.c = new WorldChunkManagerHell(BiomeBase.getBiome(worldgenflatinfo.a(), BiomeBase.ad), 0.5F);
+        } else if (worldtype == WorldType.DEBUG_ALL_BLOCK_STATES) {
+            this.c = new WorldChunkManagerHell(BiomeBase.PLAINS, 0.0F);
+        } else {
+            this.c = new WorldChunkManager(this.b);
+        }
+
     }
 
     public IChunkProvider getChunkProvider() {
-        return new VoidChunkProvider(this.b);
+        return (IChunkProvider) (this.type == WorldType.FLAT ? new ChunkProviderFlat(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.i) : (this.type == WorldType.DEBUG_ALL_BLOCK_STATES ? new ChunkProviderDebug(this.b) : (this.type == WorldType.CUSTOMIZED ? new ChunkProviderGenerate(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.i) : new ChunkProviderGenerate(this.b, this.b.getSeed(), this.b.getWorldData().shouldGenerateMapFeatures(), this.i))));
     }
 
     public boolean canSpawn(int i, int j) {

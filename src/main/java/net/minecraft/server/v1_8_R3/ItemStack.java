@@ -10,12 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Location;
-import org.bukkit.TreeType;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_8_R3.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_8_R3.util.CraftMagicNumbers;
 import org.bukkit.entity.Player;
-import org.bukkit.event.world.StructureGrowEvent;
 // CraftBukkit end
 
 public final class ItemStack {
@@ -106,46 +104,13 @@ public final class ItemStack {
 
         if (!(this.getItem() instanceof ItemBucket)) { // if not bucket
             world.captureBlockStates = true;
-            // special case bonemeal
-            if (this.getItem() instanceof ItemDye && this.getData() == 15) {
-                Block block = world.getType(blockposition).getBlock();
-                if (block == Blocks.SAPLING || block instanceof BlockMushroom) {
-                    world.captureTreeGeneration = true;
-                }
-            }
-        }
+          }
         boolean flag = this.getItem().interactWith(this, entityhuman, world, blockposition, enumdirection, f, f1, f2);
         int newData = this.getData();
         int newCount = this.count;
         this.count = count;
         this.setData(data);
         world.captureBlockStates = false;
-        if (flag && world.captureTreeGeneration && world.capturedBlockStates.size() > 0) {
-            world.captureTreeGeneration = false;
-            Location location = new Location(world.getWorld(), blockposition.getX(), blockposition.getY(), blockposition.getZ());
-            TreeType treeType = BlockSapling.treeType;
-            BlockSapling.treeType = null;
-            List<BlockState> blocks = (List<BlockState>) world.capturedBlockStates.clone();
-            world.capturedBlockStates.clear();
-            StructureGrowEvent event = null;
-            if (treeType != null) {
-                event = new StructureGrowEvent(location, treeType, false, (Player) entityhuman.getBukkitEntity(), blocks);
-                org.bukkit.Bukkit.getPluginManager().callEvent(event);
-            }
-            if (event == null || !event.isCancelled()) {
-                // Change the stack to its new contents if it hasn't been tampered with.
-                if (this.count == count && this.getData() == data) {
-                    this.setData(newData);
-                    this.count = newCount;
-                }
-                for (BlockState blockstate : blocks) {
-                    blockstate.update(true);
-                }
-            }
-
-            return flag;
-        }
-        world.captureTreeGeneration = false;
 
         if (flag) {
             org.bukkit.event.block.BlockPlaceEvent placeEvent = null;

@@ -5,9 +5,6 @@ import java.util.Random;
 public class BiomeForest extends BiomeBase {
 
     private int aG;
-    protected static final WorldGenForest aD = new WorldGenForest(false, true);
-    protected static final WorldGenForest aE = new WorldGenForest(false, false);
-    protected static final WorldGenForestTree aF = new WorldGenForestTree(false);
 
     public BiomeForest(int i, int j) {
         super(i);
@@ -48,10 +45,6 @@ public class BiomeForest extends BiomeBase {
         }
     }
 
-    public WorldGenTreeAbstract a(Random random) {
-        return (WorldGenTreeAbstract) (this.aG == 3 && random.nextInt(3) > 0 ? BiomeForest.aF : (this.aG != 2 && random.nextInt(5) != 0 ? this.aA : BiomeForest.aE));
-    }
-
     public BlockFlowers.EnumFlowerVarient a(Random random, BlockPosition blockposition) {
         if (this.aG == 1) {
             double d0 = MathHelper.a((1.0D + BiomeForest.af.a((double) blockposition.getX() / 48.0D, (double) blockposition.getZ() / 48.0D)) / 2.0D, 0.0D, 0.9999D);
@@ -80,13 +73,6 @@ public class BiomeForest extends BiomeBase {
                         WorldGenHugeMushroom worldgenhugemushroom = new WorldGenHugeMushroom();
 
                         worldgenhugemushroom.generate(world, random, blockposition1);
-                    } else {
-                        WorldGenTreeAbstract worldgentreeabstract = this.a(random);
-
-                        worldgentreeabstract.e();
-                        if (worldgentreeabstract.generate(world, random, blockposition1)) {
-                            worldgentreeabstract.a(world, random, blockposition1);
-                        }
                     }
                 }
             }
@@ -146,9 +132,7 @@ public class BiomeForest extends BiomeBase {
                     this.aE.a(world, random, blockposition);
                 }
             } : new BiomeBaseSub(i, this) {
-                public WorldGenTreeAbstract a(Random random) {
-                    return random.nextBoolean() ? BiomeForest.aD : BiomeForest.aE;
-                }
+
             };
         }
     }

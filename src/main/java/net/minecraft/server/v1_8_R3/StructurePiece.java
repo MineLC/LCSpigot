@@ -19,7 +19,6 @@ public abstract class StructurePiece {
     public NBTTagCompound b() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-        nbttagcompound.setString("id", WorldGenFactory.a(this));
         nbttagcompound.set("BB", this.l.g());
         nbttagcompound.setInt("O", this.m == null ? -1 : this.m.b());
         nbttagcompound.setInt("GD", this.n);

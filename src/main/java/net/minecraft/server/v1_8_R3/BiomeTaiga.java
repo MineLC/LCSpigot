@@ -4,10 +4,6 @@ import java.util.Random;
 
 public class BiomeTaiga extends BiomeBase {
 
-    private static final WorldGenTaiga1 aD = new WorldGenTaiga1();
-    private static final WorldGenTaiga2 aE = new WorldGenTaiga2(false);
-    private static final WorldGenMegaTree aF = new WorldGenMegaTree(false, false);
-    private static final WorldGenMegaTree aG = new WorldGenMegaTree(false, true);
     private static final WorldGenTaigaStructure aH = new WorldGenTaigaStructure(Blocks.MOSSY_COBBLESTONE, 0);
     private int aI;
 
@@ -26,9 +22,7 @@ public class BiomeTaiga extends BiomeBase {
 
     }
 
-    public WorldGenTreeAbstract a(Random random) {
-        return (WorldGenTreeAbstract) ((this.aI == 1 || this.aI == 2) && random.nextInt(3) == 0 ? (this.aI != 2 && random.nextInt(13) != 0 ? BiomeTaiga.aF : BiomeTaiga.aG) : (random.nextInt(3) == 0 ? BiomeTaiga.aD : BiomeTaiga.aE));
-    }
+
 
     public WorldGenerator b(Random random) {
         return random.nextInt(5) > 0 ? new WorldGenGrass(BlockLongGrass.EnumTallGrassType.FERN) : new WorldGenGrass(BlockLongGrass.EnumTallGrassType.GRASS);

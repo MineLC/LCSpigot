@@ -21,6 +21,13 @@ public class EntityTracker {
         this.e = worldserver.getMinecraftServer().getPlayerList().d();
     }
 
+    public void clear() {
+        c.clear();
+        trackedEntities.c();
+        c = null;
+        trackedEntities = null;
+    }
+
     public void track(Entity entity) {
         if (entity instanceof EntityPlayer) {
             this.addEntity(entity, 512, 2);

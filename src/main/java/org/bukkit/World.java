@@ -319,26 +319,6 @@ public interface World extends PluginMessageRecipient, Metadatable {
     public Arrow spawnArrow(Location location, Vector direction, float speed, float spread);
 
     /**
-     * Creates a tree at the given {@link Location}
-     *
-     * @param location Location to spawn the tree
-     * @param type Type of the tree to create
-     * @return true if the tree was created successfully, otherwise false
-     */
-    public boolean generateTree(Location location, TreeType type);
-
-    /**
-     * Creates a tree at the given {@link Location}
-     *
-     * @param loc Location to spawn the tree
-     * @param type Type of the tree to create
-     * @param delegate A class to call for each block changed as a result of
-     *     this method
-     * @return true if the tree was created successfully, otherwise false
-     */
-    public boolean generateTree(Location loc, TreeType type, BlockChangeDelegate delegate);
-
-    /**
      * Creates a entity at the given {@link Location}
      *
      * @param loc The location to spawn the entity

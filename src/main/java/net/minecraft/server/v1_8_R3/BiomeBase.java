@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -90,9 +89,6 @@ public abstract class BiomeBase {
     protected boolean ax;
     protected boolean ay;
     public final int id;
-    protected WorldGenTrees aA;
-    protected WorldGenBigTree aB;
-    protected WorldGenSwampTree aC;
 
     protected BiomeBase(int i) {
         this.ak = Blocks.GRASS.getBlockData();
@@ -105,9 +101,6 @@ public abstract class BiomeBase {
         this.ar = 16777215;
         this.aw = Lists.newArrayList();
         this.ay = true;
-        this.aA = new WorldGenTrees(false);
-        this.aB = new WorldGenBigTree(false);
-        this.aC = new WorldGenSwampTree();
         this.id = i;
         BiomeBase.biomes[i] = this;
         this.as = this.a();
@@ -136,10 +129,6 @@ public abstract class BiomeBase {
     protected BiomeBase b() {
         this.ay = false;
         return this;
-    }
-
-    public WorldGenTreeAbstract a(Random random) {
-        return (WorldGenTreeAbstract) (random.nextInt(10) == 0 ? this.aB : this.aA);
     }
 
     public WorldGenerator b(Random random) {

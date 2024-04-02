@@ -14,7 +14,6 @@ public class ChunkProviderGenerate implements IChunkProvider {
     public NoiseGeneratorOctaves b;
     public NoiseGeneratorOctaves c;
     private World m;
-    private final boolean n;
     private WorldType o;
     private final double[] p;
     private final float[] q;
@@ -22,11 +21,7 @@ public class ChunkProviderGenerate implements IChunkProvider {
     private Block s;
     private double[] t;
     private WorldGenBase u;
-    private WorldGenStronghold v;
-    private WorldGenMineshaft x;
-    private WorldGenLargeFeature y;
     private WorldGenBase z;
-    private WorldGenMonument A;
     private BiomeBase[] B;
     double[] d;
     double[] e;
@@ -37,13 +32,8 @@ public class ChunkProviderGenerate implements IChunkProvider {
         this.s = Blocks.WATER;
         this.t = new double[256];
         this.u = new WorldGenCaves();
-        this.v = new WorldGenStronghold();
-        this.x = new WorldGenMineshaft();
-        this.y = new WorldGenLargeFeature();
         this.z = new WorldGenCanyon();
-        this.A = new WorldGenMonument();
         this.m = world;
-        this.n = flag;
         this.o = world.getWorldData().getType();
         this.h = new Random(i);
         this.i = new NoiseGeneratorOctaves(this.h, 16);
@@ -160,22 +150,6 @@ public class ChunkProviderGenerate implements IChunkProvider {
 
         if (this.r.z) {
             this.z.a(this, this.m, i, j, chunksnapshot);
-        }
-
-        if (this.r.w && this.n) {
-            this.x.a(this, this.m, i, j, chunksnapshot);
-        }
-
-        if (this.r.u && this.n) {
-            this.v.a(this, this.m, i, j, chunksnapshot);
-        }
-
-        if (this.r.x && this.n) {
-            this.y.a(this, this.m, i, j, chunksnapshot);
-        }
-
-        if (this.r.y && this.n) {
-            this.A.a(this, this.m, i, j, chunksnapshot);
         }
 
         Chunk chunk = new Chunk(this.m, chunksnapshot, i, j);
@@ -311,23 +285,6 @@ public class ChunkProviderGenerate implements IChunkProvider {
 
         this.h.setSeed((long) i * i1 + (long) j * j1 ^ this.m.getSeed());
         boolean flag = false;
-        ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
-
-        if (this.r.w && this.n) {
-            this.x.a(this.m, this.h, chunkcoordintpair);
-        }
-
-        if (this.r.u && this.n) {
-            this.v.a(this.m, this.h, chunkcoordintpair);
-        }
-
-        if (this.r.x && this.n) {
-            this.y.a(this.m, this.h, chunkcoordintpair);
-        }
-
-        if (this.r.y && this.n) {
-            this.A.a(this.m, this.h, chunkcoordintpair);
-        }
 
         int k1;
         int l1;
@@ -383,10 +340,6 @@ public class ChunkProviderGenerate implements IChunkProvider {
     public boolean a(IChunkProvider ichunkprovider, Chunk chunk, int i, int j) {
         boolean flag = false;
 
-        if (this.r.y && this.n && chunk.w() < 3600L) {
-            flag |= this.A.a(this.m, this.h, new ChunkCoordIntPair(i, j));
-        }
-
         return flag;
     }
 
@@ -409,7 +362,7 @@ public class ChunkProviderGenerate implements IChunkProvider {
     }
 
     public BlockPosition findNearestMapFeature(World world, String s, BlockPosition blockposition) {
-        return "Stronghold".equals(s) && this.v != null ? this.v.getNearestGeneratedFeature(world, blockposition) : null;
+        return null;
     }
 
     public int getLoadedChunks() {
@@ -417,21 +370,7 @@ public class ChunkProviderGenerate implements IChunkProvider {
     }
 
     public void recreateStructures(Chunk chunk, int i, int j) {
-        if (this.r.w && this.n) {
-            this.x.a(this, this.m, i, j, (ChunkSnapshot) null);
-        }
-
-        if (this.r.u && this.n) {
-            this.v.a(this, this.m, i, j, (ChunkSnapshot) null);
-        }
-
-        if (this.r.x && this.n) {
-            this.y.a(this, this.m, i, j, (ChunkSnapshot) null);
-        }
-
-        if (this.r.y && this.n) {
-            this.A.a(this, this.m, i, j, (ChunkSnapshot) null);
-        }
+        
 
     }
 

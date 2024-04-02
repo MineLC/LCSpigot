@@ -17,16 +17,6 @@ public class BlockPortal extends BlockHalfTransparent {
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        super.b(world, blockposition, iblockdata, random);
-        if (world.spigotConfig.enableZombiePigmenPortalSpawns && world.worldProvider.d() && world.getGameRules().getBoolean("doMobSpawning") && random.nextInt(2000) < world.getDifficulty().a()) { // Spigot
-            int i = blockposition.getY();
-
-            BlockPosition blockposition1;
-
-            for (blockposition1 = blockposition; !World.a((IBlockAccess) world, blockposition1) && blockposition1.getY() > 0; blockposition1 = blockposition1.down()) {
-                ;
-            }
-        }
 
     }
 
@@ -59,40 +49,11 @@ public class BlockPortal extends BlockHalfTransparent {
     }
 
     public boolean e(World world, BlockPosition blockposition) {
-        BlockPortal.Shape blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.X);
-
-        if (blockportal_shape.d() && blockportal_shape.e == 0) {
-            // CraftBukkit start - return portalcreator
-            return blockportal_shape.e();
-            // return true;
-        } else {
-            BlockPortal.Shape blockportal_shape1 = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.Z);
-
-            if (blockportal_shape1.d() && blockportal_shape1.e == 0) {
-                return blockportal_shape1.e();
-                // return true;
-                // CraftBukkit end
-            } else {
-                return false;
-            }
-        }
+        return false;
     }
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
-        EnumDirection.EnumAxis enumdirection_enumaxis = (EnumDirection.EnumAxis) iblockdata.get(BlockPortal.AXIS);
-        BlockPortal.Shape blockportal_shape;
 
-        if (enumdirection_enumaxis == EnumDirection.EnumAxis.X) {
-            blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.X);
-            if (!blockportal_shape.d() || blockportal_shape.e < blockportal_shape.h * blockportal_shape.g) {
-                world.setTypeUpdate(blockposition, Blocks.AIR.getBlockData());
-            }
-        } else if (enumdirection_enumaxis == EnumDirection.EnumAxis.Z) {
-            blockportal_shape = new BlockPortal.Shape(world, blockposition, EnumDirection.EnumAxis.Z);
-            if (!blockportal_shape.d() || blockportal_shape.e < blockportal_shape.h * blockportal_shape.g) {
-                world.setTypeUpdate(blockposition, Blocks.AIR.getBlockData());
-            }
-        }
 
     }
 
@@ -101,13 +62,6 @@ public class BlockPortal extends BlockHalfTransparent {
     }
 
     public void a(World world, BlockPosition blockposition, IBlockData iblockdata, Entity entity) {
-        if (entity.vehicle == null && entity.passenger == null) {
-            // CraftBukkit start - Entity in portal
-            EntityPortalEnterEvent event = new EntityPortalEnterEvent(entity.getBukkitEntity(), new org.bukkit.Location(world.getWorld(), blockposition.getX(), blockposition.getY(), blockposition.getZ()));
-            world.getServer().getPluginManager().callEvent(event);
-            // CraftBukkit end
-            entity.d(blockposition);
-        }
 
     }
 

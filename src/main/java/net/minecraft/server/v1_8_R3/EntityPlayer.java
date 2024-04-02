@@ -20,7 +20,6 @@ import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 // CraftBukkit end
 
 public class EntityPlayer extends EntityHuman implements ICrafting {
@@ -40,13 +39,11 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public int lastSentExp = -99999999; // CraftBukkit - public
     public int invulnerableTicks = 60; // CraftBukkit - public
     private EntityHuman.EnumChatVisibility bR;
-    private boolean bS = true;
     private long bT = System.currentTimeMillis();
     private Entity bU = null;
     private int containerCounter;
     public boolean g;
     public int ping;
-    public boolean viewingCredits;
 
     // CraftBukkit start
     public String displayName;
@@ -465,23 +462,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
         return this.world.pvpMode;
     }
 
-    public void c(int i) {
-        if (this.dimension == 1 && i == 1) {
-            this.world.kill(this);
-            this.viewingCredits = true;
-            this.playerConnection.sendPacket(new PacketPlayOutGameStateChange(4, 0.0F));
-        } else {
-            // CraftBukkit start
-            TeleportCause cause = (this.dimension == 1 || i == 1) ? TeleportCause.END_PORTAL : TeleportCause.NETHER_PORTAL;
-            this.server.getPlayerList().changeDimension(this, i, cause);
-            // CraftBukkit end
-            this.lastSentExp = -1;
-            this.bM = -1.0F;
-            this.bN = -1;
-        }
-
-    }
-
     public boolean a(EntityPlayer entityplayer) {
         return entityplayer.isSpectator() ? this.C() == this : (this.isSpectator() ? false : super.a(entityplayer));
     }
@@ -884,7 +864,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public void a(PacketPlayInSettings packetplayinsettings) {
         this.locale = packetplayinsettings.a();
         this.bR = packetplayinsettings.c();
-        this.bS = packetplayinsettings.d();
         this.getDataWatcher().watch(10, Byte.valueOf((byte) packetplayinsettings.e()));
     }
 

@@ -7,6 +7,7 @@ public class ItemMapEmpty extends ItemWorldMapBase {
     }
 
     public ItemStack a(ItemStack itemstack, World world, EntityHuman entityhuman) {
+        
         return itemstack;
     }
 }

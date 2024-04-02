@@ -19,9 +19,6 @@ public class BiomeSwamp extends BiomeBase {
         this.ar = 14745518;
     }
 
-    public WorldGenTreeAbstract a(Random random) {
-        return this.aC;
-    }
 
     public BlockFlowers.EnumFlowerVarient a(Random random, BlockPosition blockposition) {
         return BlockFlowers.EnumFlowerVarient.BLUE_ORCHID;

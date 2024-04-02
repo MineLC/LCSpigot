@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
@@ -77,9 +76,14 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     private String I;
     private String J;
     private boolean demoMode;
+    private boolean M;
     private boolean N;
     private String O = "";
     private String P = "";
+    private boolean Q;
+    private long R;
+    private String S;
+    private boolean T;
     private boolean U;
     private final YggdrasilAuthenticationService V;
     private final MinecraftSessionService W;
@@ -96,12 +100,15 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     private boolean mayHaveDelayedTasks;
     private boolean forceTicks;
     private boolean isOversleep = false;
+    private volatile boolean isReady;
     private long lastOverloadWarning;
     public long serverStartTime;
     public volatile Thread shutdownThread;
+    private long lastTick = 0;
+    private long catchupTime = 0;
 
     // CraftBukkit start
-    public List<WorldServer> worlds = new LinkedList<WorldServer>();
+    public List<WorldServer> worlds = new ArrayList<WorldServer>();
     public org.bukkit.craftbukkit.v1_8_R3.CraftServer server;
     public OptionSet options;
     public org.bukkit.command.ConsoleCommandSender console;
@@ -113,6 +120,8 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     public int autosavePeriod;
     // CraftBukkit end
     // Spigot start
+    private static final int TPS = 20;
+    private static final int TICK_TIME = 1000000000 / TPS;
     private static final int SAMPLE_INTERVAL = 100;
     public final double[] recentTps = new double[ 3 ];
     // Spigot end
@@ -186,7 +195,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     }
 
     protected synchronized void b(String s) {
-
+        this.S = s;
     }
 
     protected void a(String s, String s1, long i, WorldType worldtype, String s2) {
@@ -477,6 +486,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
                 Arrays.fill( recentTps, 20 );
                 // PandaSpigot start - Modern tick loop
                 long start = System.nanoTime(), curTime, tickSection = start;
+                lastTick = start - TICK_TIME;
                 // PandaSpigot end
                 
                 while (this.isRunning) {
@@ -497,11 +507,14 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
                         recentTps[2] = calcTps( recentTps[2], 0.9945, currentTps ); // 1/exp(5sec/15min)
                         tickSection = curTime;
                     }
+                    lastTick = curTime;
+
                     this.nextTickTime += 50L;
                     this.A(this::haveTime);
                     this.mayHaveDelayedTasks = true;
                     this.delayedTasksMaxNextTickTime = Math.max(getMillis() + 50L, this.nextTickTime);
                     this.waitUntilNextTick();
+                    this.isReady = true;
                     // PandaSpigot end
                 }
                 // Spigot end
@@ -636,15 +649,16 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
         int count = this.j.size();
         while (count-- > 0 && (entry = this.j.poll()) != null) {
             SystemUtils.a(entry);
-        }
+         }
         // Spigot end
         // CraftBukkit start
         this.server.getScheduler().mainThreadHeartbeat(this.ticks);
         while (!processQueue.isEmpty()) {
             processQueue.remove().run();
         }
+        org.bukkit.craftbukkit.v1_8_R3.chunkio.ChunkIOExecutor.tick();
         // Send time updates to everyone, it will get the right time from the world the player is in.
-        if (LCConfig.getConfig().tickTime > 0 && this.ticks % LCConfig.getConfig().tickTime == 0) {
+        if (LCConfig.getConfig().tickTime >= 1 && this.ticks % LCConfig.getConfig().tickTime == 0) {
             for (final WorldServer world : this.worlds) {
                 final PacketPlayOutUpdateTime packet = new PacketPlayOutUpdateTime(world.getTime(), world.getDayTime(), true);
                 for (final EntityHuman human : world.players) {
@@ -946,7 +960,7 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     }
 
     public void c(boolean flag) {
-
+        this.M = flag;
     }
 
     public Convertable getConvertable() {
@@ -1134,6 +1148,10 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
 
     public int at() {
         return this.ticks;
+    }
+
+    public void au() {
+        this.T = true;
     }
 
     public BlockPosition getChunkCoordinates() {

@@ -1,5 +1,14 @@
 package net.minecraft.server.v1_8_R3;
 
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Multisets;
+
+// CraftBukkit start
+import org.bukkit.Bukkit;
+import org.bukkit.event.server.MapInitializeEvent;
+// CraftBukkit end
+
 public class ItemWorldMap extends ItemWorldMapBase {
 
     protected ItemWorldMap() {
@@ -10,9 +19,7 @@ public class ItemWorldMap extends ItemWorldMapBase {
     }
 
     public void a(ItemStack itemstack, World world, Entity entity, int i, boolean flag) {
-        if (!world.isClientSide) {
-
-        }
+       
     }
 
 

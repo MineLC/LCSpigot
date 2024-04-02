@@ -32,6 +32,7 @@ import net.minecraft.server.v1_8_R3.EnumDifficulty;
 import net.minecraft.server.v1_8_R3.ExceptionWorldConflict;
 import net.minecraft.server.v1_8_R3.IDataManager;
 import net.minecraft.server.v1_8_R3.IProgressUpdate;
+import net.minecraft.server.v1_8_R3.Items;
 import net.minecraft.server.v1_8_R3.JsonListEntry;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.MobEffectList;
@@ -44,6 +45,7 @@ import net.minecraft.server.v1_8_R3.ServerNBTManager;
 import net.minecraft.server.v1_8_R3.WorldData;
 import net.minecraft.server.v1_8_R3.WorldLoaderServer;
 import net.minecraft.server.v1_8_R3.WorldManager;
+import net.minecraft.server.v1_8_R3.WorldMap;
 import net.minecraft.server.v1_8_R3.WorldNBTStorage;
 import net.minecraft.server.v1_8_R3.WorldServer;
 import net.minecraft.server.v1_8_R3.WorldSettings;
@@ -88,6 +90,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
@@ -113,6 +116,7 @@ import org.bukkit.scheduler.BukkitWorker;
 import org.bukkit.util.StringUtil;
 import org.bukkit.util.permissions.DefaultPermissions;
 import org.tinylog.Logger;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.error.MarkedYAMLException;
@@ -129,7 +133,6 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.base64.Base64;
 import jline.console.ConsoleReader;
-import lc.lcspigot.configuration.LCConfig;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public final class CraftServer implements Server {
@@ -828,7 +831,6 @@ public final class CraftServer implements Server {
         return unloadWorld(getWorld(name), save);
     }
 
-
     @Override
     public boolean unloadWorld(World world, boolean save) {
         if (world == null) {
@@ -849,6 +851,13 @@ public final class CraftServer implements Server {
             return false;
         }
 
+        WorldUnloadEvent e = new WorldUnloadEvent(handle.getWorld());
+        pluginManager.callEvent(e);
+
+        if (e.isCancelled()) {
+            return false;
+        }
+
         if (save) {
             try {
                 handle.save(true, null);
@@ -857,10 +866,13 @@ public final class CraftServer implements Server {
                 Logger.error(ex);
             }
         }
+
         worlds.remove(world.getName().toLowerCase());
         console.worlds.remove(console.worlds.indexOf(handle));
         ((CraftWorld)world).unloadAll();
+
         File parentFolder = world.getWorldFolder().getAbsoluteFile();
+
         // Synchronized because access to RegionFileCache.a is guarded by this lock.
         synchronized (RegionFileCache.class) {
             // RegionFileCache.a should be RegionFileCache.cache
@@ -882,6 +894,7 @@ public final class CraftServer implements Server {
                 }
             }
         }
+
         return true;
     }
 
