@@ -3,6 +3,7 @@ package lc.lcspigot.commands.vanilla;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import lc.lcspigot.commands.Command;
 
@@ -18,13 +19,12 @@ final class OpCommand implements Command {
             return;
         }
 
-        @SuppressWarnings("deprecation")
-        final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
-        if (offlinePlayer == null) {
+        final Player player = Bukkit.getPlayer(args[0]);
+        if (player == null) {
             send(sender, "The player " + args[0] + " don't exist. This is case sensitive");
             return;
         }
-        offlinePlayer.setOp(true);
+        player.setOp(true);
         send(sender, "Now, the player " + args[0] + " is op");
     }
 }

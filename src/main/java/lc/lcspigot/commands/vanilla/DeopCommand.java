@@ -3,6 +3,7 @@ package lc.lcspigot.commands.vanilla;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_8_R3.CraftOfflinePlayer;
 
 import lc.lcspigot.commands.Command;
 
@@ -20,7 +21,7 @@ final class DeopCommand implements Command {
         }
 
         @SuppressWarnings("deprecation")
-        final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[0]);
+        final CraftOfflinePlayer offlinePlayer = (CraftOfflinePlayer) Bukkit.getOfflinePlayer(args[0]);
         if (offlinePlayer == null) {
             send(sender, "The player " + args[0] + " don't exist. This is case sensitive");
             return;

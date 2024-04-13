@@ -13,14 +13,6 @@ public class WorldGenDeadBush extends WorldGenerator {
             blockposition = blockposition.down();
         }
 
-        for (int i = 0; i < 4; ++i) {
-            BlockPosition blockposition1 = blockposition.a(random.nextInt(8) - random.nextInt(8), random.nextInt(4) - random.nextInt(4), random.nextInt(8) - random.nextInt(8));
-
-            if (world.isEmpty(blockposition1) && Blocks.DEADBUSH.f(world, blockposition1, Blocks.DEADBUSH.getBlockData())) {
-                world.setTypeAndData(blockposition1, Blocks.DEADBUSH.getBlockData(), 2);
-            }
-        }
-
         return true;
     }
 }

@@ -27,6 +27,7 @@ import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryView;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_8_R3.util.CraftChatMessage;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -600,18 +601,20 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             this.player.playerConnection.sendPacket(new PacketPlayOutChat(chatmessage));
             flag = true;
         } else {
-            // CraftBukkit start - Check if we can actually do something over this large a distance
-            Location eyeLoc = this.getPlayer().getEyeLocation();
-            double reachDistance = NumberConversions.square(eyeLoc.getX() - blockposition.getX()) + NumberConversions.square(eyeLoc.getY() - blockposition.getY()) + NumberConversions.square(eyeLoc.getZ() - blockposition.getZ());
-            if (reachDistance > (this.getPlayer().getGameMode() == org.bukkit.GameMode.CREATIVE ? CREATIVE_PLACE_DISTANCE_SQUARED : SURVIVAL_PLACE_DISTANCE_SQUARED)) {
-                return;
-            }
+            if (getPlayer().getGameMode() != GameMode.CREATIVE) {
+                Location eyeLoc = this.getPlayer().getEyeLocation();
+                double reachDistance = NumberConversions.square(eyeLoc.getX() - blockposition.getX()) + NumberConversions.square(eyeLoc.getY() - blockposition.getY()) + NumberConversions.square(eyeLoc.getZ() - blockposition.getZ());
+                getPlayer().sendMessage(String.valueOf(reachDistance));
+                if (reachDistance >= 7) {
+                    return;
+                }
+            }          
 
             if (!worldserver.getWorldBorder().a(blockposition)) {
                 return;
             }
-
-            if (this.checkMovement && this.player.e((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) < 64.0D && !this.minecraftServer.a(worldserver, blockposition, this.player) && worldserver.getWorldBorder().a(blockposition)) {
+            getPlayer().sendMessage("PACKET LOCATION: " + packetplayinblockplace.a().toString());
+            if (this.checkMovement && this.player.e((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) < 64.0D && !this.minecraftServer.a(worldserver, blockposition, this.player)) {
                 always = throttled || !this.player.playerInteractManager.interact(this.player, worldserver, itemstack, blockposition, enumdirection, packetplayinblockplace.d(), packetplayinblockplace.e(), packetplayinblockplace.f());
             }
 

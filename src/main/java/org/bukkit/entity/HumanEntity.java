@@ -2,17 +2,17 @@ package org.bukkit.entity;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.permissions.Permissible;
 
 /**
  * Represents a human entity, such as an NPC or a player
  */
-public interface HumanEntity extends LivingEntity, AnimalTamer, Permissible, InventoryHolder {
+public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder, CommandSender {
 
     /**
      * Returns the name of this player

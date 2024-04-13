@@ -32,7 +32,6 @@ import net.minecraft.server.v1_8_R3.EnumDifficulty;
 import net.minecraft.server.v1_8_R3.ExceptionWorldConflict;
 import net.minecraft.server.v1_8_R3.IDataManager;
 import net.minecraft.server.v1_8_R3.IProgressUpdate;
-import net.minecraft.server.v1_8_R3.Items;
 import net.minecraft.server.v1_8_R3.JsonListEntry;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.MobEffectList;
@@ -45,7 +44,6 @@ import net.minecraft.server.v1_8_R3.ServerNBTManager;
 import net.minecraft.server.v1_8_R3.WorldData;
 import net.minecraft.server.v1_8_R3.WorldLoaderServer;
 import net.minecraft.server.v1_8_R3.WorldManager;
-import net.minecraft.server.v1_8_R3.WorldMap;
 import net.minecraft.server.v1_8_R3.WorldNBTStorage;
 import net.minecraft.server.v1_8_R3.WorldServer;
 import net.minecraft.server.v1_8_R3.WorldSettings;
@@ -53,6 +51,8 @@ import net.minecraft.server.v1_8_R3.WorldType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.UnsafeValues;
@@ -60,7 +60,7 @@ import org.bukkit.Warning.WarningState;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
-import org.bukkit.command.CommandSender;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -84,13 +84,11 @@ import org.bukkit.craftbukkit.v1_8_R3.util.CraftIconCache;
 import org.bukkit.craftbukkit.v1_8_R3.util.CraftMagicNumbers;
 import org.bukkit.craftbukkit.v1_8_R3.util.DatFileFilter;
 import org.bukkit.craftbukkit.v1_8_R3.util.Versioning;
-import org.bukkit.craftbukkit.v1_8_R3.util.permissions.CraftDefaultPermissions;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldLoadEvent;
-import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
@@ -99,8 +97,6 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
-import org.bukkit.permissions.Permissible;
-import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginLoadOrder;
 import org.bukkit.plugin.PluginManager;
@@ -114,12 +110,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.plugin.messaging.StandardMessenger;
 import org.bukkit.scheduler.BukkitWorker;
 import org.bukkit.util.StringUtil;
-import org.bukkit.util.permissions.DefaultPermissions;
 import org.tinylog.Logger;
-import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
-import org.yaml.snakeyaml.error.MarkedYAMLException;
 import org.apache.commons.lang3.Validate;
 
 import com.google.common.base.Charsets;
@@ -133,6 +126,7 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.base64.Base64;
 import jline.console.ConsoleReader;
+import lc.lcspigot.configuration.LCConfig;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public final class CraftServer implements Server {
@@ -285,14 +279,6 @@ public final class CraftServer implements Server {
                 loadPlugin(plugin);
             }
         }
-
-        if (type == PluginLoadOrder.POSTWORLD) {
-            // Spigot start - Allow vanilla commands to be forced to be the main command
-            // Spigot end
-            loadCustomPermissions();
-            DefaultPermissions.registerCorePermissions();
-            CraftDefaultPermissions.registerCorePermissions();
-        }
     }
 
     public void disablePlugins() {
@@ -302,16 +288,6 @@ public final class CraftServer implements Server {
     private void loadPlugin(Plugin plugin) {
         try {
             pluginManager.enablePlugin(plugin);
-
-            List<Permission> perms = plugin.getDescription().getPermissions();
-
-            for (Permission perm : perms) {
-                try {
-                    pluginManager.addPermission(perm);
-                } catch (IllegalArgumentException ex) {
-                    Logger.info("Plugin " + plugin.getDescription().getFullName() + " tried to register permission '" + perm.getName() + "' but it's already registered", ex);
-                }
-            }
         } catch (Throwable ex) {
             Logger.error(ex.getMessage() + " loading " + plugin.getDescription().getFullName() + " (Is it up to date?)", ex);
         }
@@ -645,53 +621,6 @@ public final class CraftServer implements Server {
         }
     }
 
-    @SuppressWarnings({ "unchecked", "finally" })
-    private void loadCustomPermissions() {
-        File file = new File(configuration.getString("settings.permissions-file"));
-        FileInputStream stream;
-
-        try {
-            stream = new FileInputStream(file);
-        } catch (FileNotFoundException ex) {
-            try {
-                file.createNewFile();
-            } finally {
-                return;
-            }
-        }
-
-        Map<String, Map<String, Object>> perms;
-
-        try {
-            perms = (Map<String, Map<String, Object>>) yaml.load(stream);
-        } catch (MarkedYAMLException ex) {
-            Logger.info("Server permissions file " + file + " is not valid YAML: " + ex.toString());
-            return;
-        } catch (Throwable ex) {
-            Logger.info("Server permissions file " + file + " is not valid YAML.", ex);
-            return;
-        } finally {
-            try {
-                stream.close();
-            } catch (IOException ex) {}
-        }
-
-        if (perms == null) {
-            Logger.info("Server permissions file " + file + " is empty, ignoring it");
-            return;
-        }
-
-        List<Permission> permsList = Permission.loadPermissions(perms, "Permission node '%s' in " + file + " is invalid", Permission.DEFAULT_PERMISSION);
-
-        for (Permission perm : permsList) {
-            try {
-                pluginManager.addPermission(perm);
-            } catch (IllegalArgumentException ex) {
-                Logger.info("Permission in " + file + " was already defined", ex);
-            }
-        }
-    }
-
     @Override
     public String toString() {
         return "CraftServer{" + "serverName=" + serverName + ",serverVersion=" + serverVersion + ",minecraftVersion=" + console.getVersion() + '}';
@@ -847,18 +776,20 @@ public final class CraftServer implements Server {
             return false;
         }
 
-        if (handle.players.size() > 0) {
-            return false;
+        if (!handle.players.isEmpty()) {
+            List<Player> players = world.getPlayers();
+            World defaultWorld = (World)Bukkit.getWorlds().get(0);
+            Location spawnLocation = defaultWorld.getSpawnLocation();
+
+            while(spawnLocation.getBlock().getType() != Material.AIR || spawnLocation.getBlock().getRelative(BlockFace.UP).getType() != Material.AIR) {
+                spawnLocation.add(0.0, 1.0, 0.0);
+            }
+            for (final Player player : players) {
+                player.teleport(spawnLocation);
+            }
         }
 
-        WorldUnloadEvent e = new WorldUnloadEvent(handle.getWorld());
-        pluginManager.callEvent(e);
-
-        if (e.isCancelled()) {
-            return false;
-        }
-
-        if (save) {
+        if (save && LCConfig.getConfig().canSaveWorlds) {
             try {
                 handle.save(true, null);
                 handle.saveLevel();
@@ -868,7 +799,7 @@ public final class CraftServer implements Server {
         }
 
         worlds.remove(world.getName().toLowerCase());
-        console.worlds.remove(console.worlds.indexOf(handle));
+        console.worlds.remove(handle);
         ((CraftWorld)world).unloadAll();
 
         File parentFolder = world.getWorldFolder().getAbsoluteFile();
@@ -1106,16 +1037,13 @@ public final class CraftServer implements Server {
     @Override
     public int broadcast(String message, String permission) {
         int count = 0;
-        Set<Permissible> permissibles = getPluginManager().getPermissionSubscriptions(permission);
-
-        for (Permissible permissible : permissibles) {
-            if (permissible instanceof CommandSender && permissible.hasPermission(permission)) {
-                CommandSender user = (CommandSender) permissible;
-                user.sendMessage(message);
+        final List<EntityPlayer> players = MinecraftServer.getServer().getPlayerList().players;
+        for (final EntityPlayer player : players) {
+            if (player.getBukkitEntity().hasPermission(permission)) {
+                player.getBukkitEntity().sendMessage(message);
                 count++;
             }
         }
-
         return count;
     }
 

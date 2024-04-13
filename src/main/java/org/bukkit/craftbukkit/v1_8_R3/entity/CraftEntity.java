@@ -11,31 +11,14 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.metadata.MetadataValue;
-import org.bukkit.permissions.PermissibleBase;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.permissions.ServerOperator;
+
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 public abstract class CraftEntity implements org.bukkit.entity.Entity {
-    private static final PermissibleBase perm = new PermissibleBase(new ServerOperator() {
-
-        @Override
-        public boolean isOp() {
-            return false;
-        }
-
-        @Override
-        public void setOp(boolean value) {
-
-        }
-    });
     
     protected final CraftServer server;
     protected Entity entity;
@@ -89,7 +72,6 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
             else if (entity instanceof EntityMinecartHopper) { return new CraftMinecartHopper(server, (EntityMinecartHopper) entity); }
             else if (entity instanceof EntityMinecartMobSpawner) { return new CraftMinecartMobSpawner(server, (EntityMinecartMobSpawner) entity); }
             else if (entity instanceof EntityMinecartRideable) { return new CraftMinecartRideable(server, (EntityMinecartRideable) entity); }
-            else if (entity instanceof EntityMinecartCommandBlock) { return new CraftMinecartCommand(server, (EntityMinecartCommandBlock) entity); }
         } else if (entity instanceof EntityHanging) {
             if (entity instanceof EntityPainting) { return new CraftPainting(server, (EntityPainting) entity); }
             else if (entity instanceof EntityItemFrame) { return new CraftItemFrame(server, (EntityItemFrame) entity); }
@@ -385,84 +367,8 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
         return getHandle().getCustomNameVisible();
     }
 
-    @Override
-    public void sendMessage(String message) {
-
-    }
-
-    @Override
-    public void sendMessage(String[] messages) {
-
-    }
-
-    @Override
     public String getName() {
         return getHandle().getName();
-    }
-
-    @Override
-    public boolean isPermissionSet(String name) {
-        return perm.isPermissionSet(name);
-    }
-
-    @Override
-    public boolean isPermissionSet(Permission perm) {
-        return CraftEntity.perm.isPermissionSet(perm);
-    }
-
-    @Override
-    public boolean hasPermission(String name) {
-        return perm.hasPermission(name);
-    }
-
-    @Override
-    public boolean hasPermission(Permission perm) {
-        return this.perm.hasPermission(perm);
-    }
-
-    @Override
-    public PermissionAttachment addAttachment(Plugin plugin, String name, boolean value) {
-        return perm.addAttachment(plugin, name, value);
-    }
-
-    @Override
-    public PermissionAttachment addAttachment(Plugin plugin) {
-        return perm.addAttachment(plugin);
-    }
-
-    @Override
-    public PermissionAttachment addAttachment(Plugin plugin, String name, boolean value, int ticks) {
-        return perm.addAttachment(plugin, name, value, ticks);
-    }
-
-    @Override
-    public PermissionAttachment addAttachment(Plugin plugin, int ticks) {
-        return perm.addAttachment(plugin, ticks);
-    }
-
-    @Override
-    public void removeAttachment(PermissionAttachment attachment) {
-        perm.removeAttachment(attachment);
-    }
-
-    @Override
-    public void recalculatePermissions() {
-        perm.recalculatePermissions();
-    }
-
-    @Override
-    public Set<PermissionAttachmentInfo> getEffectivePermissions() {
-        return perm.getEffectivePermissions();
-    }
-
-    @Override
-    public boolean isOp() {
-        return perm.isOp();
-    }
-
-    @Override
-    public void setOp(boolean value) {
-        perm.setOp(value);
     }
 
     // Spigot start

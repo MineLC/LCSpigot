@@ -130,9 +130,9 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
         if (!org.spigotmc.SpigotConfig.lateBind) {
             try {
                 this.aq().a(inetaddress, this.R());
-            } catch (IOException ioexception) {
+            } catch (Exception e) {
                 Logger.warn("**** FAILED TO BIND TO PORT!");
-                Logger.warn("The exception was: {}", new Object[] { ioexception.toString()});
+                Logger.warn("The exception was: {}", new Object[] { e.toString()});
                 Logger.warn("Perhaps a server is already running on that port?");
                 return false;
             }
@@ -216,9 +216,9 @@ public class DedicatedServer extends MinecraftServer implements IMinecraftServer
             if (org.spigotmc.SpigotConfig.lateBind) {
                 try {
                     this.aq().a(inetaddress, this.R());
-                } catch (IOException ioexception) {
+                } catch (Exception e) {
                     Logger.warn("**** FAILED TO BIND TO PORT!");
-                    Logger.warn("The exception was: {}", new Object[] { ioexception.toString()});
+                    Logger.warn("The exception was: {}", new Object[] { e.toString()});
                     Logger.warn("Perhaps a server is already running on that port?");
                     return false;
                 }

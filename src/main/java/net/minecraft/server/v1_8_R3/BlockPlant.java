@@ -2,8 +2,6 @@ package net.minecraft.server.v1_8_R3;
 
 import java.util.Random;
 // CraftBukkit start
-import org.bukkit.craftbukkit.v1_8_R3.util.CraftMagicNumbers;
-import org.bukkit.event.block.BlockPhysicsEvent;
 // CraftBukkit end
 
 public class BlockPlant extends Block {
@@ -35,33 +33,11 @@ public class BlockPlant extends Block {
 
     public void doPhysics(World world, BlockPosition blockposition, IBlockData iblockdata, Block block) {
         super.doPhysics(world, blockposition, iblockdata, block);
-        this.e(world, blockposition, iblockdata);
     }
 
     public void b(World world, BlockPosition blockposition, IBlockData iblockdata, Random random) {
-        this.e(world, blockposition, iblockdata);
     }
 
-    protected void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!this.f(world, blockposition, iblockdata)) {
-            // CraftBukkit Start
-            org.bukkit.block.Block block = world.getWorld().getBlockAt(blockposition.getX(), blockposition.getY(), blockposition.getZ());
-            BlockPhysicsEvent event = new BlockPhysicsEvent(block, block.getTypeId());
-            world.getServer().getPluginManager().callEvent(event);
-
-            if (event.isCancelled()) {
-                return;
-            }
-            // CraftBukkit end
-            this.b(world, blockposition, iblockdata, 0);
-            world.setTypeAndData(blockposition, Blocks.AIR.getBlockData(), 3);
-        }
-
-    }
-
-    public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        return this.c(world.getType(blockposition.down()).getBlock());
-    }
 
     public AxisAlignedBB a(World world, BlockPosition blockposition, IBlockData iblockdata) {
         return null;

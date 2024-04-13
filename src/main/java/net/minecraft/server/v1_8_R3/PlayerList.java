@@ -852,7 +852,7 @@ public abstract class PlayerList {
         // CraftBukkit start
         Player player = server.server.getPlayer(gameprofile.getId());
         if (player != null) {
-           player.recalculatePermissions();
+            player.setOp(true);
         }
         // CraftBukkit end
     }
@@ -863,7 +863,7 @@ public abstract class PlayerList {
         // CraftBukkit start
         Player player = server.server.getPlayer(gameprofile.getId());
         if (player != null) {
-            player.recalculatePermissions();
+            player.setOp(false);
         }
         // CraftBukkit end
     }

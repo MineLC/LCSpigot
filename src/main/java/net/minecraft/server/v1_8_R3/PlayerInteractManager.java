@@ -33,6 +33,11 @@ public class PlayerInteractManager {
     public void setGameMode(WorldSettings.EnumGamemode worldsettings_enumgamemode) {
         this.gamemode = worldsettings_enumgamemode;
         worldsettings_enumgamemode.a(this.player.abilities);
+        if (gamemode == WorldSettings.EnumGamemode.SPECTATOR) {
+            player.noclip = true;
+        } else {
+            player.noclip = false;    
+        }
         this.player.updateAbilities();
         this.player.server.getPlayerList().sendAll(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.UPDATE_GAME_MODE, new EntityPlayer[] { this.player}));
     }
@@ -398,52 +403,6 @@ public class PlayerInteractManager {
     // CraftBukkit end
 
     public boolean interact(EntityHuman entityhuman, World world, ItemStack itemstack, BlockPosition blockposition, EnumDirection enumdirection, float f, float f1, float f2) {
-        /* CraftBukkit start - whole method
-        if (this.gamemode == WorldSettings.EnumGamemode.SPECTATOR) {
-            TileEntity tileentity = world.getTileEntity(blockposition);
-
-            if (tileentity instanceof ITileInventory) {
-                Block block = world.getType(blockposition).getBlock();
-                ITileInventory itileinventory = (ITileInventory) tileentity;
-
-                if (itileinventory instanceof TileEntityChest && block instanceof BlockChest) {
-                    itileinventory = ((BlockChest) block).f(world, blockposition);
-                }
-
-                if (itileinventory != null) {
-                    entityhuman.openContainer(itileinventory);
-                    return true;
-                }
-            } else if (tileentity instanceof IInventory) {
-                entityhuman.openContainer((IInventory) tileentity);
-                return true;
-            }
-
-            return false;
-        } else {
-            if (!entityhuman.isSneaking() || entityhuman.bA() == null) {
-                IBlockData iblockdata = world.getType(blockposition);
-
-                if (iblockdata.getBlock().interact(world, blockposition, iblockdata, entityhuman, enumdirection, f, f1, f2)) {
-                    return true;
-                }
-            }
-
-            if (itemstack == null) {
-                return false;
-            } else if (this.isCreative()) {
-                int i = itemstack.getData();
-                int j = itemstack.count;
-                boolean flag = itemstack.placeItem(entityhuman, world, blockposition, enumdirection, f, f1, f2);
-
-                itemstack.setData(i);
-                itemstack.count = j;
-                return flag;
-            } else {
-                return itemstack.placeItem(entityhuman, world, blockposition, enumdirection, f, f1, f2);
-            }
-        }
-        // Interract event */
         IBlockData blockdata = world.getType(blockposition);
         boolean result = false;
         if (blockdata.getBlock() != Blocks.AIR) {

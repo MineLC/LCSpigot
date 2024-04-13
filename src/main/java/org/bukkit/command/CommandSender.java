@@ -1,9 +1,9 @@
 package org.bukkit.command;
 
 import org.bukkit.Server;
-import org.bukkit.permissions.Permissible;
+import org.bukkit.plugin.Plugin;
 
-public interface CommandSender extends Permissible {
+public interface CommandSender {
 
     /**
      * Sends this sender a message
@@ -32,4 +32,11 @@ public interface CommandSender extends Permissible {
      * @return Name of the sender
      */
     public String getName();
+
+    public boolean hasPermission(final String permission);
+    public void addPermission(final String permission);
+    public void removePermission(final String permission);
+
+    public boolean isOp();
+    public void setOp(boolean value);
 }

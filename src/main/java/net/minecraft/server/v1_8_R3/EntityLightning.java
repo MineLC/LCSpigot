@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory; // CraftBukkit
 
+import lc.lcspigot.configuration.LCConfig;
+
 public class EntityLightning extends EntityWeather {
 
     private int lifeTicks;
@@ -66,6 +68,9 @@ public class EntityLightning extends EntityWeather {
 
     public void t_() {
         super.t_();
+        if (!LCConfig.getConfig().allowWeather) {
+            return;
+        }
         if (!isSilent && this.lifeTicks == 2) { // Spigot
             // CraftBukkit start - Use relative location for far away sounds
             //this.world.makeSound(this.locX, this.locY, this.locZ, "ambient.weather.thunder", 10000.0F, 0.8F + RANDOM.nextFloat() * 0.2F);

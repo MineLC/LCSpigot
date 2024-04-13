@@ -64,4 +64,12 @@ public class CraftConsoleCommandSender extends ServerCommandSender implements Co
     public boolean isConversing() {
         return conversationTracker.isConversing();
     }
+
+    @Override
+    public void addPermission(String permission) {
+    }
+
+    @Override
+    public void removePermission(String permission) {
+    }
 }

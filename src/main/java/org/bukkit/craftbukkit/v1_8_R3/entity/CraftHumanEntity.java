@@ -1,5 +1,6 @@
 package org.bukkit.craftbukkit.v1_8_R3.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.server.v1_8_R3.*;
@@ -22,16 +23,11 @@ import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryView;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.permissions.PermissibleBase;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.plugin.Plugin;
 
 public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
     private CraftInventoryPlayer inventory;
     private final CraftInventory enderChest;
-    protected final PermissibleBase perm = new PermissibleBase(this);
+    private final Set<String> permissions = new HashSet<>();
     private boolean op;
     private GameMode mode;
 
@@ -90,53 +86,8 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
         return op;
     }
 
-    public boolean isPermissionSet(String name) {
-        return perm.isPermissionSet(name);
-    }
-
-    public boolean isPermissionSet(Permission perm) {
-        return this.perm.isPermissionSet(perm);
-    }
-
-    public boolean hasPermission(String name) {
-        return perm.hasPermission(name);
-    }
-
-    public boolean hasPermission(Permission perm) {
-        return this.perm.hasPermission(perm);
-    }
-
-    public PermissionAttachment addAttachment(Plugin plugin, String name, boolean value) {
-        return perm.addAttachment(plugin, name, value);
-    }
-
-    public PermissionAttachment addAttachment(Plugin plugin) {
-        return perm.addAttachment(plugin);
-    }
-
-    public PermissionAttachment addAttachment(Plugin plugin, String name, boolean value, int ticks) {
-        return perm.addAttachment(plugin, name, value, ticks);
-    }
-
-    public PermissionAttachment addAttachment(Plugin plugin, int ticks) {
-        return perm.addAttachment(plugin, ticks);
-    }
-
-    public void removeAttachment(PermissionAttachment attachment) {
-        perm.removeAttachment(attachment);
-    }
-
-    public void recalculatePermissions() {
-        perm.recalculatePermissions();
-    }
-
     public void setOp(boolean value) {
         this.op = value;
-        perm.recalculatePermissions();
-    }
-
-    public Set<PermissionAttachmentInfo> getEffectivePermissions() {
-        return perm.getEffectivePermissions();
     }
 
     public GameMode getGameMode() {
@@ -353,5 +304,29 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
 
     public int getExpToLevel() {
         return getHandle().getExpToLevel();
+    }
+
+    @Override
+    public boolean hasPermission(String permission) {
+        return isOp() || permissions.contains(permission);
+    }
+
+    @Override
+    public void addPermission(String permission) {
+        permissions.add(permission);
+    }
+
+    @Override
+    public void removePermission(String permission) {
+        permissions.remove(permission);
+    }
+
+
+    @Override
+    public void sendMessage(String message) {
+    }
+
+    @Override
+    public void sendMessage(String[] messages) {
     }
 }

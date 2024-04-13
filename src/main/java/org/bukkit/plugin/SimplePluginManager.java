@@ -23,9 +23,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.permissions.Permissible;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.FileUtil;
 import org.tinylog.Logger;
 
@@ -40,17 +37,10 @@ public final class SimplePluginManager implements PluginManager {
     private final List<Plugin> plugins = new ArrayList<Plugin>();
     private final Map<String, Plugin> lookupNames = new HashMap<String, Plugin>();
     private static File updateDirectory = null;
-    private final Map<String, Permission> permissions = new HashMap<String, Permission>();
-    private final Map<Boolean, Set<Permission>> defaultPerms = new LinkedHashMap<Boolean, Set<Permission>>();
-    private final Map<String, Map<Permissible, Boolean>> permSubs = new HashMap<String, Map<Permissible, Boolean>>();
-    private final Map<Boolean, Map<Permissible, Boolean>> defSubs = new HashMap<Boolean, Map<Permissible, Boolean>>();
     private boolean useTimings = false;
 
     public SimplePluginManager(Server instance) {
         server = instance;
-
-        defaultPerms.put(true, new HashSet<Permission>());
-        defaultPerms.put(false, new HashSet<Permission>());
     }
 
     /**
@@ -454,9 +444,6 @@ public final class SimplePluginManager implements PluginManager {
             lookupNames.clear();
             HandlerList.unregisterAll();
             fileAssociations.clear();
-            permissions.clear();
-            defaultPerms.get(true).clear();
-            defaultPerms.get(false).clear();
         }
     }
 
@@ -581,134 +568,6 @@ public final class SimplePluginManager implements PluginManager {
                 throw new IllegalPluginAccessException("Unable to find handler list for event " + clazz.getName());
             }
         }
-    }
-
-    public Permission getPermission(String name) {
-        return permissions.get(name.toLowerCase());
-    }
-
-    public void addPermission(Permission perm) {
-        String name = perm.getName().toLowerCase();
-
-        if (permissions.containsKey(name)) {
-            throw new IllegalArgumentException("The permission " + name + " is already defined!");
-        }
-
-        permissions.put(name, perm);
-        calculatePermissionDefault(perm);
-    }
-
-    public Set<Permission> getDefaultPermissions(boolean op) {
-        return ImmutableSet.copyOf(defaultPerms.get(op));
-    }
-
-    public void removePermission(Permission perm) {
-        removePermission(perm.getName());
-    }
-
-    public void removePermission(String name) {
-        permissions.remove(name.toLowerCase());
-    }
-
-    public void recalculatePermissionDefaults(Permission perm) {
-        if (permissions.containsValue(perm)) {
-            defaultPerms.get(true).remove(perm);
-            defaultPerms.get(false).remove(perm);
-
-            calculatePermissionDefault(perm);
-        }
-    }
-
-    private void calculatePermissionDefault(Permission perm) {
-        if ((perm.getDefault() == PermissionDefault.OP) || (perm.getDefault() == PermissionDefault.TRUE)) {
-            defaultPerms.get(true).add(perm);
-            dirtyPermissibles(true);
-        }
-        if ((perm.getDefault() == PermissionDefault.NOT_OP) || (perm.getDefault() == PermissionDefault.TRUE)) {
-            defaultPerms.get(false).add(perm);
-            dirtyPermissibles(false);
-        }
-    }
-
-    private void dirtyPermissibles(boolean op) {
-        Set<Permissible> permissibles = getDefaultPermSubscriptions(op);
-
-        for (Permissible p : permissibles) {
-            p.recalculatePermissions();
-        }
-    }
-
-    public void subscribeToPermission(String permission, Permissible permissible) {
-        String name = permission.toLowerCase();
-        Map<Permissible, Boolean> map = permSubs.get(name);
-
-        if (map == null) {
-            map = new WeakHashMap<Permissible, Boolean>();
-            permSubs.put(name, map);
-        }
-
-        map.put(permissible, true);
-    }
-
-    public void unsubscribeFromPermission(String permission, Permissible permissible) {
-        String name = permission.toLowerCase();
-        Map<Permissible, Boolean> map = permSubs.get(name);
-
-        if (map != null) {
-            map.remove(permissible);
-
-            if (map.isEmpty()) {
-                permSubs.remove(name);
-            }
-        }
-    }
-
-    public Set<Permissible> getPermissionSubscriptions(String permission) {
-        String name = permission.toLowerCase();
-        Map<Permissible, Boolean> map = permSubs.get(name);
-
-        if (map == null) {
-            return ImmutableSet.of();
-        } else {
-            return ImmutableSet.copyOf(map.keySet());
-        }
-    }
-
-    public void subscribeToDefaultPerms(boolean op, Permissible permissible) {
-        Map<Permissible, Boolean> map = defSubs.get(op);
-
-        if (map == null) {
-            map = new WeakHashMap<Permissible, Boolean>();
-            defSubs.put(op, map);
-        }
-
-        map.put(permissible, true);
-    }
-
-    public void unsubscribeFromDefaultPerms(boolean op, Permissible permissible) {
-        Map<Permissible, Boolean> map = defSubs.get(op);
-
-        if (map != null) {
-            map.remove(permissible);
-
-            if (map.isEmpty()) {
-                defSubs.remove(op);
-            }
-        }
-    }
-
-    public Set<Permissible> getDefaultPermSubscriptions(boolean op) {
-        Map<Permissible, Boolean> map = defSubs.get(op);
-
-        if (map == null) {
-            return ImmutableSet.of();
-        } else {
-            return ImmutableSet.copyOf(map.keySet());
-        }
-    }
-
-    public Set<Permission> getPermissions() {
-        return new HashSet<Permission>(permissions.values());
     }
 
     public boolean useTimings() {

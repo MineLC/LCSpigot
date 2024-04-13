@@ -16,8 +16,9 @@ public final class LCConfig {
     public final boolean logCommands;
     public final boolean allowConsole;
     public final boolean disableLogging;
+    public final boolean allowWeather;
 
-    LCConfig(String unknownCommand, int tickTime, int defaultTime, int containerUpdateDelay, int tickNextTickCap, boolean canSaveWorlds, ConfigKnockback knockback, boolean logCommands, boolean allowConsole, boolean disableLogging) {
+    LCConfig(String unknownCommand, int tickTime, int defaultTime, int containerUpdateDelay, int tickNextTickCap, boolean canSaveWorlds, ConfigKnockback knockback, boolean logCommands, boolean allowConsole, boolean disableLogging, boolean allowWeather) {
         this.unknownCommand = unknownCommand;
         this.tickTime = tickTime;
         this.containerUpdateDelay = containerUpdateDelay;
@@ -28,6 +29,7 @@ public final class LCConfig {
         this.logCommands = logCommands;
         this.allowConsole = allowConsole;
         this.disableLogging = disableLogging;
+        this.allowWeather = allowWeather;
     }
 
     public static LCConfig getConfig() {

@@ -100,12 +100,9 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
     private boolean mayHaveDelayedTasks;
     private boolean forceTicks;
     private boolean isOversleep = false;
-    private volatile boolean isReady;
     private long lastOverloadWarning;
     public long serverStartTime;
     public volatile Thread shutdownThread;
-    private long lastTick = 0;
-    private long catchupTime = 0;
 
     // CraftBukkit start
     public List<WorldServer> worlds = new ArrayList<WorldServer>();
@@ -486,7 +483,6 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
                 Arrays.fill( recentTps, 20 );
                 // PandaSpigot start - Modern tick loop
                 long start = System.nanoTime(), curTime, tickSection = start;
-                lastTick = start - TICK_TIME;
                 // PandaSpigot end
                 
                 while (this.isRunning) {
@@ -507,14 +503,11 @@ public abstract class MinecraftServer extends ReentrantIAsyncHandler<TasksPerTic
                         recentTps[2] = calcTps( recentTps[2], 0.9945, currentTps ); // 1/exp(5sec/15min)
                         tickSection = curTime;
                     }
-                    lastTick = curTime;
-
                     this.nextTickTime += 50L;
                     this.A(this::haveTime);
                     this.mayHaveDelayedTasks = true;
                     this.delayedTasksMaxNextTickTime = Math.max(getMillis() + 50L, this.nextTickTime);
                     this.waitUntilNextTick();
-                    this.isReady = true;
                     // PandaSpigot end
                 }
                 // Spigot end

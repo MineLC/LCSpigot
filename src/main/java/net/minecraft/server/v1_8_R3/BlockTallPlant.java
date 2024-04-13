@@ -48,35 +48,7 @@ public class BlockTallPlant extends BlockPlant implements IBlockFragilePlantElem
     }
 
     protected void e(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (!this.f(world, blockposition, iblockdata)) {
-            boolean flag = iblockdata.get(BlockTallPlant.HALF) == BlockTallPlant.EnumTallPlantHalf.UPPER;
-            BlockPosition blockposition1 = flag ? blockposition : blockposition.up();
-            BlockPosition blockposition2 = flag ? blockposition.down() : blockposition;
-            Object object = flag ? this : world.getType(blockposition1).getBlock();
-            Object object1 = flag ? world.getType(blockposition2).getBlock() : this;
 
-            if (object == this) {
-                world.setTypeAndData(blockposition1, Blocks.AIR.getBlockData(), 2);
-            }
-
-            if (object1 == this) {
-                world.setTypeAndData(blockposition2, Blocks.AIR.getBlockData(), 3);
-                if (!flag) {
-                    this.b(world, blockposition2, iblockdata, 0);
-                }
-            }
-
-        }
-    }
-
-    public boolean f(World world, BlockPosition blockposition, IBlockData iblockdata) {
-        if (iblockdata.get(BlockTallPlant.HALF) == BlockTallPlant.EnumTallPlantHalf.UPPER) {
-            return world.getType(blockposition.down()).getBlock() == this;
-        } else {
-            IBlockData iblockdata1 = world.getType(blockposition.up());
-
-            return iblockdata1.getBlock() == this && super.f(world, blockposition, iblockdata1);
-        }
     }
 
     public Item getDropType(IBlockData iblockdata, Random random, int i) {

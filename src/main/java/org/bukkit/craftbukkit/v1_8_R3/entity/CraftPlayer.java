@@ -96,8 +96,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         } else {
             server.getHandle().removeOp(getProfile());
         }
-
-        perm.recalculatePermissions();
     }
 
     public boolean isOnline() {
@@ -1010,7 +1008,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     public void disconnect(String reason) {
         conversationTracker.abandonAllConversations();
-        perm.clearPermissions();
     }
 
     @Override

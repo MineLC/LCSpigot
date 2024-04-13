@@ -10,9 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.permissions.Permissible;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.AbstractConstruct;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
@@ -221,9 +218,7 @@ public final class PluginDescriptionFile {
     private String prefix = null;
     private boolean database = false;
     private PluginLoadOrder order = PluginLoadOrder.POSTWORLD;
-    private List<Permission> permissions = null;
     private Map<?, ?> lazyPermissions = null;
-    private PermissionDefault defaultPerm = PermissionDefault.OP;
     private Set<PluginAwareness> awareness = ImmutableSet.of();
 
     public PluginDescriptionFile(final InputStream stream) throws InvalidDescriptionException {
@@ -672,147 +667,6 @@ public final class PluginDescriptionFile {
     }
 
     /**
-     * Gives the list of permissions the plugin will register at runtime,
-     * immediately proceding enabling. The format for defining permissions is
-     * a map from permission name to properties. To represent a map without
-     * any specific property, empty <a
-     * href="http://yaml.org/spec/current.html#id2502702">curly-braces</a> (
-     * <code>&#123;&#125;</code> ) may be used (as a null value is not
-     * accepted, unlike the {@link #getCommands() commands} above).
-     * <p>
-     * A list of optional properties for permissions:
-     * <table border=1>
-     * <caption>The permission section's description</caption>
-     * <tr>
-     *     <th>Node</th>
-     *     <th>Description</th>
-     *     <th>Example</th>
-     * </tr><tr>
-     *     <td><code>description</code></td>
-     *     <td>Plaintext (user-friendly) description of what the permission
-     *         is for.</td>
-     *     <td><blockquote><pre>description: Allows you to set yourself on fire</pre></blockquote></td>
-     * </tr><tr>
-     *     <td><code>default</code></td>
-     *     <td>The default state for the permission, as defined by {@link
-     *         Permission#getDefault()}. If not defined, it will be set to
-     *         the value of {@link PluginDescriptionFile#getPermissionDefault()}.
-     *         <p>
-     *         For reference:<ul>
-     *         <li><code>true</code> - Represents a positive assignment to
-     *             {@link Permissible permissibles}.
-     *         <li><code>false</code> - Represents no assignment to {@link
-     *             Permissible permissibles}.
-     *         <li><code>op</code> - Represents a positive assignment to
-     *             {@link Permissible#isOp() operator permissibles}.
-     *         <li><code>notop</code> - Represents a positive assignment to
-     *             {@link Permissible#isOp() non-operator permissibiles}.
-     *         </ul></td>
-     *     <td><blockquote><pre>default: true</pre></blockquote></td>
-     * </tr><tr>
-     *     <td><code>children</code></td>
-     *     <td>Allows other permissions to be set as a {@linkplain
-     *         Permission#getChildren() relation} to the parent permission.
-     *         When a parent permissions is assigned, child permissions are
-     *         respectively assigned as well.
-     *         <ul>
-     *         <li>When a parent permission is assigned negatively, child
-     *             permissions are assigned based on an inversion of their
-     *             association.
-     *         <li>When a parent permission is assigned positively, child
-     *             permissions are assigned based on their association.
-     *         </ul>
-     *         <p>
-     *         Child permissions may be defined in a number of ways:<ul>
-     *         <li>Children may be defined as a <a
-     *             href="http://en.wikipedia.org/wiki/YAML#Lists">list</a> of
-     *             names. Using a list will treat all children associated
-     *             positively to their parent.
-     *         <li>Children may be defined as a map. Each permission name maps
-     *             to either a boolean (representing the association), or a
-     *             nested permission definition (just as another permission).
-     *             Using a nested definition treats the child as a positive
-     *             association.
-     *         <li>A nested permission definition must be a map of these same
-     *             properties. To define a valid nested permission without
-     *             defining any specific property, empty curly-braces (
-     *             <code>&#123;&#125;</code> ) must be used.
-     *          <li>A nested permission may carry it's own nested permissions
-     *              as children, as they may also have nested permissions, and
-     *              so forth. There is no direct limit to how deep the
-     *              permission tree is defined.
-     *         </ul></td>
-     *     <td>As a list:
-     *         <blockquote><pre>children: [inferno.flagrate, inferno.burningdeaths]</pre></blockquote>
-     *         Or as a mapping:
-     *         <blockquote><pre>children:
-     *  inferno.flagrate: true
-     *  inferno.burningdeaths: true</pre></blockquote>
-     *         An additional example showing basic nested values can be seen
-     *         <a href="doc-files/permissions-example_plugin.yml">here</a>.
-     *         </td>
-     * </tr>
-     * </table>
-     * The permissions are structured as a hiearchy of <a
-     * href="http://yaml.org/spec/current.html#id2502325">nested mappings</a>.
-     * The primary (top-level, no intendentation) node is
-     * `<code>permissions</code>', while each individual permission name is
-     * indented, indicating it maps to some value (in our case, the
-     * properties of the table above).
-     * <p>
-     * Here is an example using some of the properties:<blockquote><pre>
-     *permissions:
-     *  inferno.*:
-     *    description: Gives access to all Inferno commands
-     *    children:
-     *      inferno.flagrate: true
-     *      inferno.burningdeaths: true
-     *  inferno.flagate:
-     *    description: Allows you to ignite yourself
-     *    default: true
-     *  inferno.burningdeaths:
-     *    description: Allows you to see how many times you have burned to death
-     *    default: true
-     *</pre></blockquote>
-     * Another example, with nested definitions, can be found <a
-     * href="doc-files/permissions-example_plugin.yml">here</a>.
-     * 
-     * @return the permissions this plugin will register
-     */
-    public List<Permission> getPermissions() {
-        if (permissions == null) {
-            if (lazyPermissions == null) {
-                permissions = ImmutableList.<Permission>of();
-            } else {
-                permissions = ImmutableList.copyOf(Permission.loadPermissions(lazyPermissions, "Permission node '%s' in plugin description file for " + getFullName() + " is invalid", defaultPerm));
-                lazyPermissions = null;
-            }
-        }
-        return permissions;
-    }
-
-    /**
-     * Gives the default {@link Permission#getDefault() default} state of
-     * {@link #getPermissions() permissions} registered for the plugin.
-     * <ul>
-     * <li>If not specified, it will be {@link PermissionDefault#OP}.
-     * <li>It is matched using {@link PermissionDefault#getByName(String)}
-     * <li>It only affects permissions that do not define the
-     *     <code>default</code> node.
-     * <li>It may be any value in {@link PermissionDefault}.
-     * </ul>
-     * <p>
-     * In the plugin.yml, this entry is named <code>default-permission</code>.
-     * <p>
-     * Example:<blockquote><pre>default-permission: NOT_OP</pre></blockquote>
-     *
-     * @return the default value for the plugin's permissions
-     */
-    public PermissionDefault getPermissionDefault() {
-        return defaultPerm;
-    }
-
-    /**
      * Gives a set of every {@link PluginAwareness} for a plugin. An awareness
      * dictates something that a plugin developer acknowledges when the plugin
      * is compiled. Some implementions may define extra awarenesses that are
@@ -1001,16 +855,6 @@ public final class PluginDescriptionFile {
             authors = ImmutableList.<String>of();
         }
 
-        if (map.get("default-permission") != null) {
-            try {
-                defaultPerm = PermissionDefault.getByName(map.get("default-permission").toString());
-            } catch (ClassCastException ex) {
-                throw new InvalidDescriptionException(ex, "default-permission is of wrong type");
-            } catch (IllegalArgumentException ex) {
-                throw new InvalidDescriptionException(ex, "default-permission is not a valid choice");
-            }
-        }
-
         if (map.get("awareness") instanceof Iterable) {
             Set<PluginAwareness> awareness = new HashSet<PluginAwareness>();
             try {
@@ -1061,7 +905,6 @@ public final class PluginDescriptionFile {
         map.put("version", version);
         map.put("database", database);
         map.put("order", order.toString());
-        map.put("default-permission", defaultPerm.toString());
 
         if (commands != null) {
             map.put("command", commands);

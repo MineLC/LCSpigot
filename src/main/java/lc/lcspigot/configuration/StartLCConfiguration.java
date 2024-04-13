@@ -36,7 +36,8 @@ public final class StartLCConfiguration {
             getKnockback(config),
             config.getBoolean("commands.log"),
             config.getBoolean("create-console-log-thread"),
-            config.getBoolean("disable-logging")
+            config.getBoolean("disable-logging"),
+            config.getBoolean("allow-weather")
         );
 
         LCConfig.setInstance(lcConfig);
