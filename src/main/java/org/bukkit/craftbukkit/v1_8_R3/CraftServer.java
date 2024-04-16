@@ -777,16 +777,7 @@ public final class CraftServer implements Server {
         }
 
         if (!handle.players.isEmpty()) {
-            List<Player> players = world.getPlayers();
-            World defaultWorld = (World)Bukkit.getWorlds().get(0);
-            Location spawnLocation = defaultWorld.getSpawnLocation();
-
-            while(spawnLocation.getBlock().getType() != Material.AIR || spawnLocation.getBlock().getRelative(BlockFace.UP).getType() != Material.AIR) {
-                spawnLocation.add(0.0, 1.0, 0.0);
-            }
-            for (final Player player : players) {
-                player.teleport(spawnLocation);
-            }
+            return false;
         }
 
         if (save && LCConfig.getConfig().canSaveWorlds) {

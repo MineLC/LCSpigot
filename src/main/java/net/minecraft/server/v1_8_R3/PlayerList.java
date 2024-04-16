@@ -282,7 +282,7 @@ public abstract class PlayerList {
 
         ChunkIOExecutor.adjustPoolSize(getPlayerCount());
         // CraftBukkit end
-        final PlayerJoinTabInfoEvent event = new PlayerJoinTabInfoEvent();
+        final PlayerJoinTabInfoEvent event = new PlayerJoinTabInfoEvent(cserver.getPlayer(entityplayer));
         EventsExecutor.execute(event);
         if (!event.isCancelled()) {
             // CraftBukkit start - sendAll above replaced with this loop

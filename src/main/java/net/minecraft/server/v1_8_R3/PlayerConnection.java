@@ -27,7 +27,6 @@ import org.bukkit.craftbukkit.v1_8_R3.event.CraftEventFactory;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftInventoryView;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_8_R3.util.CraftChatMessage;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -87,9 +86,6 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
     private final org.bukkit.craftbukkit.v1_8_R3.CraftServer server;
     private int lastDropTick = MinecraftServer.currentTick;
     private int dropCount = 0;
-    private static final int SURVIVAL_PLACE_DISTANCE_SQUARED = 6 * 6;
-    private static final int CREATIVE_PLACE_DISTANCE_SQUARED = 7 * 7;
-
     // Get position of last block hit for BlockDamageLevel.STOPPED
 
     public CraftPlayer getPlayer() {
@@ -168,6 +164,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
         PlayerConnectionUtils.ensureMainThread(packetplayinsteervehicle, this, this.player.u());
         this.player.a(packetplayinsteervehicle.a(), packetplayinsteervehicle.b(), packetplayinsteervehicle.c(), packetplayinsteervehicle.d());
     }
+
 
     public void a(PacketPlayInFlying packetplayinflying) {
         PlayerConnectionUtils.ensureMainThread(packetplayinflying, this, this.player.u());
@@ -338,6 +335,7 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             final BlockPosition position = new BlockPosition(player.locX, player.locY, player.locZ);
             final WorldServer worldserver = this.minecraftServer.getWorldServer(this.player.dimension);
             final Block block = worldserver.getType(position).getBlock();
+
             if ((flag1 || !worldserver.getWorldBorder().a(position) || block.u()) && !this.player.isSleeping() && block.getMaterial() != Material.SAND) {
                 this.a(this.o, this.p, this.q, f2, f3);
                 return;
@@ -601,19 +599,9 @@ public class PlayerConnection implements PacketListenerPlayIn, IUpdatePlayerList
             this.player.playerConnection.sendPacket(new PacketPlayOutChat(chatmessage));
             flag = true;
         } else {
-            if (getPlayer().getGameMode() != GameMode.CREATIVE) {
-                Location eyeLoc = this.getPlayer().getEyeLocation();
-                double reachDistance = NumberConversions.square(eyeLoc.getX() - blockposition.getX()) + NumberConversions.square(eyeLoc.getY() - blockposition.getY()) + NumberConversions.square(eyeLoc.getZ() - blockposition.getZ());
-                getPlayer().sendMessage(String.valueOf(reachDistance));
-                if (reachDistance >= 7) {
-                    return;
-                }
-            }          
-
             if (!worldserver.getWorldBorder().a(blockposition)) {
                 return;
             }
-            getPlayer().sendMessage("PACKET LOCATION: " + packetplayinblockplace.a().toString());
             if (this.checkMovement && this.player.e((double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D) < 64.0D && !this.minecraftServer.a(worldserver, blockposition, this.player)) {
                 always = throttled || !this.player.playerInteractManager.interact(this.player, worldserver, itemstack, blockposition, enumdirection, packetplayinblockplace.d(), packetplayinblockplace.e(), packetplayinblockplace.f());
             }
