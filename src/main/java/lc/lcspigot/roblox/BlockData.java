@@ -4,8 +4,8 @@ import org.bukkit.Material;
 
 public final class BlockData {
 
-    final int hashCode, x, y, z;
-    final Material material;
+    private final int hashCode, x, y, z;
+    private final Material material;
 
     BlockData(int hashcode, int x, int y, int z, Material material) {
         this.hashCode = hashcode;
@@ -15,7 +15,21 @@ public final class BlockData {
         this.material = material;
     }
 
+    public Material getMaterial() {
+        return material;
+    }
 
+    public int x() {
+        return x;
+    }
+
+    public int y() {
+        return y;
+    }
+
+    public int z() {
+        return z;
+    }
     @Override
     public int hashCode() {
         return hashCode;

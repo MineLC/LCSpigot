@@ -5,7 +5,7 @@ import lc.lcspigot.configuration.sections.ConfigKnockback;
 public final class LCConfig {
     private static LCConfig instance;
 
-    public final String unknownCommand, robloxUri;
+    public final String unknownCommand;
     public final int tickTime;
     public final int defaultTime;
     public final int containerUpdateDelay;
@@ -14,7 +14,7 @@ public final class LCConfig {
 
     public final boolean canSaveWorlds, logCommands, allowConsole, disableLogging, allowWeather, robloxSupport;
 
-    LCConfig(String unknownCommand, int tickTime, int defaultTime, int containerUpdateDelay, int tickNextTickCap, boolean canSaveWorlds, ConfigKnockback knockback, boolean logCommands, boolean allowConsole, boolean disableLogging, boolean allowWeather, boolean robloxSupport, String robloxUri) {
+    LCConfig(String unknownCommand, int tickTime, int defaultTime, int containerUpdateDelay, int tickNextTickCap, boolean canSaveWorlds, ConfigKnockback knockback, boolean logCommands, boolean allowConsole, boolean disableLogging, boolean allowWeather, boolean robloxSupport) {
         this.unknownCommand = unknownCommand;
         this.tickTime = tickTime;
         this.containerUpdateDelay = containerUpdateDelay;
@@ -27,7 +27,6 @@ public final class LCConfig {
         this.disableLogging = disableLogging;
         this.allowWeather = allowWeather;
         this.robloxSupport = robloxSupport;
-        this.robloxUri = robloxUri;
     }
 
     public static LCConfig getConfig() {

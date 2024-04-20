@@ -13,7 +13,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.tinylog.Logger;
 
 import lc.lcspigot.configuration.sections.ConfigKnockback;
-import lc.lcspigot.roblox.RobloxThread;
 
 public final class StartLCConfiguration {
 
@@ -39,21 +38,13 @@ public final class StartLCConfiguration {
             config.getBoolean("create-console-log-thread"),
             config.getBoolean("disable-logging"),
             config.getBoolean("allow-weather"),
-            getRobloxSupport(config),
-            config.getString("roblox-uri")
+            config.getBoolean("roblox-support")
         );
 
         LCConfig.setInstance(lcConfig);
     }
 
-    private boolean getRobloxSupport(final FileConfiguration config) {
-        if (config.getBoolean("roblox-support")) {
-            RobloxThread.iniciate();
-            return true;
-        }
-        RobloxThread.close();
-        return false;
-    }
+
 
     private ConfigKnockback getKnockback(final FileConfiguration config) {
         final ConfigKnockback knockback = new ConfigKnockback();

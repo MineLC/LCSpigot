@@ -7,14 +7,13 @@ import org.bukkit.Material;
 
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 
-
 public final class RobloxData {
 
     private static RobloxData instance;
 
-    final Set<BlockData> blocks = new HashSet<>();
-    final Set<EntityPlayer> joins = new HashSet<>();
-    final Set<EntityPlayer> quits = new HashSet<>();
+    private final Set<BlockData> blocks = new HashSet<>();
+    private final Set<EntityPlayer> joins = new HashSet<>();
+    private final Set<EntityPlayer> quits = new HashSet<>();
 
     public void playerQuit(final EntityPlayer player) {
         quits.add(player);
@@ -40,7 +39,7 @@ public final class RobloxData {
         return hash;
     }
 
-    void clear() {
+    public void clear() {
         blocks.clear();
         if (!quits.isEmpty()) {
             quits.clear();
@@ -48,6 +47,18 @@ public final class RobloxData {
         if (!joins.isEmpty()) {
             joins.clear();
         }
+    }
+
+    public Set<BlockData> getBlocks() {
+        return blocks;
+    }
+
+    public Set<EntityPlayer> getJoins() {
+        return joins;
+    }
+
+    public Set<EntityPlayer> getQuits() {
+        return quits;
     }
 
     public static RobloxData getInstance() {
