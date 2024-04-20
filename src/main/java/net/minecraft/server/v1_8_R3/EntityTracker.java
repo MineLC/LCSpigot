@@ -1,8 +1,6 @@
 package net.minecraft.server.v1_8_R3;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.Callable;

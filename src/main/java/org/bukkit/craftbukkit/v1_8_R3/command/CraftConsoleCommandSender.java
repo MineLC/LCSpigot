@@ -2,18 +2,12 @@ package org.bukkit.craftbukkit.v1_8_R3.command;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.conversations.Conversation;
-import org.bukkit.conversations.ConversationAbandonedEvent;
-import org.bukkit.conversations.ManuallyAbandonedConversationCanceller;
-import org.bukkit.craftbukkit.v1_8_R3.conversations.ConversationTracker;
 import org.tinylog.Logger;
 
 /**
  * Represents CLI input from a console
  */
 public class CraftConsoleCommandSender extends ServerCommandSender implements ConsoleCommandSender {
-
-    protected final ConversationTracker conversationTracker = new ConversationTracker();
 
     protected CraftConsoleCommandSender() {
         super();
@@ -43,26 +37,6 @@ public class CraftConsoleCommandSender extends ServerCommandSender implements Co
 
     public void setOp(boolean value) {
         throw new UnsupportedOperationException("Cannot change operator status of server console");
-    }
-
-    public boolean beginConversation(Conversation conversation) {
-        return conversationTracker.beginConversation(conversation);
-    }
-
-    public void abandonConversation(Conversation conversation) {
-        conversationTracker.abandonConversation(conversation, new ConversationAbandonedEvent(conversation, new ManuallyAbandonedConversationCanceller()));
-    }
-
-    public void abandonConversation(Conversation conversation, ConversationAbandonedEvent details) {
-        conversationTracker.abandonConversation(conversation, details);
-    }
-
-    public void acceptConversationInput(String input) {
-        conversationTracker.acceptConversationInput(input);
-    }
-
-    public boolean isConversing() {
-        return conversationTracker.isConversing();
     }
 
     @Override

@@ -1,8 +1,9 @@
 package org.bukkit.craftbukkit.v1_8_R3.entity;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.authlib.GameProfile;
+
+import gnu.trove.set.hash.TIntHashSet;
 import io.netty.buffer.Unpooled;
 import lc.lcspigot.commands.CommandStorage;
 
@@ -17,7 +18,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 
@@ -29,11 +29,7 @@ import org.bukkit.*;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.serialization.DelegateDeserialization;
-import org.bukkit.conversations.Conversation;
-import org.bukkit.conversations.ConversationAbandonedEvent;
-import org.bukkit.conversations.ManuallyAbandonedConversationCanceller;
 import org.bukkit.craftbukkit.v1_8_R3.block.CraftSign;
-import org.bukkit.craftbukkit.v1_8_R3.conversations.ConversationTracker;
 import org.bukkit.craftbukkit.v1_8_R3.map.CraftMapView;
 import org.bukkit.craftbukkit.v1_8_R3.map.RenderData;
 import org.bukkit.craftbukkit.v1_8_R3.scoreboard.CraftScoreboard;
@@ -64,9 +60,10 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     private long firstPlayed = 0;
     private long lastPlayed = 0;
     private boolean hasPlayedBefore = false;
-    private final ConversationTracker conversationTracker = new ConversationTracker();
+
     private final Set<String> channels = new HashSet<String>();
-    private final Set<UUID> hiddenPlayers = new HashSet<UUID>();
+    private final TIntHashSet hiddenPlayers = new TIntHashSet();
+
     private int hash = 0;
     private double health = 20;
     private boolean scaledHealth = false;
@@ -148,9 +145,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
 
     @Override
     public void sendMessage(String message) {
-        if (!conversationTracker.isConversingModaly()) {
-            this.sendRawMessage(message);
-        }
+        this.sendRawMessage(message);
     }
 
     @Override
@@ -749,8 +744,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         Validate.notNull(player, "hidden player cannot be null");
         if (getHandle().playerConnection == null) return;
         if (equals(player)) return;
-        if (hiddenPlayers.contains(player.getUniqueId())) return;
-        hiddenPlayers.add(player.getUniqueId());
+        if (hiddenPlayers.contains(player.getEntityId())) return;
+        hiddenPlayers.add(player.getEntityId());
 
         //remove this player from the hidden player's EntityTrackerEntry
         EntityTracker tracker = ((WorldServer) entity.world).tracker;
@@ -769,8 +764,8 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         Validate.notNull(player, "shown player cannot be null");
         if (getHandle().playerConnection == null) return;
         if (equals(player)) return;
-        if (!hiddenPlayers.contains(player.getUniqueId())) return;
-        hiddenPlayers.remove(player.getUniqueId());
+        if (!hiddenPlayers.contains(player.getEntityId())) return;
+        hiddenPlayers.remove(player.getEntityId());
 
         EntityTracker tracker = ((WorldServer) entity.world).tracker;
         EntityPlayer other = ((CraftPlayer) player).getHandle();
@@ -784,12 +779,12 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     public void removeDisconnectingPlayer(Player player) {
-        hiddenPlayers.remove(player.getUniqueId());
+        hiddenPlayers.remove(player.getEntityId());
     }
 
     @Override
     public boolean canSee(Player player) {
-        return !hiddenPlayers.contains(player.getUniqueId());
+        return !hiddenPlayers.contains(player.getEntityId());
     }
 
     @Override
@@ -886,31 +881,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
     }
 
     @Override
-    public boolean beginConversation(Conversation conversation) {
-        return conversationTracker.beginConversation(conversation);
-    }
-
-    @Override
-    public void abandonConversation(Conversation conversation) {
-        conversationTracker.abandonConversation(conversation, new ConversationAbandonedEvent(conversation, new ManuallyAbandonedConversationCanceller()));
-    }
-
-    @Override
-    public void abandonConversation(Conversation conversation, ConversationAbandonedEvent details) {
-        conversationTracker.abandonConversation(conversation, details);
-    }
-
-    @Override
-    public void acceptConversationInput(String input) {
-        conversationTracker.acceptConversationInput(input);
-    }
-
-    @Override
-    public boolean isConversing() {
-        return conversationTracker.isConversing();
-    }
-
-    @Override
     public void sendPluginMessage(Plugin source, String channel, byte[] message) {
         StandardMessenger.validatePluginMessage(server.getMessenger(), source, channel, message);
         if (getHandle().playerConnection == null) return;
@@ -1004,10 +974,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         }
         getHandle().setContainerData(container, prop.getId(), value);
         return true;
-    }
-
-    public void disconnect(String reason) {
-        conversationTracker.abandonAllConversations();
     }
 
     @Override
@@ -1287,18 +1253,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
         public String getLocale()
         {
            return getHandle().locale;
-        }
-
-        @Override
-        public Set<Player> getHiddenPlayers()
-        {
-            Set<Player> ret = new HashSet<Player>();
-            for ( UUID u : hiddenPlayers )
-            {
-                ret.add( getServer().getPlayer( u ) );
-            }
-
-            return java.util.Collections.unmodifiableSet( ret );
         }
 
         @Override

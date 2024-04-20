@@ -5,7 +5,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -37,12 +36,11 @@ public final class RobloxThread extends Thread {
         if (post == null) {
             return;
         }
-        RobloxData.getInstance().blocks = new HashSet<>();
-
+        RobloxData.getInstance().clear();
         try {
             final HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(LCConfig.getConfig().robloxUri))
-                .POST(HttpRequest.BodyPublishers.ofString(post))
+                .PUT(HttpRequest.BodyPublishers.ofString(post))
                 .build();
             client.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
@@ -59,6 +57,10 @@ public final class RobloxThread extends Thread {
         builder.append('{');
         appendPlayers(builder);
         builder.append(',');
+        appendPlayers("joins", builder, RobloxData.getInstance().joins);
+        builder.append(',');
+        appendPlayers("quits", builder, RobloxData.getInstance().quits);
+        builder.append(',');
         appendBlocks(builder);
         builder.append('}');
 
@@ -69,7 +71,10 @@ public final class RobloxThread extends Thread {
         final List<EntityPlayer> players = MinecraftServer.getServer().getPlayerList().players;
         int remainPlayers = players.size();
         builder.append("\"players\": [");
-
+        if (remainPlayers == 0) {
+            builder.append(']');
+            return;
+        }
         for (final EntityPlayer player : players) {
             --remainPlayers;
             builder.append('\"');
@@ -117,6 +122,26 @@ public final class RobloxThread extends Thread {
         }
     }
 
+    private void appendPlayers(final String key, final StringBuilder builder, final Set<EntityPlayer> players) {
+        builder.append('"');
+        builder.append(key);
+        builder.append('"');
+        builder.append('[');
+        int remainPlayers = players.size();
+        if (remainPlayers == 0) {
+            builder.append(']');
+            return;
+        }
+        for (final EntityPlayer player : players) {
+            --remainPlayers;
+            builder.append(player.getName());
+            if (remainPlayers == 0) {
+                builder.append("\"]");        
+                continue;
+            }
+            builder.append("\",");
+        }
+    }
     public static void iniciate() {
         RobloxData.start();
         thread = new RobloxThread();

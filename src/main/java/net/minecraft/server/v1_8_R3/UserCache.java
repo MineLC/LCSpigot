@@ -109,7 +109,6 @@ public class UserCache {
             date = calendar.getTime();
         }
 
-        String s = gameprofile.getName().toLowerCase(Locale.ROOT);
         UserCache.UserCacheEntry usercache_usercacheentry = new UserCache.UserCacheEntry(gameprofile, date, null);
 
         if (this.d.containsKey(uuid)) {

@@ -1273,29 +1273,6 @@ public final class CraftServer implements Server {
         return warningState;
     }
 
-    public List<String> tabCompleteChat(Player player, String message) {
-        List<String> completions = new ArrayList<String>();
-        PlayerChatTabCompleteEvent event = new PlayerChatTabCompleteEvent(player, message, completions);
-        String token = event.getLastToken();
-        for (Player p : getOnlinePlayers()) {
-            if (player.canSee(p) && StringUtil.startsWithIgnoreCase(p.getName(), token)) {
-                completions.add(p.getName());
-            }
-        }
-        pluginManager.callEvent(event);
-
-        Iterator<?> it = completions.iterator();
-        while (it.hasNext()) {
-            Object current = it.next();
-            if (!(current instanceof String)) {
-                // Sanity
-                it.remove();
-            }
-        }
-        Collections.sort(completions, String.CASE_INSENSITIVE_ORDER);
-        return completions;
-    }
-
     @Override
     public CraftItemFactory getItemFactory() {
         return CraftItemFactory.instance();

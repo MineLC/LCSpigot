@@ -5,16 +5,16 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
+
 import lc.lcspigot.configuration.LCConfig;
 import lc.lcspigot.events.PlayerJoinTabInfoEvent;
-import lc.lcspigot.listeners.ListenerData;
 import lc.lcspigot.listeners.internal.EventsExecutor;
+import lc.lcspigot.roblox.RobloxData;
 
 import java.io.File;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EventListener;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +34,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.util.Vector;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 // CraftBukkit end
@@ -75,13 +74,6 @@ public abstract class PlayerList {
         String s = gameprofile1 == null ? gameprofile.getName() : gameprofile1.getName();
 
         usercache.a(gameprofile);
-        NBTTagCompound nbttagcompound = this.a(entityplayer);
-        // CraftBukkit start - Better rename detection
-        if (nbttagcompound != null && nbttagcompound.hasKey("bukkit")) {
-            NBTTagCompound bukkit = nbttagcompound.getCompound("bukkit");
-            s = bukkit.hasKeyOfType("lastKnownName", 8) ? bukkit.getString("lastKnownName") : s;
-        }
-        // CraftBukkit end
 
         entityplayer.spawnIn(this.server.getWorldServer(entityplayer.dimension));
         entityplayer.playerInteractManager.a((WorldServer) entityplayer.world);
@@ -154,17 +146,6 @@ public abstract class PlayerList {
         }
 
         entityplayer.syncInventory();
-        if (nbttagcompound != null && nbttagcompound.hasKeyOfType("Riding", 10)) {
-            Entity entity = EntityTypes.a(nbttagcompound.getCompound("Riding"), (World) worldserver);
-
-            if (entity != null) {
-                entity.attachedToPlayer = true;
-                worldserver.addEntity(entity);
-                entityplayer.mount(entity);
-                entity.attachedToPlayer = false;
-            }
-        }
-
         // CraftBukkit - Moved from above, added world
         Logger.info(entityplayer.getName() + "[" + s1 + "] logged in with entity id " + entityplayer.getId() + " at ([" + entityplayer.world.worldData.getName() + "]" + entityplayer.locX + ", " + entityplayer.locY + ", " + entityplayer.locZ + ")");
     }
@@ -243,21 +224,6 @@ public abstract class PlayerList {
         return PlayerChunkMap.getFurthestViewableBlock(this.s());
     }
 
-    public NBTTagCompound a(EntityPlayer entityplayer) {
-        NBTTagCompound nbttagcompound = this.server.worlds.get(0).getWorldData().i(); // CraftBukkit
-        NBTTagCompound nbttagcompound1;
-
-        if (entityplayer.getName().equals(this.server.S()) && nbttagcompound != null) {
-            entityplayer.f(nbttagcompound);
-            nbttagcompound1 = nbttagcompound;
-            Logger.debug("loading single player");
-        } else {
-            nbttagcompound1 = this.playerFileData.load(entityplayer);
-        }
-
-        return nbttagcompound1;
-    }
-
     protected void savePlayerFile(EntityPlayer entityplayer) {
 
     }
@@ -302,6 +268,7 @@ public abstract class PlayerList {
             this.a(entityplayer, (WorldServer) null);
         }
         // CraftBukkit end
+        RobloxData.getInstance().playerJoin(entityplayer);
     }
 
     public void d(EntityPlayer entityplayer) {
@@ -314,7 +281,6 @@ public abstract class PlayerList {
 
         PlayerQuitEvent playerQuitEvent = new PlayerQuitEvent(cserver.getPlayer(entityplayer), "\u00A7e" + entityplayer.getName() + " left the game.");
         cserver.getPluginManager().callEvent(playerQuitEvent);
-        entityplayer.getBukkitEntity().disconnect(playerQuitEvent.getQuitMessage());
         // CraftBukkit end
         
         this.savePlayerFile(entityplayer);
@@ -353,6 +319,8 @@ public abstract class PlayerList {
 
         ChunkIOExecutor.adjustPoolSize(this.getPlayerCount()); // CraftBukkit
 
+        RobloxData.getInstance().playerQuit(entityplayer);
+    
         return playerQuitEvent.getQuitMessage(); // CraftBukkit
     }
 
@@ -897,9 +865,7 @@ public abstract class PlayerList {
     }
 
     public void sendPacketNearby(EntityHuman entityhuman, double d0, double d1, double d2, double d3, int i, Packet packet) {
-        for (int j = 0; j < this.players.size(); ++j) {
-            EntityPlayer entityplayer = (EntityPlayer) this.players.get(j);
-
+        for (final EntityPlayer entityplayer : this.players) {
             // CraftBukkit start - Test if player receiving packet can see the source of the packet
             if (entityhuman != null && entityhuman instanceof EntityPlayer && !entityplayer.getBukkitEntity().canSee(((EntityPlayer) entityhuman).getBukkitEntity())) {
                continue;
@@ -912,7 +878,7 @@ public abstract class PlayerList {
                 double d6 = d2 - entityplayer.locZ;
 
                 if (d4 * d4 + d5 * d5 + d6 * d6 < d3 * d3) {
-                    entityplayer.playerConnection.sendPacket(packet);
+                    entityplayer.playerConnection.networkManager.handle(packet);
                 }
             }
         }

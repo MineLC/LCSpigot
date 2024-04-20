@@ -12,7 +12,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.Title;
 import org.bukkit.WeatherType;
-import org.bukkit.conversations.Conversable;
 import org.bukkit.map.MapView;
 import org.bukkit.plugin.messaging.PluginMessageRecipient;
 import org.bukkit.scoreboard.Scoreboard;
@@ -20,7 +19,7 @@ import org.bukkit.scoreboard.Scoreboard;
 /**
  * Represents a player, connected or not
  */
-public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginMessageRecipient {
+public interface Player extends HumanEntity, OfflinePlayer, PluginMessageRecipient {
 
     /**
      * Gets the "friendly" name to display of this player. This may include

@@ -50,7 +50,6 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.InventoryView;
-import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.util.NumberConversions;
 // CraftBukkit end
 
