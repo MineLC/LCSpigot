@@ -432,7 +432,7 @@ public class PlayerInteractManager {
                 TileEntity tileentity = world.getTileEntity(blockposition);
 
                 if (tileentity instanceof ITileInventory) {
-                    Block block = world.getType(blockposition).getBlock();
+                    Block block = blockdata.getBlock();
                     ITileInventory itileinventory = (ITileInventory) tileentity;
 
                     if (itileinventory instanceof TileEntityChest && block instanceof BlockChest) {

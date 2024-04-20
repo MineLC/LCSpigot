@@ -1,9 +1,9 @@
 package lc.lcspigot.commands.vanilla;
 
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_8_R3.CraftOfflinePlayer;
+import org.bukkit.entity.Player;
 
 import lc.lcspigot.commands.Command;
 
@@ -19,7 +19,12 @@ final class DeopCommand implements Command {
             send(sender, "Format: /deop (player)");
             return;
         }
-
+        final Player player = Bukkit.getPlayer(args[0]);
+        if (player != null) {
+            player.setOp(false);
+            send(sender, "Now, the player " + player.getName() + " is deop");
+            return;
+        }
         @SuppressWarnings("deprecation")
         final CraftOfflinePlayer offlinePlayer = (CraftOfflinePlayer) Bukkit.getOfflinePlayer(args[0]);
         if (offlinePlayer == null) {

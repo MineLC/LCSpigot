@@ -14,6 +14,10 @@ import java.util.concurrent.Callable;
 
 // CraftBukkit start
 import com.google.common.collect.Maps;
+
+import lc.lcspigot.configuration.LCConfig;
+import lc.lcspigot.roblox.RobloxData;
+
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -379,7 +383,9 @@ public abstract class World implements IBlockAccess {
             // CraftBukkit end
 
             IBlockData iblockdata1 = chunk.a(blockposition, iblockdata);
-
+            if (LCConfig.getConfig().robloxSupport) {
+                RobloxData.getInstance().changedBlock(org.bukkit.Material.getMaterial(CraftMagicNumbers.getId(block)), blockposition.getX(), blockposition.getY(), blockposition.getZ());
+            }
             if (iblockdata1 == null) {
                 // CraftBukkit start - remove blockstate if failed
                 if (this.captureBlockStates) {

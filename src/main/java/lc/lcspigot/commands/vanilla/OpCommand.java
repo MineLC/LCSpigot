@@ -1,7 +1,6 @@
 package lc.lcspigot.commands.vanilla;
 
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

@@ -14,6 +14,9 @@ commands:
 
 create-console-log-thread: true
 
+roblox-support: false
+roblox-uri: ""
+
 container-update-delay: 4 # How many ticks wait to update the player inventory. Vanilla: 1
 
 # How many ticks wait to disable the redstone or block physics. Reduce this value can HEAVY increase performance.

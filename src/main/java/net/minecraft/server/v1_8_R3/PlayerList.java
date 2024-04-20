@@ -961,6 +961,9 @@ public abstract class PlayerList {
         } else {
             entityplayer.playerConnection.sendPacket(new PacketPlayOutUpdateTime(LCConfig.getConfig().defaultTime, LCConfig.getConfig().defaultTime, false));
         }
+        if (!LCConfig.getConfig().allowWeather) {
+            return;
+        }
         if (worldserver.S()) {
             // CraftBukkit start - handle player weather
             // entityplayer.playerConnection.sendPacket(new PacketPlayOutGameStateChange(1, 0.0F));

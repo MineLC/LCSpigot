@@ -35,11 +35,13 @@ final class GiveCommand implements Command {
         final Player player = (Player)sender;
         if (args.length != 2) {
             player.getInventory().addItem(new ItemStack(material, 1));
+            sendWithColor(sender, "&aItem " + material + " x1");
             return;
         }
         try {
             final int amount = Integer.parseInt(args[1]);
             player.getInventory().addItem(new ItemStack(material, amount));
+            sendWithColor(sender, "&aItem " + material + " x" + amount);
         } catch (NumberFormatException e) {
             sendWithColor(sender, "&cThe amount need be positive");
         }
@@ -47,6 +49,6 @@ final class GiveCommand implements Command {
 
     @Override
     public String[] tab(CommandSender sender, String[] args) {
-        return (args.length == 0) ? (String[])Material.getMaterialNames().toArray() : none();
+        return (args.length == 0) ? Material.getMaterialNames().toArray(new String[0]) : none();
     }
 }
