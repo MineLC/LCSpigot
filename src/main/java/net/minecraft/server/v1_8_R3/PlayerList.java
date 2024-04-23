@@ -141,7 +141,10 @@ public abstract class PlayerList {
 
         while (iterator.hasNext()) {
             MobEffect mobeffect = (MobEffect) iterator.next();
-
+            if (mobeffect.getDuration() <= 0) {
+                entityplayer.removeEffect(mobeffect.getEffectId());
+                continue;
+            }
             playerconnection.sendPacket(new PacketPlayOutEntityEffect(entityplayer.getId(), mobeffect));
         }
 
@@ -268,7 +271,6 @@ public abstract class PlayerList {
             this.a(entityplayer, (WorldServer) null);
         }
         // CraftBukkit end
-        RobloxData.getInstance().playerJoin(entityplayer);
     }
 
     public void d(EntityPlayer entityplayer) {
@@ -318,9 +320,6 @@ public abstract class PlayerList {
         // CraftBukkit end
 
         ChunkIOExecutor.adjustPoolSize(this.getPlayerCount()); // CraftBukkit
-
-        RobloxData.getInstance().playerQuit(entityplayer);
-    
         return playerQuitEvent.getQuitMessage(); // CraftBukkit
     }
 
@@ -524,6 +523,10 @@ public abstract class PlayerList {
         entityplayer.updateAbilities();
         for (Object o1 : entityplayer.getEffects()) {
             MobEffect mobEffect = (MobEffect) o1;
+            if (mobEffect.getDuration() <= 0) {
+                entityplayer.removeEffect(mobEffect.getEffectId());
+                continue;
+            }
             entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityEffect(entityplayer.getId(), mobEffect));
         }
         // entityplayer1.syncInventory();

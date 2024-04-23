@@ -65,7 +65,7 @@ public final class RobloxData {
         return instance;
     }
 
-    static void start() {
+    public static void start() {
         instance = new RobloxData();
     }
 }

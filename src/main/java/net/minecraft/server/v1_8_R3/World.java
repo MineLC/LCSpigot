@@ -364,6 +364,10 @@ public abstract class World implements IBlockAccess {
     }
 
     public boolean setTypeAndData(BlockPosition blockposition, IBlockData iblockdata, int i) {
+        return setTypeAndData(blockposition, iblockdata, i, false);
+    }
+
+    public boolean setTypeAndData(BlockPosition blockposition, IBlockData iblockdata, int i, boolean robloxBlock) {
         // CraftBukkit start - tree generation
         // CraftBukkit end
         if (!this.isValidLocation(blockposition)) {
@@ -383,7 +387,7 @@ public abstract class World implements IBlockAccess {
             // CraftBukkit end
 
             IBlockData iblockdata1 = chunk.a(blockposition, iblockdata);
-            if (LCConfig.getConfig().robloxSupport) {
+            if (!robloxBlock && LCConfig.getConfig().robloxSupport) {
                 RobloxData.getInstance().changedBlock(org.bukkit.Material.getMaterial(CraftMagicNumbers.getId(block)), blockposition.getX(), blockposition.getY(), blockposition.getZ());
             }
             if (iblockdata1 == null) {

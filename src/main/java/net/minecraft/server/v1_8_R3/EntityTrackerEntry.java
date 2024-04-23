@@ -372,7 +372,10 @@ public class EntityTrackerEntry {
 
                         while (iterator.hasNext()) {
                             MobEffect mobeffect = (MobEffect) iterator.next();
-
+                            if (mobeffect.getDuration() <= 0) {
+                                entityliving.removeEffect(mobeffect.getEffectId());
+                                continue;
+                            }
                             entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityEffect(this.tracker.getId(), mobeffect));
                         }
                     }

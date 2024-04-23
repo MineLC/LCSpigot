@@ -77,15 +77,16 @@ public class MobEffect {
     }
 
     public boolean tick(EntityLiving entityliving) {
-        if (this.duration > 0) {
+        if (this.duration >= 1) {
             if (MobEffectList.byId[this.effectId].a(this.duration, this.amplification)) {
                 this.b(entityliving);
             }
 
             this.i();
+            return true;
         }
 
-        return this.duration > 0;
+        return false;
     }
 
     private int i() {

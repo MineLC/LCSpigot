@@ -4,14 +4,8 @@ import java.util.Random;
 
 public class BiomeJungle extends BiomeBase {
 
-    private boolean aD;
-    private static final IBlockData aE = Blocks.LOG.getBlockData().set(BlockLog1.VARIANT, BlockWood.EnumLogVariant.JUNGLE);
-    private static final IBlockData aF = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.JUNGLE).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
-    private static final IBlockData aG = Blocks.LEAVES.getBlockData().set(BlockLeaves1.VARIANT, BlockWood.EnumLogVariant.OAK).set(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
-
     public BiomeJungle(int i, boolean flag) {
         super(i);
-        this.aD = flag;
         if (flag) {
             this.as.A = 2;
         } else {

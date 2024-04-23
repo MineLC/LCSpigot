@@ -2,15 +2,15 @@ package net.minecraft.server.v1_8_R3;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import com.google.common.collect.Maps;
 
+import gnu.trove.iterator.TIntIterator;
+import gnu.trove.iterator.TIntObjectIterator;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import lc.lcspigot.configuration.LCConfig;
 import lc.lcspigot.configuration.sections.ConfigKnockback;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -33,7 +33,7 @@ public abstract class EntityLiving extends Entity {
     private static final AttributeModifier b = (new AttributeModifier(EntityLiving.a, "Sprinting speed boost", 0.30000001192092896D, 2)).a(false);
     private AttributeMapBase c;
     public CombatTracker combatTracker = new CombatTracker(this); // CraftBukkit - public
-    public final Map<Integer, MobEffect> effects = Maps.newHashMap(); // CraftBukkit - public
+    public final TIntObjectHashMap<MobEffect> effects = new TIntObjectHashMap<>(); // CraftBukkit - public
     private final ItemStack[] h = new ItemStack[5];
     public boolean ar;
     public int as;
@@ -398,12 +398,10 @@ public abstract class EntityLiving extends Entity {
 
         if (!this.effects.isEmpty()) {
             NBTTagList nbttaglist = new NBTTagList();
-            Iterator iterator = this.effects.values().iterator();
+            Collection<MobEffect> effectsValues = this.effects.valueCollection();
 
-            while (iterator.hasNext()) {
-                MobEffect mobeffect = (MobEffect) iterator.next();
-
-                nbttaglist.add(mobeffect.a(new NBTTagCompound()));
+            for (MobEffect effect : effectsValues) {
+                nbttaglist.add(effect.a(new NBTTagCompound()));
             }
 
             nbttagcompound.set("ActiveEffects", nbttaglist);
@@ -466,17 +464,19 @@ public abstract class EntityLiving extends Entity {
     // CraftBukkit end
 
     protected void bi() {
-        Iterator iterator = this.effects.keySet().iterator();
+        TIntObjectIterator<MobEffect> iterator = this.effects.iterator();
 
         isTickingEffects = true; // CraftBukkit
         while (iterator.hasNext()) {
-            Integer integer = (Integer) iterator.next();
-            MobEffect mobeffect = (MobEffect) this.effects.get(integer);
+            MobEffect mobeffect = iterator.value();
 
             if (!mobeffect.tick(this)) {
                 if (!this.world.isClientSide) {
                     iterator.remove();
                     this.b(mobeffect);
+                    if (this instanceof EntityPlayer player) {
+                        player.playerConnection.sendPacket(new PacketPlayOutRemoveEntityEffect(this.getId(), mobeffect));
+                    }
                 }
             } else if (mobeffect.getDuration() % 600 == 0) {
                 this.a(mobeffect, false);
@@ -533,9 +533,9 @@ public abstract class EntityLiving extends Entity {
             this.bj();
             this.setInvisible(false);
         } else {
-            int i = PotionBrewer.a(this.effects.values());
+            int i = PotionBrewer.a(this.effects.valueCollection());
 
-            this.datawatcher.watch(8, Byte.valueOf((byte) (PotionBrewer.b(this.effects.values()) ? 1 : 0)));
+            this.datawatcher.watch(8, Byte.valueOf((byte) (PotionBrewer.b(this.effects.valueCollection()) ? 1 : 0)));
             this.datawatcher.watch(7, Integer.valueOf(i));
             this.setInvisible(this.hasEffect(MobEffectList.INVISIBILITY.id));
         }
@@ -548,7 +548,7 @@ public abstract class EntityLiving extends Entity {
     }
 
     public void removeAllEffects() {
-        Iterator iterator = this.effects.keySet().iterator();
+        TIntIterator iterator = this.effects.keySet().iterator();
 
         while (iterator.hasNext()) {
             Integer integer = (Integer) iterator.next();
@@ -563,7 +563,7 @@ public abstract class EntityLiving extends Entity {
     }
 
     public Collection<MobEffect> getEffects() {
-        return this.effects.values();
+        return this.effects.valueCollection();
     }
 
     public boolean hasEffect(int i) {
