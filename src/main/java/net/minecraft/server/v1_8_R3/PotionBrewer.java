@@ -45,19 +45,19 @@ public class PotionBrewer {
         return a(i, 5, 4, 3, 2, 1);
     }
 
-    public static int a(Collection<MobEffect> collection) {
-        int i = 3694022;
+    public static int a(MobEffect[] collection) {
+        int ia = 3694022;
 
-        if (collection != null && !collection.isEmpty()) {
+        if (collection != null && collection.length != 0) {
             float f = 0.0F;
             float f1 = 0.0F;
             float f2 = 0.0F;
             float f3 = 0.0F;
-            Iterator iterator = collection.iterator();
-
-            while (iterator.hasNext()) {
-                MobEffect mobeffect = (MobEffect) iterator.next();
-
+            for (int i = 0; i < collection.length; i++) {
+                final MobEffect mobeffect = collection[i];
+                if (mobeffect == null) {
+                    continue;
+                }
                 if (mobeffect.isShowParticles()) {
                     int j = MobEffectList.byId[mobeffect.getEffectId()].k();
 
@@ -79,24 +79,21 @@ public class PotionBrewer {
                 return (int) f << 16 | (int) f1 << 8 | (int) f2;
             }
         } else {
-            return i;
+            return ia;
         }
     }
 
-    public static boolean b(Collection<MobEffect> collection) {
-        Iterator iterator = collection.iterator();
-
-        MobEffect mobeffect;
-
-        do {
-            if (!iterator.hasNext()) {
-                return true;
+    public static boolean b(MobEffect[] effects) {
+        for (int i = 0; i < effects.length; i++) {
+            final MobEffect effect = effects[i];
+            if (effect == null) {
+                continue;
             }
-
-            mobeffect = (MobEffect) iterator.next();
-        } while (mobeffect.isAmbient());
-
-        return false;
+            if (effect.isAmbient()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static String c(int i) {

@@ -9,7 +9,6 @@ import io.netty.buffer.Unpooled;
 import lc.lcspigot.configuration.LCConfig;
 import lc.lcspigot.events.PlayerJoinTabInfoEvent;
 import lc.lcspigot.listeners.internal.EventsExecutor;
-import lc.lcspigot.roblox.RobloxData;
 
 import java.io.File;
 import java.net.SocketAddress;
@@ -137,15 +136,13 @@ public abstract class PlayerList {
             entityplayer.setResourcePack(this.server.getResourcePack(), this.server.getResourcePackHash());
         }
 
-        Iterator iterator = entityplayer.getEffects().iterator();
+        MobEffect[] effects = entityplayer.getEffects();
 
-        while (iterator.hasNext()) {
-            MobEffect mobeffect = (MobEffect) iterator.next();
-            if (mobeffect.getDuration() <= 0) {
-                entityplayer.removeEffect(mobeffect.getEffectId());
-                continue;
+        for (int i = 0; i < effects.length; i++) {
+            final MobEffect effect = effects[i];
+            if (effect != null) {
+                playerconnection.sendPacket(new PacketPlayOutEntityEffect(entityplayer.getId(), effect));
             }
-            playerconnection.sendPacket(new PacketPlayOutEntityEffect(entityplayer.getId(), mobeffect));
         }
 
         entityplayer.syncInventory();
@@ -523,10 +520,6 @@ public abstract class PlayerList {
         entityplayer.updateAbilities();
         for (Object o1 : entityplayer.getEffects()) {
             MobEffect mobEffect = (MobEffect) o1;
-            if (mobEffect.getDuration() <= 0) {
-                entityplayer.removeEffect(mobEffect.getEffectId());
-                continue;
-            }
             entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityEffect(entityplayer.getId(), mobEffect));
         }
         // entityplayer1.syncInventory();

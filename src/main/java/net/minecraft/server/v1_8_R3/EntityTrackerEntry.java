@@ -368,15 +368,14 @@ public class EntityTrackerEntry {
                         entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityHeadRotation(this.tracker, (byte) this.i)); // PandaSpigot - Don't broadcast
                         
                         EntityLiving entityliving = (EntityLiving) this.tracker;
-                        Iterator iterator = entityliving.getEffects().iterator();
+                        MobEffect[] effects = entityliving.getEffects();
 
-                        while (iterator.hasNext()) {
-                            MobEffect mobeffect = (MobEffect) iterator.next();
-                            if (mobeffect.getDuration() <= 0) {
-                                entityliving.removeEffect(mobeffect.getEffectId());
+                        for (int i = 0; i < effects.length; i++) {
+                            final MobEffect effect = effects[i];
+                            if (effect == null) {
                                 continue;
                             }
-                            entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityEffect(this.tracker.getId(), mobeffect));
+                            entityplayer.playerConnection.sendPacket(new PacketPlayOutEntityEffect(this.tracker.getId(), effect));
                         }
                     }
                 }

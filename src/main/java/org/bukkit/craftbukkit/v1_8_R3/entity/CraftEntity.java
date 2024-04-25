@@ -1,7 +1,6 @@
 package org.bukkit.craftbukkit.v1_8_R3.entity;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import net.minecraft.server.v1_8_R3.*;

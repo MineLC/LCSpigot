@@ -16,7 +16,6 @@ public class MobEffectList {
 
     public static final MobEffectList[] byId = new MobEffectList[32];
     private static final Map<MinecraftKey, MobEffectList> I = Maps.newHashMap();
-    public static final MobEffectList b = null;
     public static final MobEffectList FASTER_MOVEMENT = (new MobEffectList(1, new MinecraftKey("speed"), false, 8171462)).c("potion.moveSpeed").b(0, 0).a(GenericAttributes.MOVEMENT_SPEED, "91AEAA56-376B-4498-935B-2F7F68070635", 0.20000000298023224D, 2);
     public static final MobEffectList SLOWER_MOVEMENT = (new MobEffectList(2, new MinecraftKey("slowness"), true, 5926017)).c("potion.moveSlowdown").b(1, 0).a(GenericAttributes.MOVEMENT_SPEED, "7107DE5E-7CE8-4030-940E-514C1F160890", -0.15000000596046448D, 2);
     public static final MobEffectList FASTER_DIG = (new MobEffectList(3, new MinecraftKey("haste"), false, 14270531)).c("potion.digSpeed").b(2, 0).a(1.5D);
@@ -40,20 +39,10 @@ public class MobEffectList {
     public static final MobEffectList HEALTH_BOOST = (new MobEffectHealthBoost(21, new MinecraftKey("health_boost"), false, 16284963)).c("potion.healthBoost").b(2, 2).a(GenericAttributes.maxHealth, "5D6F0BA2-1186-46AC-B896-C61C5CEE99CC", 4.0D, 0);
     public static final MobEffectList ABSORBTION = (new MobEffectAbsorption(22, new MinecraftKey("absorption"), false, 2445989)).c("potion.absorption").b(2, 2);
     public static final MobEffectList SATURATION = (new InstantMobEffect(23, new MinecraftKey("saturation"), false, 16262179)).c("potion.saturation");
-    public static final MobEffectList z = null;
-    public static final MobEffectList A = null;
-    public static final MobEffectList B = null;
-    public static final MobEffectList C = null;
-    public static final MobEffectList D = null;
-    public static final MobEffectList E = null;
-    public static final MobEffectList F = null;
-    public static final MobEffectList G = null;
     public final int id;
     private final Map<IAttribute, AttributeModifier> J = Maps.newHashMap();
-    private final boolean K;
     private final int L;
     private String M = "";
-    private int N = -1;
     private double O;
     private boolean P;
 
@@ -61,7 +50,6 @@ public class MobEffectList {
         this.id = i;
         MobEffectList.byId[i] = this;
         MobEffectList.I.put(minecraftkey, this);
-        this.K = flag;
         if (flag) {
             this.O = 0.5D;
         } else {
@@ -81,7 +69,6 @@ public class MobEffectList {
     }
 
     protected MobEffectList b(int i, int j) {
-        this.N = i + j * 8;
         return this;
     }
 

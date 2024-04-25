@@ -128,6 +128,7 @@ public class MobEffect {
         return MobEffectList.byId[this.effectId].j() ? "(" + s + ")" : s;
     }
 
+    @Override
     public boolean equals(Object object) {
         if (!(object instanceof MobEffect)) {
             return false;
