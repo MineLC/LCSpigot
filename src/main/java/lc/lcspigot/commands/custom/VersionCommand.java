@@ -14,13 +14,13 @@ public final class VersionCommand implements Command {
     private String format() {
         return
             "\n " +
-            "\n §b§lLC§6§lSPIGOT §7(1.8)" +
+            "\n §b§lLC§6§lSPIGOT §7(1.8) - 1.0.0" +
             "\n " +
             "\n §fFeatures:" +
             "\n §7- Uses TinyLog" +
             "\n §7- No patches based" +
             "\n §7- PandaSpigot features" +
             "\n §7- Recode chat, commands and more." +
-            "\n §8Please use minestom, spigot is shit :(";
+            "";
     }
 }
